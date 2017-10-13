@@ -1,0 +1,49 @@
+---
+- hosts: all
+  tasks:
+    - name: create whleyThorProbe log directory
+      file: path=/data/logs/WhaleyThorProbe state=directory owner=moretv group=moretv
+
+    - name: create whleyThorProbe directory
+      file: path=/app/WhaleyThorProbe state=directory owner=moretv group=moretv
+
+    - name: create whleyThorProbe conf directory
+      file: path=/app/WhaleyThorProbe/conf state=directory owner=moretv group=moretv
+    
+    - name: copy whleyThorProbe jar to remote host
+      shell: ncftpget -z -ubigdata -p'whaley!90365' 10.255.130.6 /tmp bigdata/{{ item }}
+      tags: install
+      with_items:
+        - WhaleyThorProbe.jar
+
+    - name: owner to moretv
+      shell: chown -R moretv:moretv /app/WhaleyThorProbe
+
+    - name: /app/WhaleyThorProbe owner to moretv
+      file: name=/app/WhaleyThorProbe owner=moretv group=moretv
+
+    - name: create Create a soft link to hive
+      file: src=/app/WhaleyThorProbe dest=/opt/WhaleyThorProbe state=link owner=moretv group=moretv
+
+    - name: touch install file
+      shell: touch /app/WhaleyThorProbe/.install
+      tags: install
+      args:
+        creates: /app/WhaleyThorProbe/.install
+
+    - name: copy WhaleyThorProbe.jar  to remote host
+      copy: src=/data/tools/ansible/modules/whaleythorprobe/package/{{ item }} dest=/opt/WhaleyThorProbe/{{ item }} owner=moretv group=moretv mode=0771
+      with_items:
+        - WhaleyThorProbe.jar
+
+    - name: copy WhaleyThorProbe config file to remote host
+      copy: src=/data/tools/ansible/modules/whaleythorprobe/config/{{ item }} dest=/opt/WhaleyThorProbe/conf/{{ item }} owner=moretv group=moretv mode=0771
+      with_items:
+        - my.properties
+
+    - name: copy WhaleyThorProbe scripts file to remote host
+      copy: src=/data/tools/ansible/modules/whaleythorprobe/scripts/{{ item }} dest=/opt/WhaleyThorProbe/{{ item }} owner=moretv group=moretv mode=0771
+      with_items:
+          - start.sh
+
+

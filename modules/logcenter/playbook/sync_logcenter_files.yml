@@ -1,0 +1,23 @@
+---
+- hosts: all
+  tasks:
+    - name: copy config file to remote host
+      copy: src=/data/tools/ansible/modules/logcenter/package/{{ item.file }} dest=/opt/logcenter{{item.index}}/lib/{{ item.file }} owner=moretv group=moretv mode=0764
+      tags: config
+      with_items:
+        - { index: '1', file: 'logcenter.logcenter-1.0.0-sans-externalized.jar'}
+        - { index: '2', file: 'logcenter.logcenter-1.0.0-sans-externalized.jar'}
+        - { index: '3', file: 'logcenter.logcenter-1.0.0-sans-externalized.jar'}
+        - { index: '4', file: 'logcenter.logcenter-1.0.0-sans-externalized.jar'}
+
+
+    - name: copy config file to remote host
+      copy: src=/data/tools/ansible/modules/logcenter/config/{{ item.file }} dest=/opt/logcenter{{item.index}}/bin/{{ item.file }} owner=moretv group=moretv mode=0764
+      tags: sync
+      with_items:
+        - { index: '1', file: 'logcenter'}
+        - { index: '2', file: 'logcenter'}
+        - { index: '3', file: 'logcenter'}
+        - { index: '4', file: 'logcenter'}
+
+

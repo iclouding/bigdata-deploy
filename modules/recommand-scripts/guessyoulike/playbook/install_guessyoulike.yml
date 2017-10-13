@@ -1,0 +1,20 @@
+---
+- hosts: all
+  tasks:
+    - name: copy package to remote host
+      shell: ncftpget -z -ubigdata -p'whaley!90365' 10.255.130.6 /tmp bigdata/{{ item }}
+      tags: install
+      with_items:
+        - guessyoulike.zip
+
+    - name: detale /app/ai/guessyoulike
+      shell: su - spark && rm -rf /app/ai/guessyoulike
+      tags: install
+
+    - name: decompress package
+      shell: cd /tmp && unzip guessyoulike.zip -d /app/ai && chown -R spark:hadoop /app/ai/guessyoulike
+      tags: install
+
+
+
+

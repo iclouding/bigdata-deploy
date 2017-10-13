@@ -1,0 +1,14 @@
+---
+- hosts: all
+  tasks:
+    - name: create directory
+      file: path={{ item.name }} state=directory owner={{ item.user }} group={{ item.groups }}
+      with_items:
+        - { name: '/home/hadoop/tools', user: 'hadoop', groups: 'hadoop' }
+
+    - name: copy scripts to /home/hadoop/tools directory
+      copy: src=/data/tools/ansible/modules/kylin/scripts/monitor_kylin_cube_error.py dest=/home/hadoop/tools/monitor_kylin_cube_error.py owner=hadoop group=hadoop mode=0755
+      tags: kylin_cron
+
+    - name: create monitor_kylin_cube_error cron
+      cron: name="monitor_kylin_cube_error" minute=*/2 user="hadoop" job="/usr/bin/python /home/hadoop/tools/monitor_kylin_cube_error.py MEDUSA_PLAY_LIVE_QOS_CUBE,helios_rolling_status_cube,medusa_hot_play_cube,hot_play_cube,whaley_thor_probe_cube"

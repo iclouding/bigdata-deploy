@@ -1,0 +1,20 @@
+---
+- hosts: all
+  tasks:
+    - name: copy config file to remote host
+      copy: src=/data/tools/ansible/modules/lion/test/appenv dest=/data/webapps/appenv owner=moretv group=moretv mode=0755
+
+    - name: sync  modi conf script to desc host
+      copy: src=/data/tools/ansible/modules/ansible/scripts/modi_conf/{{ item }} dest=/data/scripts/{{ item }} owner=moretv group=moretv mode=0755
+      with_items:
+        - make_conf.py
+
+    - name: sync  modi conf script to desc host
+      copy: src=/data/tools/ansible/modules/lion/test/{{ item }} dest=/data/scripts/{{ item }} owner=moretv group=moretv mode=0755
+      with_items:
+        - lion.conf
+
+    - name: run modi config script
+      shell: python make_conf.py lion.conf
+      args:
+        chdir: /data/scripts

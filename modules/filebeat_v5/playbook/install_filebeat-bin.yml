@@ -1,0 +1,71 @@
+---
+- hosts: nodes
+  tasks:
+
+    - name: copy tar file to remote host
+      copy: src=/data/tools/ansible/modules/filebeat_v5/package/filebeat-5.2.0-linux-x86_64.tar.gz dest=/tmp/filebeat-5.2.0-linux-x86_64.tar.gz owner=moretv group=moretv mode=0771
+      tags: install
+
+    - name: decompress filebeat-5.2.0-linux-x86_64.tar.gz
+      shell: cd /tmp && tar zxvf  filebeat-5.2.0-linux-x86_64.tar.gz -C /app && chown -R moretv:moretv /app/filebeat-5.2.0-linux-x86_64
+      tags: install
+      args:
+        creates: /app/filebeat-5.2.0-linux-x86_64/.install
+
+    - name: touch install file
+      shell: touch /app/filebeat-5.2.0-linux-x86_64/.install
+      tags: install
+      args:
+        creates: /app/filebeat-5.2.0-linux-x86_64/.install
+
+    - name: create soft link
+      file: src=/app/filebeat-5.2.0-linux-x86_64 dest=/opt/filebeat_v5 state=link owner=moretv group=moretv
+      tags: install
+
+    - name: make dir
+      file: path={{ item.name }} state=directory owner={{ item.user }} group={{ item.groups }}
+      tags: install
+      with_items:
+         - { name: '/data/logs/filebeat_v5', user: 'moretv', groups: 'moretv' }
+         - { name: '/opt/filebeat_v5/bin', user: 'moretv', groups: 'moretv' }
+         - { name: '/opt/filebeat_v5/conf', user: 'moretv', groups: 'moretv' }
+
+    - name: copy filebeat config file to remote host
+      copy: src=/data/tools/ansible/modules/filebeat_v5/config/etc/filebeat/{{ item.name }} dest={{ item.dest }} owner=moretv group=moretv mode=755
+      tags: config
+      with_items:
+        - {name: 'filebeat_helios_raw_log.yml',        dest: '/opt/filebeat_v5'}
+        - {name: 'filebeat_medusa_raw_log.yml',        dest: '/opt/filebeat_v5'}
+        - {name: 'restart_filebeat_helios_raw_log.sh', dest: '/opt/filebeat_v5'}
+        - {name: 'restart_filebeat_medusa_raw_log.sh', dest: '/opt/filebeat_v5'}
+        - {name: 'start_filebeat_helios_raw_log.sh',   dest: '/opt/filebeat_v5'}
+        - {name: 'start_filebeat_medusa_raw_log.sh',   dest: '/opt/filebeat_v5'}
+        - {name: 'stop_filebeat_helios_raw_log.sh',    dest: '/opt/filebeat_v5'}
+        - {name: 'stop_filebeat_medusa_raw_log.sh',    dest: '/opt/filebeat_v5'}
+        - {name: 'check_filebeat_helios_raw_log.sh',    dest: '/opt/filebeat_v5'}
+        - {name: 'check_filebeat_medusa_raw_log.sh',    dest: '/opt/filebeat_v5'}
+
+    - name: copy filebeat over nginx config file to remote host
+      copy: src=/data/tools/ansible/modules/filebeat_v5/config/{{ item.name }} dest=/opt/filebeat_v5/{{ item.dest }} owner=moretv group=moretv mode=755
+      tags: config
+      with_items:
+        - {name: 'bin/startFilebeat.sh',        dest: 'bin/'}
+        - {name: 'conf/filebeat_log-raw-boikgpokn78sb95k7id7n8eb.yml',    dest: 'conf/'}
+        - {name: 'conf/filebeat_log-raw-boikgpokn78sb95kbqei6cc9.yml',    dest: 'conf/'}
+        - {name: 'conf/filebeat_log-raw-boikgpokn78sb95kicggqhbk.yml',    dest: 'conf/'}
+        - {name: 'conf/filebeat_log-raw-boikgpokn78sb95kjhfrendo.yml',    dest: 'conf/'}
+        - {name: 'conf/filebeat_log-raw-boikgpokn78sb95kjtihcg26.yml',    dest: 'conf/'}
+        - {name: 'conf/filebeat_log-raw-boikgpokn78sb95kkls3bhmt.yml',    dest: 'conf/'}
+        - {name: 'conf/filebeat_log-raw-boikgpokn78sb95ktmsc1bnk.yml',    dest: 'conf/'}
+        - {name: 'conf/filebeat_log-raw-boikgpokn78sb95k00000000.yml',    dest: 'conf/'}
+
+    - name: copy nginx filebeat config file to remote host
+      copy: src=/data/tools/ansible/modules/filebeat_v5/config/etc/filebeat/{{ item.name }} dest={{ item.dest }} owner=moretv group=moretv mode=755
+      tags: config_for_nginx
+      with_items:
+        - {name: 'filebeat_nginx_medusa_3x.yml',            dest: '/opt/filebeat_v5'}
+        - {name: 'filebeat_nginx_whaleytv_main.yml',        dest: '/opt/filebeat_v5'}
+        - {name: 'start_filebeat_nginx_medusa_3x.sh',       dest: '/opt/filebeat_v5'}
+        - {name: 'start_filebeat_nginx_whaleytv_main.sh',   dest: '/opt/filebeat_v5'}
+        - {name: 'stop_filebeat_nginx_medusa_3x.sh',        dest: '/opt/filebeat_v5'}
+        - {name: 'stop_filebeat_nginx_whaleytv_main.sh',    dest: '/opt/filebeat_v5'}

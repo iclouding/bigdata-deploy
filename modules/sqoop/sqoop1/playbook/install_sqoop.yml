@@ -1,0 +1,49 @@
+---
+- hosts: all
+  tasks:
+    - name: get file
+      shell: cd /tmp && rm -f sqoop-1.4.6.bin__hadoop-2.0.4-alpha.tar.gz && /opt/hadoop/bin/hadoop fs -get /libs/package/sqoop-1.4.6.bin__hadoop-2.0.4-alpha.tar.gz sqoop-1.4.6.bin__hadoop-2.0.4-alpha.tar.gz
+      tags: install
+      args:
+        creates: /app/sqoop-1.4.6.bin__hadoop-2.0.4-alpha/.install
+
+    - name: tar file to /app
+      shell: cd /tmp && tar zxvf  sqoop-1.4.6.bin__hadoop-2.0.4-alpha.tar.gz -C /app
+      tags: install
+      args:
+        creates: /app/sqoop-1.4.6.bin__hadoop-2.0.4-alpha/.install
+
+    - name: create log directory
+      file: path=/data/logs/sqoop state=directory owner=hadoop group=hadoop mode=0777
+      tags: install
+
+    - name: change owner
+      file: name=/app/sqoop-1.4.6.bin__hadoop-2.0.4-alpha owner=hadoop group=hadoop
+      tags: install
+
+    - name: touch install file
+      shell: touch /app/sqoop-1.4.6.bin__hadoop-2.0.4-alpha/.install
+      tags: install
+      args:
+        creates: /app/sqoop-1.4.6.bin__hadoop-2.0.4-alpha/.install
+
+    - name: copy jar file
+      shell: /opt/hadoop/bin/hadoop fs -get /libs/common/mysql-connector-java-5.1.39-bin.jar /app/sqoop-1.4.6.bin__hadoop-2.0.4-alpha/lib
+      tags: install
+      args:
+        creates: /app/sqoop-1.4.6.bin__hadoop-2.0.4-alpha/lib/mysql-connector-java-5.1.39-bin.jar
+
+    - name: copy config file
+      copy: src=/data/tools/ansible/modules/sqoop/sqoop1/config/{{ item }} dest=/app/sqoop-1.4.6.bin__hadoop-2.0.4-alpha/conf/{{ item }} owner=hadoop group=hadoop mode=755
+      tags: config
+      with_items:
+        - oraoop-site.xml
+        - sqoop-env.sh
+        - sqoop-site.xml
+        - log4j.properties
+
+    - name: create Create a soft link
+      file: src=/app/sqoop-1.4.6.bin__hadoop-2.0.4-alpha dest=/opt/sqoop state=link owner=hadoop group=hadoop
+      tags: link
+
+

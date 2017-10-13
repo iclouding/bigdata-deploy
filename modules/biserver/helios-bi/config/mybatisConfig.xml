@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+		PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+		"http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+	<properties resource="jdbc.properties"/>
+
+	<environments default="helios">
+		<environment id="helios">
+			<transactionManager type="JDBC"/>
+			<dataSource type="POOLED">
+				<property name="driver" value="${helios.jdbc.driverClassName}"/>
+				<property name="url" value="${helios.jdbc.url}"/>
+				<property name="username" value="${helios.jdbc.username}"/>
+				<property name="password" value="${helios.jdbc.password}"/>
+			</dataSource>
+		</environment>
+
+		<environment id="orca">
+			<transactionManager type="JDBC"/>
+			<dataSource type="POOLED">
+				<property name="driver" value="${orca.jdbc.driverClassName}"/>
+				<property name="url" value="${orca.jdbc.url}"/>
+				<property name="username" value="${orca.jdbc.username}"/>
+				<property name="password" value="${orca.jdbc.password}"/>
+			</dataSource>
+		</environment>
+
+		<environment id="metis">
+			<transactionManager type="JDBC"/>
+			<dataSource type="POOLED">
+				<property name="driver" value="${metis.jdbc.driverClassName}"/>
+				<property name="url" value="${metis.jdbc.url}"/>
+				<property name="username" value="${metis.jdbc.username}"/>
+				<property name="password" value="${metis.jdbc.password}"/>
+			</dataSource>
+		</environment>
+
+		<environment id="bi">
+			<transactionManager type="JDBC"/>
+			<dataSource type="POOLED">
+				<property name="driver" value="${bi.jdbc.driverClassName}"/>
+				<property name="url" value="${bi.jdbc.url}"/>
+				<property name="username" value="${bi.jdbc.username}"/>
+				<property name="password" value="${bi.jdbc.password}"/>
+			</dataSource>
+		</environment>
+
+		<environment id="realtime">
+			<transactionManager type="JDBC"/>
+			<dataSource type="POOLED">
+				<property name="driver" value="${realtime.jdbc.driverClassName}"/>
+				<property name="url" value="${realtime.jdbc.url}"/>
+				<property name="username" value="${realtime.jdbc.username}"/>
+				<property name="password" value="${realtime.jdbc.password}"/>
+			</dataSource>
+		</environment>
+
+	</environments>
+	<mappers>
+		<mapper resource="sql/mapper/basic/UserMapper.xml"/>
+		<mapper resource="sql/mapper/basic/PopedomMapper.xml"/>
+		<mapper resource="sql/mapper/basic/GroupMapper.xml"/>
+		<mapper resource="sql/mapper/basic/LoginMapper.xml"/>
+		<mapper resource="sql/mapper/basic/ApplicationMapper.xml"/>
+
+
+		<!--helios应用的所有数据sql-->
+		<mapper resource="sql/mapper/helios/terminalAndUser/salesTrend.xml"/>
+		<mapper resource="sql/mapper/helios/terminalAndUser/userDevTrend.xml"/>
+		<mapper resource="sql/mapper/helios/terminalAndUser/userVersionDist.xml"/>
+		<mapper resource="sql/mapper/helios/userPartition/regionDistribute.xml"/>
+		<mapper resource="sql/mapper/helios/userPartition/retention.xml"/>
+		<mapper resource="sql/mapper/helios/userPartition/timeRegionAnalyze.xml"/>
+		<mapper resource="sql/mapper/helios/userPartition/useOverview.xml"/>
+		<mapper resource="sql/mapper/helios/userPartition/userUseNum.xml"/>
+		<mapper resource="sql/mapper/helios/userPartition/userUseTime.xml"/>
+		<mapper resource="sql/mapper/helios/account/accountOverview.xml"/>
+		<mapper resource="sql/mapper/helios/account/loginAnalyze.xml"/>
+		<mapper resource="sql/mapper/helios/account/userParticipation.xml"/>
+		<mapper resource="sql/mapper/helios/account/userPortrait.xml"/>
+		<mapper resource="sql/mapper/helios/account/otherIndexRatioOverview.xml"/>
+		<mapper resource="sql/mapper/helios/contentEvaluation/homePageAccessDistribution.xml"/>
+		<mapper resource="sql/mapper/helios/contentEvaluation/recommendAssessDetail.xml"/>
+		<mapper resource="sql/mapper/helios/contentEvaluation/subjectStatistics.xml"/>
+		<mapper resource="sql/mapper/helios/contentEvaluation/todayRecommend.xml"/>
+		<mapper resource="sql/mapper/helios/contentEvaluation/videoPlayVolumeQueries.xml"/>
+		<mapper resource="sql/mapper/helios/contentEvaluation/commentAndTag.xml"/>
+		<mapper resource="sql/mapper/helios/contentEvaluation/viscousContent.xml"/>
+		<mapper resource="sql/mapper/helios/contentEvaluation/firstChannelStatistics.xml"/>
+		<mapper resource="sql/mapper/helios/filterInfo/versionInfo.xml"/>
+		<mapper resource="sql/mapper/helios/filterInfo/channelOverViewInfo.xml"/>
+		<mapper resource="sql/mapper/helios/filterInfo/whaleyliveInfo.xml"/>
+		<mapper resource="sql/mapper/helios/filterInfo/channelListInfo.xml"/>
+		<mapper resource="sql/mapper/helios/filterInfo/ProductModel.xml"/>
+		<mapper resource="sql/mapper/helios/vipStatistics/getVIP.xml"/>
+		<mapper resource="sql/mapper/helios/vipStatistics/vipVideoContentEvaluate.xml"/>
+		<mapper resource="sql/mapper/helios/vipStatistics/vipUser.xml"/>
+		<mapper resource="sql/mapper/helios/vipStatistics/vippay.xml"/>
+		<mapper resource="sql/mapper/helios/vipStatistics/vipconsumption.xml"/>
+		<mapper resource="sql/mapper/helios/vipStatistics/vipClub.xml"/>
+		<mapper resource="sql/mapper/helios/vipStatistics/vipPackageRenewTheOrder.xml"/>
+		<mapper resource="sql/mapper/helios/appStoreAndMyApp/installAndUseStatistics.xml"/>
+		<mapper resource="sql/mapper/helios/appStoreAndMyApp/speedUpStatistics.xml"/>
+		<mapper resource="sql/mapper/helios/systemFunction/global.xml"/>
+		<mapper resource="sql/mapper/helios/systemFunction/localPlay.xml"/>
+		<mapper resource="sql/mapper/helios/systemFunction/setting.xml"/>
+		<mapper resource="sql/mapper/helios/systemFunction/signalSource.xml"/>
+		<mapper resource="sql/mapper/helios/systemFunction/recentTask.xml"/>
+		<mapper resource="sql/mapper/helios/systemFunction/screenSaver.xml"/>
+		<mapper resource="sql/mapper/helios/systemFunction/setTimingOff.xml"/>
+		<mapper resource="sql/mapper/helios/voiceAndSearch/voiceAndSearch.xml"/>
+		<mapper resource="sql/mapper/helios/voiceAndSearch/search.xml"/>
+		<mapper resource="sql/mapper/helios/pageStatistics/classification.xml"/>
+		<mapper resource="sql/mapper/helios/pageStatistics/launcherOverview.xml"/>
+		<mapper resource="sql/mapper/helios/pageStatistics/myTV.xml"/>
+		<mapper resource="sql/mapper/helios/pageStatistics/otherWatch.xml"/>
+		<mapper resource="sql/mapper/helios/pageStatistics/setting.xml"/>
+		<mapper resource="sql/mapper/helios/pageStatistics/signalSource.xml"/>
+		<mapper resource="sql/mapper/helios/pageStatistics/todayRecommendation.xml"/>
+		<mapper resource="sql/mapper/helios/pageStatistics/topList.xml"/>
+		<mapper resource="sql/mapper/helios/channelAndProgram/channelOverview.xml"/>
+		<mapper resource="sql/mapper/helios/channelAndProgram/channelStatistics.xml"/>
+		<mapper resource="sql/mapper/helios/channelAndProgram/programAndSubject.xml"/>
+		<mapper resource="sql/mapper/helios/channelAndProgram/olympic.xml"/>
+		<mapper resource="sql/mapper/helios/channelAndProgram/videoFunction.xml"/>
+		<mapper resource="sql/mapper/helios/channelAndProgram/historyCollect.xml"/>
+		<mapper resource="sql/mapper/helios/live/liveOverview.xml"/>
+		<mapper resource="sql/mapper/helios/live/whaleylunbo.xml"/>
+		<mapper resource="sql/mapper/helios/instantdata/longconnection.xml"/>
+		<mapper resource="sql/mapper/realtime/HotPlay.xml"/>
+		<mapper resource="sql/mapper/helios/test/test.xml"/>
+		<mapper resource="sql/mapper/helios/channelAndProgram/kidsWcampusStatistics.xml"/>
+
+		<!--orca应用的所有数据sql-->
+		<mapper resource="sql/mapper/orca/account/accountOverview.xml"/>
+		<mapper resource="sql/mapper/orca/hardWareOrca/hardWareInterface.xml"/>
+		<mapper resource="sql/mapper/orca/filterInfo/ProductModel.xml"/>
+		<mapper resource="sql/mapper/orca/hardWareOrca/hardWareVolumeslider.xml"/>
+		<mapper resource="sql/mapper/orca/hardWareOrca/hardWareTelecontroller.xml"/>
+		<mapper resource="sql/mapper/orca/systemOrca/projectionSet.xml"/>
+		<mapper resource="sql/mapper/orca/userParticipation/userPartitions.xml"/>
+		<mapper resource="sql/mapper/orca/terminalAndUser/userVersionDist.xml"/>
+
+
+		<!--来自kylin所有数据sql-->
+		<mapper resource="sql/mapper/realtime/HotPlay.xml"/>
+		<mapper resource="sql/mapper/realtime/RollingStatus.xml"/>
+
+	</mappers>
+</configuration>

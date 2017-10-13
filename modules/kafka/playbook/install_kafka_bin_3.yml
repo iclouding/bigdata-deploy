@@ -1,0 +1,9 @@
+---
+- hosts: all
+  tasks:
+    - name: copy kafka config file to remote host
+      copy: src=/data/tools/ansible/modules/kafka/config/kafka3/kafka-server-start.sh dest=/opt/kafka3/bin/kafka-server-start.sh owner=moretv group=moretv mode=0771
+
+    - name: copy kafka config file to remote host
+      copy: src=/data/tools/ansible/modules/kafka/config/kafka3/kafka-server-stop.sh dest=/opt/kafka3/bin/kafka-server-stop.sh owner=moretv group=moretv mode=0771
+

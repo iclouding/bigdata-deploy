@@ -1,0 +1,47 @@
+---
+- hosts: all
+  tasks:
+    - name: rsync init scripts
+      copy: src=/data/tools/ansible/package/redis-2.8.13.tar.gz dest=/tmp owner=root group=root mode=0755
+
+    - name: install package from yum repo
+      yum: name={{ item }}  state=present
+      with_items:
+        - gcc
+        - tcl
+
+    - name : run init script
+      shell : tar zxvf redis-2.8.13.tar.gz -C /tmp
+      args:
+        chdir: /tmp
+        creates: /opt/redis/bin/redis-server
+
+    - name: create directory
+      file: path={{ item }} state=directory owner=moretv group=moretv
+      with_items:
+        - /data/apps/redis-dump
+        - /etc/redis
+
+    - name :  make install
+      shell : make PREFIX=/app/redis-2.8.13 install
+      args:
+        chdir: /tmp/redis-2.8.13
+        creates: /opt/redis/bin/redis-server
+
+
+    - name: create  a soft link to nginx
+      file: src=/app/redis-2.8.13 dest=/opt/redis state=link owner=root group=root
+
+    - name: rsync  redis config
+      copy: src=/data/tools/ansible/config/redis/redis.conf dest=/etc/redis/redis.conf
+
+    - name: rsync  /etc/profile
+      copy: src=/data/tools/ansible/config/system/profile.sample dest=/etc/profile
+
+    - name: source  /etc/profile
+      shell: source /etc/profile
+
+    - name : start redis
+      shell : su - moretv -c 'redis-server /etc/redis/redis.conf'
+      args:
+        creates: /var/run/redis.pid

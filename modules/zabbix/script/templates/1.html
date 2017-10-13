@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Miles test</title>
+</head>
+<body>
+<h2>
+    <strong><span style="font-size:22px;"> Crash数据，请参考</span></strong>
+</h2>
+<p>
+    <br/>
+</p>
+<h3>
+    <strong><span style="font-size:18px;">Crash 基于Version的统计</span></strong>
+</h3>
+<table border="1">
+    <tr>
+        <th>版本号</th>
+        <th>用户个数</th>
+    </tr>
+    {% for line in data %}
+    <tr>
+        {% for item in line %}
+        <th>{{ item }}</th>
+        {% endfor %}
+    </tr>
+    {% endfor %}
+</table>
+<h3 style="text-align:center;">
+    <strong> BY <a href="whaley_alert@whaley.cn" target="_blank">Miles邮箱</a></strong>
+</h3>
+<!--{{ a_variable }}-->
+
+<!--{# a comment #}-->
+</body>
+</html>

@@ -1,0 +1,8 @@
+- hosts : all
+  remote_user : root
+  tasks :
+  - name : show hostname
+    shell : hostname
+  - name : show ip
+    command : ip a
+  - hostname : name=bigdata-cmpt-128-{{ ansible_default_ipv4.address.split('.')[-1] }}

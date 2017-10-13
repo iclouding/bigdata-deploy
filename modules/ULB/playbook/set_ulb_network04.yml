@@ -1,0 +1,11 @@
+---
+- hosts: all
+  tasks:
+
+    - name: rsync yunwei_init scripts
+      copy: src=/data/tools/ansible/modules/ULB/config/ifcfg-ulb04 dest=/etc/sysconfig/network-scripts/ifcfg-lo:4 owner=root group=root mode=0644
+      tags: ulb
+
+    - name : run  script
+      command : ifup lo:4
+      tags: ulb

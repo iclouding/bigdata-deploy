@@ -1,0 +1,52 @@
+---
+- hosts: all
+  tasks:
+
+    - name: create directory
+      file: path={{ item }} state=directory owner=moretv group=moretv
+      tags: install
+      with_items:
+        - /app/biserver/helios-bi
+
+    - name: copy tar.gz file to remote host
+      shell: ncftpget -z -ubigdata -p'whaley!90365' 10.255.130.6 /tmp bigdata/{{ item }}
+      tags: install
+      with_items:
+        - helios-bi.tar.gz
+
+    - name: decompress
+      shell: cd /tmp && tar zxvf  helios-bi.tar.gz -C /app/biserver/{{ item }}
+      tags: install
+      args:
+        creates: /app/biserver/{{ item }}/.install
+      with_items:
+        - helios-bi
+
+    - name: change owner
+      shell: chown -R moretv:moretv /app/biserver/
+      tags: install
+
+    - name: create Create a soft link
+      file: src=/app/biserver dest=/opt/biserver state=link owner=moretv group=moretv
+      tags: install
+
+    - name: touch install file
+      shell: touch /app/biserver/{{ item }}/.install
+      tags: install
+      args:
+        creates: /app/biserver/{{ item }}/.install
+      with_items:
+        - helios-bi
+
+    - name: copy config file to remote host
+      copy: src=/data/tools/ansible/modules/biserver/helios-bi/config/{{ item.file }} dest=/opt/biserver/helios-bi/{{ item.dir }}/conf/ owner=moretv group=moretv mode=0644
+      tags: config
+      with_items:
+        - { dir: 'server/server-1.0.0', file: 'app.properties'}
+        - { dir: 'server/server-1.0.0', file: 'application.conf'}
+        - { dir: 'server/server-1.0.0', file: 'application.ini'}
+        - { dir: 'server/server-1.0.0', file: 'jdbc.properties'}
+        - { dir: 'server/server-1.0.0', file: 'log4j.properties'}
+        - { dir: 'server/server-1.0.0', file: 'logback.xml'}
+        - { dir: 'server/server-1.0.0', file: 'mybatisConfig.xml'}
+        - { dir: 'server/server-1.0.0', file: 'routes'}

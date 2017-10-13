@@ -1,0 +1,21 @@
+---
+- hosts: all
+  tasks:
+
+    - name: rsync spark,hadoop known_hosts
+      copy: src=/data/tools/ansible/modules/ansible/config/system/host_info/all_host dest=/home/{{ item }}/.ssh/known_hosts owner={{ item }} group=hadoop mode=0644
+      tags: auth
+      with_items:
+        - hadoop
+        - yarn
+        - hdfs
+        - spark
+        - mesos
+
+    - name: rsync hosts files
+      copy: src=/data/tools/ansible/modules/ansible/config/system/hosts.sample dest=/etc/hosts owner=root group=root mode=0644
+      tags: hosts
+
+    - name: rsync process limit  files
+      copy: src=/data/tools/ansible/modules/ansible/config/system/20-nproc.conf dest=/etc/security/limits.d/20-nproc.conf owner=root group=root mode=0644
+      tags: limit

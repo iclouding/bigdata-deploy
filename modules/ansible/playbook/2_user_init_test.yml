@@ -1,0 +1,44 @@
+---
+- hosts: all
+  tasks:
+    - name: create user group
+      group: name={{ item }} state=present
+      with_items:
+        - hadoop
+        - moretv
+
+    - name: add users
+      user: name={{ item.name }} state=present group={{ item.groups }}
+      with_items:
+        - { name: 'hdfs', groups: 'hadoop' }
+        - { name: 'yarn', groups: 'hadoop' }
+        - { name: 'mesos', groups: 'hadoop' }
+        - { name: 'hadoop', groups: 'hadoop' }
+        - { name: 'moretv', groups: 'moretv' }
+        - { name: 'spark', groups: 'hadoop' }
+        - { name: 'storm', groups: 'hadoop' }
+
+    - name: create directory
+      file: path={{ item.name }} state=directory owner={{ item.user }} group={{ item.groups }}   
+      with_items: 
+        - { name: '/opt', user: 'root', groups: 'root' }
+        - { name: '/app', user: 'root', groups: 'root' }
+        - { name: '/data/logs', user: 'root', groups: 'root' }
+        - { name: '/data/tools', user: 'root', groups: 'root' }
+        - { name: '/data/scripts', user: 'root', groups: 'root' }
+        - { name: '/data/backups', user: 'root', groups: 'root' }
+        - { name: '/data/apps', user: 'root', groups: 'root' }
+        - { name: '/home/hadoop/.ssh', user: 'hadoop', groups: 'hadoop' }
+        - { name: '/home/yarn/.ssh', user: 'yarn', groups: 'hadoop' }
+        - { name: '/home/hdfs/.ssh', user: 'hdfs', groups: 'hadoop' }
+        - { name: '/home/spark/.ssh', user: 'spark', groups: 'hadoop' }
+        - { name: '/home/mesos/.ssh', user: 'mesos', groups: 'hadoop' }
+
+
+    - name: rsync hosts
+      copy: src=/data/tools/ansible/modules/ansible/config/system/hosts.sample dest=/etc/hosts owner=root group=root
+
+    - name: rsync  /etc/profile
+      copy: src=/data/tools/ansible/modules/ansible/config/system/profile.sample dest=/etc/profile
+
+

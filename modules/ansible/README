@@ -1,0 +1,13 @@
+ansible all -i spark.host -mshell -a"ls  /opt/spark/conf/"
+#批量执行，all 代表执行spark.host下所有服务器，-mshell 代表执行shell模块，其执行命令写入-a""中，如要切换到某个用户执行，写法如下：su - moretv -c 'redis-server /etc/redis/redis.conf'
+ansible all -i ../playbook/mysql.host -mcopy -a"src=mysql-account.py dest=/data/tools owner=moretv mode=0755"
+#将管理机上的文件下发到远程，并添加权限
+
+#yum 远程安装
+ansible host1 -m yum -a "name=vsftpd state=latest"
+
+#添加crontab
+ansible all -i hbase.host -m cron -a "name='check hbase regionserver ' minute=*/6  user='hadoop' job='sh /hadoopecosystem/hbase/bin/monitor_hbase.sh org.apache.hadoop.hbase.regionserver.HRegionServer regionserver >/dev/null 2>&1'  "
+
+ansible-playbook -i spark.host install_spark.yml
+#执行写好的部署脚本，服务器列表在spark.host 中，执行命令在install_spark.yml中

@@ -1,0 +1,23 @@
+#!/bin/bash
+export "HADOOP_CLASSPATH=$HADOOP_CLASSPATH:/opt/hadoop/etc/hadoop"
+
+export "HADOOP_CLASSPATH=$HADOOP_CLASSPATH:/opt/hadoop/share/hadoop/common/*"
+export "HADOOP_CLASSPATH=$HADOOP_CLASSPATH:/opt/hadoop/share/hadoop/common/lib/*"
+
+export "HADOOP_CLASSPATH=$HADOOP_CLASSPATH:/opt/hadoop/share/hadoop/mapreduce/*"
+export "HADOOP_CLASSPATH=$HADOOP_CLASSPATH:/opt/hadoop/share/hadoop/mapreduce/lib/*"
+
+export "HADOOP_CLASSPATH=$HADOOP_CLASSPATH:/opt/hadoop/share/hadoop/hdfs/*"
+export "HADOOP_CLASSPATH=$HADOOP_CLASSPATH:/opt/hadoop/share/hadoop/hdfs/lib/*"
+
+export "HADOOP_CLASSPATH=$HADOOP_CLASSPATH:/opt/hadoop/share/hadoop/yarn/*"
+export "HADOOP_CLASSPATH=$HADOOP_CLASSPATH:/opt/hadoop/share/hadoop/yarn/lib/*"
+
+export "HADOOP_CLASSPATH=$HADOOP_CLASSPATH:/opt/hive/lib/*"
+export "HADOOP_CLASSPATH=$HADOOP_CLASSPATH:/opt/hive/conf"
+
+export HADOOP_OPTS="$HADOOP_OPTS -Djava.library.path=/opt/hadoop/lib/native"
+
+SCRIPTPATH=`S=\`readlink "$0"\`;[ -z "$S" ] && S=$0; dirname $S `
+
+java -cp $SCRIPTPATH:$HADOOP_CLASSPATH:$SCRIPTPATH/hplsql-0.3.17.jar:$SCRIPTPATH/antlr-runtime-4.5.jar $HADOOP_OPTS org.apache.hive.hplsql.Hplsql "$@"

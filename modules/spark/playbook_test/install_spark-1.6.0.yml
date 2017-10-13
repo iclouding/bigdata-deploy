@@ -1,0 +1,65 @@
+---
+- hosts: all
+  tasks:
+
+    - name: create directory
+      file: path={{ item }} state=directory owner=spark group=hadoop
+      tags: install
+      with_items:
+        - /data/logs/spark
+
+    - name: copy spark tar file to remote host
+      shell: ncftpget -z -ubigdata -p'whaley!90365' 10.255.130.6 /tmp bigdata/{{ item }}
+      tags: install
+      with_items:
+        - spark-1.6.0-hadoop-2.6.2.tgz
+
+    - name: tar spark tar to /app
+      shell: cd /tmp && tar zxvf  spark-1.6.0-hadoop-2.6.2.tgz -C /app
+      tags: install
+      args:
+        creates: /app/spark-1.6.0-hadoop-2.6.2/.install
+
+    - name: owner to spark
+      shell: chown -R spark:hadoop /app/spark-1.6.0-hadoop-2.6.2
+      tags: install
+      args:
+        creates: /app/spark-1.6.0-hadoop-2.6.2/.install
+
+    - name: /app/spark-1.6.0-hadoop-2.6.2 owner to spark
+      file: name=/app/spark-1.6.0-hadoop-2.6.2 owner=spark group=hadoop
+      tags: install
+
+    - name: create Create a soft link to spark
+      file: src={{ item.src }} dest={{ item.dest }} state=link owner=spark group=hadoop
+      tags: install
+      with_items:
+        - { src: '/app/spark-1.6.0-hadoop-2.6.2', dest: '/opt/spark' }
+
+    - name: touch install file
+      shell: touch /app/spark-1.6.0-hadoop-2.6.2/.install
+      tags: install
+      args:
+        creates: /app/spark-1.6.0-hadoop-2.6.2/.install
+
+    - name: copy spark config file to remote host
+      copy: src=/data/tools/ansible/modules/spark/config_test/{{ item }} dest=/opt/spark/conf/{{ item }} owner=spark group=hadoop mode=0771
+      tags: config
+      with_items:
+        - slaves
+        - spark-defaults.conf
+        - spark-env.sh
+        - spark-thrift-sparkconf.conf
+        - log4j.properties
+
+- hosts: master
+  tasks:
+    - name: create hdfs dir
+      shell: |
+        su - hdfs -c "hadoop fs -mkdir -p /spark-log/spark-events  ; hadoop fs -chown -R spark:hadoop /spark-log";
+        su - hdfs -c "hadoop fs -mkdir -p /libs/common  ; hadoop fs -setfacl -m group::rwx /libs/common";
+      tags: hdfs
+
+    - name: upload file to hdfs
+      shell: su - hdfs -c "hadoop fs -put -f /opt/spark/lib/spark-assembly-1.6.0-hadoop2.6.2.jar /libs/common"
+      tags: hdfs

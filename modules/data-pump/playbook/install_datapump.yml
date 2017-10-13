@@ -1,0 +1,21 @@
+---
+- hosts: all
+  tasks:
+    - name: copy data-pump tar file to remote host
+      shell: ncftpget -z -ubigdata -p'whaley!90365' 10.255.130.6 /tmp bigdata/{{ item }}
+      with_items:
+        - data-pump-deploy-0.1.0-bin.zip
+
+    - name: unzip data-pump tar to /app
+      shell: cd /tmp && unzip data-pump-deploy-0.1.0-bin.zip -d /app
+
+    - name: owner to data-pump
+      shell: chown -R moretv:moretv /app/data-pump-deploy-0.1.0
+
+    - name: create Create a soft link to data-pump
+      file: src=/app/data-pump-deploy-0.1.0 dest=/opt/data-pump state=link owner=moretv group=moretv
+
+    - name: create data-pump need directory
+      file: path={{ item }}  state=directory  owner=moretv group=moretv
+      with_items:
+        - /data/logs/data-pump

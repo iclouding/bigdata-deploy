@@ -1,0 +1,124 @@
+<!-- https://www.playframework.com/documentation/latest/SettingsLogger -->
+<configuration>
+
+  <conversionRule conversionWord="coloredLevel" converterClass="play.api.libs.logback.ColoredLevel" />
+
+  <!-- 现网日志收集配置 start -->
+  <appender name="LOGFILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+    <file>/data/logs/logcenter/current/log.helios.{{hostname}}_{{index}}.log</file>
+    <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+      <!-- hourly rollover -->
+      <fileNamePattern>/data/logs/logcenter/current/log.helios.%d{yyyy-MM-dd-HH}_{{hostname}}_{{index}}.log</fileNamePattern>
+
+      <!-- keep 2 days' worth of history capped at 300GB total size -->
+      <maxHistory>36</maxHistory>
+      <totalSizeCap>200GB</totalSizeCap>
+
+    </rollingPolicy>
+    <encoder>
+      <pattern>%message%n</pattern>
+    </encoder>
+  </appender>
+
+  <logger name="helios.info.log" level="INFO" additivity="false">
+    <appender-ref ref="LOGFILE" />
+  </logger>
+
+  <appender name="LOGFILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+    <file>/data/logs/logcenter/current/log.medusa.{{hostname}}_{{index}}.log</file>
+    <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+      <!-- hourly rollover -->
+      <fileNamePattern>/data/logs/logcenter/current/log.medusa.%d{yyyy-MM-dd-HH}_{{hostname}}_{{index}}.log</fileNamePattern>
+
+      <!-- keep 2 days' worth of history capped at 300GB total size -->
+      <maxHistory>36</maxHistory>
+      <totalSizeCap>200GB</totalSizeCap>
+
+    </rollingPolicy>
+    <encoder>
+      <pattern>%message%n</pattern>
+    </encoder>
+  </appender>
+
+  <logger name="medusa.info.log" level="INFO" additivity="false">
+    <appender-ref ref="LOGFILE" />
+  </logger>
+
+  <appender name="LOGFILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+    <file>/data/logs/logcenter/current/log.eagle.{{hostname}}_{{index}}.log</file>
+    <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+      <!-- hourly rollover -->
+      <fileNamePattern>/data/logs/logcenter/current/log.eagle.%d{yyyy-MM-dd-HH}_{{hostname}}_{{index}}.log</fileNamePattern>
+
+      <!-- keep 2 days' worth of history capped at 300GB total size -->
+      <maxHistory>36</maxHistory>
+      <totalSizeCap>200GB</totalSizeCap>
+
+    </rollingPolicy>
+    <encoder>
+      <pattern>%message%n</pattern>
+    </encoder>
+  </appender>
+
+  <logger name="eagle.info.log" level="INFO" additivity="false">
+    <appender-ref ref="LOGFILE" />
+  </logger>
+
+  <appender name="LOGFILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+    <file>/data/logs/logcenter/current/log.vr.{{hostname}}_{{index}}.log</file>
+    <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+      <!-- hourly rollover -->
+      <fileNamePattern>/data/logs/logcenter/current/log.vr.%d{yyyy-MM-dd-HH}_{{hostname}}_{{index}}.log</fileNamePattern>
+
+      <!-- keep 2 days' worth of history capped at 300GB total size -->
+      <maxHistory>36</maxHistory>
+      <totalSizeCap>200GB</totalSizeCap>
+
+    </rollingPolicy>
+    <encoder>
+      <pattern>%message%n</pattern>
+    </encoder>
+  </appender>
+
+  <logger name="vr.info.log" level="INFO" additivity="false">
+    <appender-ref ref="LOGFILE" />
+  </logger>
+  <!-- 现网日志收集配置 end -->
+
+  <!--play自身日志配置 -->
+  <appender name="FILE" class="ch.qos.logback.core.FileAppender">
+    <file>/data/logs/logcenter/application_{{index}}.log</file>
+    <encoder>
+      <pattern>%date [%level] from %logger in %thread - %message%n%xException</pattern>
+    </encoder>
+  </appender>
+
+  <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+    <encoder>
+      <pattern>%coloredLevel %logger{15} - %message%n%xException{10}</pattern>
+    </encoder>
+  </appender>
+
+  <appender name="ASYNCFILE" class="ch.qos.logback.classic.AsyncAppender">
+    <appender-ref ref="FILE" />
+  </appender>
+
+  <appender name="ASYNCSTDOUT" class="ch.qos.logback.classic.AsyncAppender">
+    <appender-ref ref="STDOUT" />
+  </appender>
+
+  <logger name="play" level="INFO" />
+  <logger name="application" level="DEBUG" />
+
+  <!-- Off these ones as they are annoying, and anyway we manage configuration ourselves -->
+  <logger name="com.avaje.ebean.config.PropertyMapLoader" level="OFF" />
+  <logger name="com.avaje.ebeaninternal.server.core.XmlConfigLoader" level="OFF" />
+  <logger name="com.avaje.ebeaninternal.server.lib.BackgroundThread" level="OFF" />
+  <logger name="com.gargoylesoftware.htmlunit.javascript" level="OFF" />
+
+  <root level="WARN">
+    <appender-ref ref="ASYNCFILE" />
+    <appender-ref ref="ASYNCSTDOUT" />
+  </root>
+
+</configuration>

@@ -1,0 +1,41 @@
+---
+- hosts: all
+  tasks:
+    - name: get file
+      shell: cd /app && rm -f /app/livy-server-0.3.0.zip && /opt/hadoop/bin/hadoop fs -get /libs/package/livy-server-0.3.0.zip
+      tags: install
+      args:
+        creates: /app/livy-server-0.3.0/.install 
+        
+    - name: unzip file to /app
+      shell: cd /app && unzip livy-server-0.3.0.zip
+      tags: install
+      args:
+        creates: /app/livy-server-0.3.0/.install
+
+    - name: create log directory
+      file: path=/data/logs/livy-server state=directory owner=hadoop group=hadoop mode=0777
+      tags: install
+
+    - name: change owner
+      file: name=/app/livy-server-0.3.0 owner=hadoop group=hadoop
+      tags: install
+
+    - name: touch install file
+      shell: touch /app/livy-server-0.3.0/.install
+      tags: install
+      args:
+        creates: /app/livy-server-0.3.0/.install
+
+    - name: copy config file
+      copy: src=/data/tools/ansible/modules/livy-server/config/{{ item.src }} dest=/app/livy-server-0.3.0/{{ item.dest }} owner=hadoop group=hadoop mode=755
+      tags: config
+      with_items:
+        - {src: 'livy.conf' , dest: 'conf/log4j.properties'}
+        - {src: 'livy-env.sh' , dest: 'conf/livy-env.sh'}
+        - {src: 'log4j.properties' , dest: 'conf/log4j.properties'}
+        - {src: 'spark-blacklist.conf' , dest: 'conf/spark-blacklist.conf'}
+
+    - name: Create a soft link
+      file: src=/app/livy-server-0.3.0 dest=/opt/livy-server state=link owner=hadoop group=hadoop
+      tags: link

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+		PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+		"http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+	<properties resource="jdbc.properties"/>
+
+	<environments default="competitor_analysis">
+		<environment id="competitor_analysis">
+			<transactionManager type="JDBC"/>
+			<dataSource type="POOLED">
+				<property name="driver" value="${cis.jdbc.driverClassName}"/>
+				<property name="url" value="${cis.jdbc.url}"/>
+				<property name="username" value="${cis.jdbc.username}"/>
+				<property name="password" value="${cis.jdbc.password}"/>
+			</dataSource>
+		</environment>
+	</environments>
+	<mappers>
+		<mapper resource="sql/mapper/basic/UserMapper.xml"/>
+		<mapper resource="sql/mapper/basic/PopedomMapper.xml"/>
+		<mapper resource="sql/mapper/basic/GroupMapper.xml"/>
+		<mapper resource="sql/mapper/basic/LoginMapper.xml"/>
+		<mapper resource="sql/mapper/basic/ApplicationMapper.xml"/>
+
+		<!-- CSI统计相关信息-->
+		<mapper resource="sql/mapper/cis/ContentCoverageMapper.xml"/>
+
+
+
+	</mappers>
+</configuration>

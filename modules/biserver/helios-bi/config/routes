@@ -1,0 +1,87 @@
+# Routes
+# This file defines all application routes (Higher priority routes first)
+# ~~~~
+
+# different application login page
+POST         /login                                                 bi.controllers.LoginController.login
+GET          /logout/:username                                      bi.controllers.LoginController.logout(username:String)
+
+
+#obtain left menu list
+GET          /:app/asset/:userId                                    bi.controllers.UserController.getMenuListByUserId(userId:Int,app:String)
+
+
+#different application user managment pages
+GET          /:app/admin/users                                      bi.controllers.UserController.list(app:String)
+GET          /:app/admin/users/:userId                              bi.controllers.UserController.toEdit(userId:Int,app:String)
+POST         /:app/admin/users/:userId                              bi.controllers.UserController.updateUser(userId:Int,app:String)
+POST         /:app/admin/users/:userId/lock                         bi.controllers.UserController.lockUser(userId:Int,app:String)
+POST         /:app/admin/users                                      bi.controllers.UserController.saveUser(app:String)
+GET          /:app/admin/users/:userId/popedoms                     bi.controllers.UserController.getUserPopedomList(userId:Int,app:String)
+POST         /:app/admin/users/:userId/popedoms                     bi.controllers.UserController.updateUserPopedomList(userId:Int,app:String)
+POST         /:app/admin/users/:userId/password                     bi.controllers.UserController.modifyPassword(userId:Int,app:String)
+
+
+#different application grpup managment pages
+GET          /:app/admin/groups/menu                                bi.controllers.GroupController.menu(app:String)
+GET          /:app/admin/groups                                     bi.controllers.GroupController.list(app:String)
+GET          /:app/admin/groups/:groupId                            bi.controllers.GroupController.toEdit(groupId,app:String)
+POST         /:app/admin/groups/:groupId                            bi.controllers.GroupController.updateGroup(groupId,app:String)
+POST         /:app/admin/groups                                     bi.controllers.GroupController.save(app:String)
+GET          /:app/admin/groups/:groupId/popedoms                   bi.controllers.GroupController.getGroupPopedomList(groupId:String,app:String)
+POST         /:app/admin/groups/:groupId/popedoms                   bi.controllers.GroupController.updateGroupPopedomList(groupId:String,app:String)
+
+#different application popedom managment pages
+GET          /:app/admin/popedoms                                   bi.controllers.PopedomController.list(app:String)
+GET          /:app/admin/popedoms/:popedomId                        bi.controllers.PopedomController.toEdit(popedomId:String,app:String)
+POST         /:app/admin/popedoms/:popedomId                        bi.controllers.PopedomController.updatePopedom(popedomId:String,app:String)
+POST         /:app/admin/popedoms                                   bi.controllers.PopedomController.savePopedom(app:String)
+GET          /:app/admin/popedoms/:popedomId/groups                 bi.controllers.PopedomController.getGroupsOwnPopedomId(popedomId:String,app:String)
+GET          /:app/admin/popedoms/:popedomId/users                  bi.controllers.PopedomController.getUsersOwnPopedomId(popedomId:String,app:String)
+POST         /:app/admin/popedoms/:popedomId/groups                 bi.controllers.PopedomController.updateGroupsOwnPopedomId(popedomId:String,app:String)
+POST         /:app/admin/popedoms/:popedomId/users                  bi.controllers.PopedomController.updateUsersOwnPopedomId(popedomId:String,app:String)
+
+
+#application managment pages
+GET          /app/admin/applications                                bi.controllers.ApplicationController.list
+GET          /app/admin/applications/:applicationId                 bi.controllers.ApplicationController.toEdit(applicationId:Int)
+POST         /app/admin/applications/:applicationId                 bi.controllers.ApplicationController.updateApplication(applicationId:Int)
+POST         /app/admin/applications                                bi.controllers.ApplicationController.save
+GET          /app/admin/applications/:applicationId/users           bi.controllers.ApplicationController.getApplicationUserList(applicationId:Int)
+POST         /app/admin/applications/:applicationId/users           bi.controllers.ApplicationController.updateApplicationUserList(applicationId:Int)
+
+
+#get json data
+POST         /:app/common/getJsonData                               bi.controllers.CommonController.getJsonData(app:String)
+POST         /:app/common/getProgramPlayFromES                      bi.controllers.CommonController.getProgramPlayFromES(app:String)
+POST         /:app/common/getLivePlayFromES                         bi.controllers.CommonController.getLivePlayFromES(app:String)
+POST         /:app/common/getProgramPlayTopFromES                   bi.controllers.CommonController.getProgramPlayTopFromES(app:String)
+POST         /:app/common/getJsonDataBasecWUIDist                   bi.controllers.CommonController.getJsonDataBasecWUIDist(app:String)
+POST         /:app/common/getKylinJsonData                          bi.controllers.KylinCommonController.getJsonData(app:String)
+
+#get fiter list about charts
+POST         /:app/common/getFilterData                             bi.controllers.CommonController.getFilterData(app:String)
+
+
+#option
+OPTIONS      /:app/admin/*path                                      bi.controllers.MessageController.options(path,app)
+OPTIONS      /:app/common/*path                                     bi.controllers.MessageController.options(path,app)
+OPTIONS      /:app/asset/*path                                      bi.controllers.MessageController.options(path,app)
+OPTIONS      /login                                                 bi.controllers.MessageController.loginOptions
+OPTIONS      /logout/*path                                          bi.controllers.MessageController.logoutOptions(path)
+
+
+
+
+#user setting
+#GET         /user/modifyPassword                                   bi.controllers.UserController.toModifyPassword
+#POST        /user/modifyPassword                                   bi.controllers.UserController.modifyPassword
+
+#message pages
+#GET         /message/todo                                          bi.controllers.MessageController.todo
+
+
+
+#POST        /common/getTableJsonData                               bi.controllers.CommonController.getTableJsonData
+#POST        /common/getGroupedJsonData                             bi.controllers.CommonController.getGroupedJsonData
+#POST        /common/getUserRetentionData                           bi.controllers.CommonController.getUserRetentionData

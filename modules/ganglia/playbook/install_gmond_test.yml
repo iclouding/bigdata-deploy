@@ -1,0 +1,38 @@
+---
+- hosts: all
+  gather_facts: false
+  tasks:
+
+    - name: yum install dep
+      shell: yum install -y epel-release
+      tags: install
+      args:
+        creates: /etc/ganglia/.install
+
+
+    - name: install package from yum repo
+      yum: name={{ item }}  state=present
+      tags: install
+      with_items:
+        - epel-release
+        - ganglia-gmond
+
+    
+    - name: copy config files to remote host
+      copy: src=/data/tools/ansible/modules/ganglia/config/gmond_test.conf dest=/etc/ganglia/gmond.conf owner=root
+      tags: sync
+
+    - name: restart
+      shell: systemctl restart gmond.service
+      tags: install
+      args:
+        creates: /etc/ganglia/.install
+
+    - name: touch install files
+      shell: touch /etc/ganglia/.install
+      tags: install
+      args:
+        creates: /etc/ganglia/.install
+
+
+

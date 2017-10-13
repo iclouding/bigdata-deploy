@@ -1,0 +1,10 @@
+[nodes]
+bigdata-appsvr-130-1
+bigdata-appsvr-130-2
+bigdata-appsvr-130-3
+bigdata-appsvr-130-4
+bigdata-appsvr-130-5
+bigdata-appsvr-130-6
+
+[online_cron_machine]
+bigdata-appsvr-130-1

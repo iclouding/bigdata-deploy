@@ -1,0 +1,18 @@
+---
+
+- hosts: nodes
+  tasks:
+
+    - name: remove old  file
+      shell: rm -f /opt/hadoop/share/hadoop/yarn/spark-*-yarn-shuffle.jar
+      tags: install
+
+    - name: download spark yarn shuffle tar file
+      shell: ncftpget -z -ubigdata -p'whaley!90365' 10.255.130.6 /opt/hadoop/share/hadoop/yarn bigdata/{{ item }}
+      tags: install
+      with_items:
+        - spark-1.6.3-yarn-shuffle.jar
+
+    - name: change mode
+      file: path=/opt/hadoop/share/hadoop/yarn/spark-1.6.3-yarn-shuffle.jar state=file owner=hadoop group=hadoop mode=0771
+      tags: install

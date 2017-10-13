@@ -1,0 +1,18 @@
+---
+- hosts: all
+  tasks:
+
+    - name: copy mysql tar file to remote host
+      copy: src=/data/tools/ansible/package/mysql-5.5.tar.gz dest=/tmp owner=root group=root
+
+    - name: tar mysql to /tmp
+      shell:  tar zxvf mysql-5.5.tar.gz -C /app
+      args:
+        chdir: /tmp
+        creates: /app/mysql_5.5/install_mysql.sh
+
+    - name: run install script
+      shell: sh install_mysql.sh
+      args:
+        chdir: /app/mysql_5.5
+        creates: /data/lib/mysql/ibdata1

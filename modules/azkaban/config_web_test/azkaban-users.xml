@@ -1,0 +1,26 @@
+<azkaban-users>
+	<user username="azkaban" password="azkaban@whaley" roles="admin" groups="azkaban" />
+	<user username="metrics" password="metrics" roles="metrics"/>
+
+	<user username="whaley_bi" password="bi@whaley"  groups="bigdata" />
+	<user username="medusa_bi" password="bi@medusa"  groups="bigdata" />
+	<user username="eagle_bi" password="bi@eagle"  groups="bigdata" />
+	<user username="vr_bi" password="bi@vr"  groups="bigdata" />
+	<user username="dw" password="dw@whaley"  groups="bigdata" />
+	<user username="ai" password="ai@whaley"  groups="bigdata" />
+	<user username="user_profile" password="user_profile@whaley"  groups="bigdata" />
+	<user username="playQuality_bi" password="bi@playQuality"  groups="bigdata" />
+
+	<user username="openrs_ad" password="openrs_ad@whaley"  groups="openrs" />
+
+	<group name="bigdata" roles="bigdata" />
+	<group name="openrs" roles="openrs" />
+
+
+
+	<role name="admin" permissions="ADMIN" />
+	<role name="metrics" permissions="METRICS"/>
+
+	<role name="bigdata" permissions="" />
+	<role name="openrs" permissions="" />
+</azkaban-users>

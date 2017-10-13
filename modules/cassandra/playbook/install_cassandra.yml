@@ -1,0 +1,50 @@
+---
+- hosts: all
+  tasks:
+    - name: copy cassandra tar file to remote host
+      shell: ncftpget -z -ubigdata -p'whaley!90365' 10.255.130.6 /tmp bigdata/{{ item }}
+      tags: install
+      with_items:
+        - apache-cassandra-3.5-bin.tar.gz
+
+    - name: tar cassandra tar to /app
+      shell: cd /tmp && tar zxvf  apache-cassandra-3.5-bin.tar.gz -C /app
+      args:
+        creates: /app/apache-cassandra-3.5/.install
+
+    - name: owner to cassandra
+      shell: chown -R moretv:moretv /app/apache-cassandra-3.5
+      args:
+        creates: /app/apache-cassandra-3.5/.install
+
+    - name: /app/cassandra_3.5 owner to cassandra
+      file: name=/app/apache-cassandra-3.5 owner=moretv group=moretv
+
+    - name: create Create a soft link to cassandra
+      file: src=/app/apache-cassandra-3.5 dest=/opt/cassandra state=link owner=moretv group=moretv
+
+    - name: copy cassandra config file to remote host
+      copy: src=/data/tools/ansible/modules/cassandra/config/cassandra.yaml dest=/opt/cassandra/conf/cassandra.yaml owner=moretv group=moretv mode=0771
+
+    - name: create cassandra need directory
+      file: path={{ item }}  state=directory  owner=moretv group=moretv
+      with_items:
+        - /data/logs/cassandra
+        - /data/apps/cassandra
+
+    - name: sync  modi conf script to desc host
+      copy: src=/data/tools/ansible/modules/ansible/scripts/modi_conf/{{ item }} dest=/data/scripts/{{ item }} owner=moretv group=moretv mode=0755
+      with_items:
+        - make_conf.py
+        - cassandra.conf
+
+    - name: run modi config script
+      shell: python make_conf.py cassandra.conf
+      args:
+        chdir: /data/scripts
+
+    - name: touch install file
+      shell: touch /app/apache-cassandra-3.5/.install
+      tags: install
+      args:
+        creates: /app/apache-cassandra-3.5/.install

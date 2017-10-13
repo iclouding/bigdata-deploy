@@ -1,0 +1,18 @@
+# User private specific environment and startup programs
+# # .bash_profile
+#
+# # Get the aliases and functions
+if [ -f ~/.bashrc ]; then
+ 	. ~/.bashrc
+fi
+
+ 	# User specific environment and startup programs
+
+export KYLIN_HOME=/opt/kylin
+export KAFKA_HOME=/opt/kafka3
+
+PATH=$PATH:$HOME/bin
+
+export PATH
+
+

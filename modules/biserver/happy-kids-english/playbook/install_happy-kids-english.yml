@@ -1,0 +1,50 @@
+---
+- hosts: all
+  tasks:
+
+    - name: create directory
+      file: path={{ item }} state=directory owner=moretv group=moretv
+      tags: install
+      with_items:
+        - /app/biserver/happy-kids-english
+
+    - name: copy tar.gz file to remote host
+      shell: ncftpget -z -ubigdata -p'whaley!90365' 10.255.130.6 /tmp bigdata/{{ item }}
+      tags: install
+      with_items:
+        - happy-kids-english.tar.gz
+
+    - name: decompress
+      shell: cd /tmp && tar zxvf  happy-kids-english.tar.gz -C /app/biserver/{{ item }}
+      tags: install
+      args:
+        creates: /app/biserver/{{ item }}/.install
+      with_items:
+        - happy-kids-english
+
+    - name: change owner
+      shell: chown -R moretv:moretv /app/biserver/
+      tags: install
+
+    - name: create Create a soft link
+      file: src=/app/biserver dest=/opt/biserver state=link owner=moretv group=moretv
+      tags: install
+
+    - name: touch install file
+      shell: touch /app/biserver/{{ item }}/.install
+      tags: install
+      args:
+        creates: /app/biserver/{{ item }}/.install
+      with_items:
+        - happy-kids-english
+
+    - name: copy config file to remote host
+      copy: src=/data/tools/ansible/modules/biserver/happy-kids-english/config/{{ item.file }} dest=/opt/biserver/happy-kids-english/conf/{{ item.dir }} owner=moretv group=moretv mode=0644
+      tags: config
+      with_items:
+        - { dir: '', file: 'application.conf'}
+        - { dir: '', file: 'application.ini'}
+        - { dir: '', file: 'log4j.properties'}
+        - { dir: '', file: 'logback.xml'}
+        - { dir: '', file: 'mybatisConfig.xml'}
+        - { dir: '', file: 'routes'}

@@ -1,0 +1,13 @@
+---
+- hosts: nodes
+  tasks:
+  - name: copy logstash config file to remote host
+    copy: src=/data/tools/ansible/modules/logstash_v5/config/etc/logstash/{{ item.name }} dest={{ item.dest }} owner=moretv group=moretv mode=755
+    tags: business_config
+    with_items:
+     - {name: 'kafka_topic_distribute_helios_hot_16.conf',                dest: '/opt/logstash_v5/config'}
+     - {name: 'kafka_topic_distribute_helios_status.conf',                dest: '/opt/logstash_v5/config'}
+     - {name: 'kafka_topic_distribute_medusa_hot.conf',                   dest: '/opt/logstash_v5/config'}
+     - {name: 'kafka_topic_distribute_jianianhua.conf',                   dest: '/opt/logstash_v5/config'}
+     - {name: 'kafka_topic_distribute_ad_turnon_medusa_product.conf',     dest: '/opt/logstash_v5/config'}
+     - {name: 'kafka_topic_distribute_ad_vod_whaley_product.conf',        dest: '/opt/logstash_v5/config'}

@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+		PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+		"http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+	<properties>
+		<property name="driver" value="com.mysql.jdbc.Driver"/>
+		<property name="username" value="bi"/>
+		<property name="password" value="mlw321@moretv"/>
+		<property name="url_pro" value="jdbc:mysql://bigdata-extsvr-db_bi2:3306/whaley_bi?useUnicode=true&amp;characterEncoding=utf-8&amp;autoReconnect=true"/>
+	</properties>
+	<environments default="dev_whaley">
+		<environment id="dev_whaley">
+			<transactionManager type="JDBC"/>
+			<dataSource type="POOLED">
+				<property name="driver" value="${driver}"/>
+				<property name="url" value="${url_dev}"/>
+				<property name="username" value="${username}"/>
+				<property name="password" value="${password}"/>
+			</dataSource>
+		</environment>
+
+		<environment id="prod_whaley">
+			<transactionManager type="JDBC"/>
+			<dataSource type="POOLED">
+				<property name="driver" value="${driver}"/>
+				<property name="url" value="${url_pro}"/>
+				<property name="username" value="${username}"/>
+				<property name="password" value="${password}"/>
+			</dataSource>
+		</environment>
+	</environments>
+	<mappers>
+		<mapper resource="sql/mapper/basic/UserMapper.xml"/>
+		<mapper resource="sql/mapper/basic/RoleMapper.xml"/>
+		<mapper resource="sql/mapper/basic/PopedomMapper.xml"/>
+		<mapper resource="sql/mapper/basic/AssignMapper.xml"/>
+		<mapper resource="sql/mapper/basic/GroupMapper.xml"/>
+		<mapper resource="sql/mapper/external/happyKidsEnglish.xml"/>
+	</mappers>
+</configuration>

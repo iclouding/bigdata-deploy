@@ -1,0 +1,17 @@
+---
+- hosts: all
+  tasks:
+    - name: rsync init scripts
+      copy: src=/data/tools/ansible/modules/ansible/scripts/bigdata_init.bash dest=/tmp owner=root group=root mode=0755
+
+    - name : run init script
+      command : sh /tmp/bigdata_init.bash -i
+
+    - name: rsync iptables scripts
+      copy: src=/data/tools/ansible/modules/ansible/scripts/iptables/iptables_cmpt.sh dest=/data/tools/iptables.sh owner=root group=root mode=0755
+
+    - name : run iptables script
+      command : sh /data/tools/iptables.sh & iptables-save
+
+    - name : add iptables for restart
+      command : service iptables save

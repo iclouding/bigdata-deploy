@@ -1,0 +1,29 @@
+---
+- hosts: all
+  tasks:
+    - name: install package from yum repo
+      yum: name={{ item }}  state=present
+      with_items:
+        - parted
+        - kmod-xfs
+        - xfsprogs
+
+    - name: add xfs module
+      shell: modprobe xfs
+
+    - name: sync  modi conf script to desc host
+      copy: src=/data/tools/ansible/modules/ansible/scripts/create_data_disk/{{ item }} dest=/tmp/{{ item }} owner=root group=root mode=0755
+      with_items:
+        - create_data_disk.py
+        - create_data_disk.ini
+
+    - name: run modi config script
+      shell: python create_data_disk.py create_data_disk.ini
+      args:
+        chdir: /tmp
+        creates: /data1/.install
+
+    - name: touch install file
+      shell: touch /data1/.install
+      args:
+        creates: /data1/.install

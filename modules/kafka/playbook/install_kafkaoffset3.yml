@@ -1,0 +1,17 @@
+---
+- hosts: all
+  tasks:
+    - name: copy KafkaOffsetMonitor tar file to remote host
+      shell: ncftpget -z -ubigdata -p'whaley!90365' 10.255.130.6 /tmp bigdata/{{ item }}
+      with_items:
+        - KafkaOffsetMonitor3-0.2.1.zip
+
+    - name: tar kafka tar to /app
+      shell: cd /tmp && unzip  KafkaOffsetMonitor3-0.2.1.zip -d /app
+
+    - name: owner to kafka
+      shell: chown -R moretv:moretv /app/KafkaOffsetMonitor3-0.2.1
+
+    - name: create Create a soft link to KafkaOffsetMonitor
+      file: src=/app/KafkaOffsetMonitor3-0.2.1 dest=/opt/KafkaOffsetMonitor3 state=link owner=moretv group=moretv
+

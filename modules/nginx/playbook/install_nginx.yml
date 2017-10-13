@@ -1,0 +1,58 @@
+---
+- hosts: all
+  tasks:
+    - name: rsync init scripts
+      copy: src=/data/tools/ansible/modules/nginx/package/ngx_openresty-1.9.7.1.tar.gz dest=/tmp owner=root group=root mode=0755
+
+    - name : run init script
+      shell : tar zxvf  ngx_openresty-1.9.7.1.tar.gz -C /tmp
+      args:
+        chdir: /tmp
+        creates: /app/openresty1.0.1/.install
+
+    - name: install package from yum repo
+      yum: name={{ item }}  state=present
+      with_items:
+        - readline-devel
+        - pcre-devel
+        - openssl-devel
+
+    - name : configure
+      shell : ./configure --prefix=/app/openresty1.0.1    --with-luajit   --without-http_redis2_module    --with-http_iconv_module    --with-http_stub_status_module  --with-stream
+      args:
+        chdir: /tmp/ngx_openresty-1.9.7.1
+        creates: /app/openresty1.0.1/.install
+
+    - name : make & make install
+      shell : make -j2 && make install
+      args:
+        chdir: /tmp/ngx_openresty-1.9.7.1
+        creates: /app/openresty1.0.1/.install
+
+    - name : add nginx with system restart
+      shell : echo "cd /opt/openresty/nginx/sbin && ./nginx" >> /etc/rc.local
+      args:
+        creates: /app/openresty1.0.1/.install
+
+    - name: create  a soft link to nginx
+      file: src=/app/openresty1.0.1 dest=/opt/openresty state=link owner=root group=root
+
+    - name: touch install file
+      shell: touch /app/openresty1.0.1/.install
+      tags: install
+      args:
+        creates: /app/openresty1.0.1/.install
+
+#    - name: rsync  /etc/profile
+#      copy: src=/data/tools/ansible/modules/ansible/config/system/profile.sample dest=/etc/profile
+
+    - name : start nginx
+      shell : ./nginx
+      args:
+        chdir: /opt/openresty/nginx/sbin
+
+
+
+
+
+

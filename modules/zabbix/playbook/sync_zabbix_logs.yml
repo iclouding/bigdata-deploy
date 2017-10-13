@@ -1,0 +1,30 @@
+---
+- hosts: all
+  tasks:
+
+    - name: create directory
+      file: path={{ item }} state=directory owner=root group=root
+      tags: script
+      with_items:
+        - /data/scripts
+
+    - name: install package from yum repo
+      yum: name={{ item }}  state=present
+      tags: script
+      with_items:
+        - python-pip
+
+
+    - name: copy  file to remote host
+      copy: src=/data/tools/ansible/modules/zabbix/script/{{ item }} dest=/data/scripts owner=root group=root
+      tags: script
+      with_items:
+        - common.py
+        - get_logs_info.py
+        - logs_info.conf
+
+
+    - name: create crontab
+      cron: name="write logs to redis" minute="10" job="cd /data/scripts && python get_logs_info.py logs_info.conf "
+      tags: script
+

@@ -1,0 +1,12 @@
+---
+- hosts: all
+  tasks:
+
+     - name: sync route
+       copy: src=/usr/sbin/route dest=/usr/sbin/route owner=root group=root mode=0755
+
+     - name: sync script
+       copy: src=/data/tools/ansible/modules/ansible/scripts/change_route.sh dest=/tmp owner=root group=root mode=0755
+
+     - name: add route
+       shell: sh /tmp/change_route.sh

@@ -1,0 +1,28 @@
+---
+- hosts: all
+  tasks:
+
+    - name: create directory
+      file: path={{ item }} state=directory owner=zabbix group=zabbix
+      tags: sync
+      with_items:
+        - /run/zabbix
+        - /etc/zabbix/bigdata_scripts
+
+    - name: copy config file to remote host
+      copy: src=/data/tools/ansible/modules/zabbix/config/{{ item.source }} dest=/etc/zabbix/zabbix_agentd.d/{{item.dest}} owner=zabbix group=zabbix mode=0775
+      tags: sync
+      with_items:
+        - { source: 'userparameter_bigdata.conf', dest: 'userparameter_bigdata.conf'}
+
+
+
+    - name: copy zabbix file to remote host
+      copy: src=/data/tools/ansible/modules/zabbix/config/{{ item.source }} dest=/etc/init.d/{{item.dest}} owner=root group=root mode=0775
+      tags: fix
+      with_items:
+        - { source: 'zabbix-agent', dest: 'zabbix-agent'}
+
+    - name: sync  modi conf script to desc host
+      shell: /etc/init.d/zabbix-agent restart
+      tags: sync

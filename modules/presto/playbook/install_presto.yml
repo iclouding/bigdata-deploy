@@ -1,0 +1,94 @@
+---
+- hosts: all
+  tasks:
+
+    - name: download tar.gz file
+      shell: ncftpget -z -ubigdata -p'whaley!90365' 10.255.130.6 /tmp bigdata/{{ item }}
+      tags: install
+      with_items:
+        - presto-server-0.181.tar.gz
+
+    - name: decompress
+      shell: cd /tmp && tar zxvf  presto-server-0.181.tar.gz -C /app/
+      tags: install
+      args:
+        creates: /app/presto-server-0.181/.install
+
+    - name: change owner
+      shell: chown -R hadoop:hadoop /app/presto-server-0.181
+      tags: install
+
+    - name: create Create a soft link to spark
+      file: src=/app/presto-server-0.181 dest=/opt/presto state=link owner=hadoop group=hadoop
+      tags: install
+
+    - name: touch install file
+      shell: touch /app/presto-server-0.181/.install
+      tags: install
+      args:
+        creates: /app/presto-server-0.181/.install
+
+    - name: create directory
+      file: path={{ item }} state=directory owner=hadoop group=hadoop
+      tags: install
+      with_items:
+        - /data/logs/presto/
+        - /opt/presto/etc/
+        - /opt/presto/etc/catalog
+
+- hosts: worker
+  tasks:
+
+    - name: copy config file to remote host
+      copy: src=/data/tools/ansible/modules/presto/{{ item.src }} dest=/opt/presto/{{ item.dest }} owner=hadoop group=hadoop mode=0644
+      tags: config
+      with_items:
+        - { src: 'config/worker-config.properties', dest: 'etc/config.properties'}
+
+- hosts: coordinator
+  tasks:
+
+    - name: copy config file to remote host
+      copy: src=/data/tools/ansible/modules/presto/{{ item.src }} dest=/opt/presto/{{ item.dest }} owner=hadoop group=hadoop mode=0644
+      tags: config
+      with_items:
+        - { src: 'config/coordinator-config.properties', dest: 'etc/config.properties'}
+
+- hosts: all
+  tasks:
+
+    - name: copy config file to remote host
+      copy: src=/data/tools/ansible/modules/presto/{{ item.src }} dest=/opt/presto/{{ item.dest }} owner=hadoop group=hadoop mode=0755
+      tags: config
+      with_items:
+        - { src: 'bin/launcher', dest: 'bin/launcher'}
+        - { src: 'config/node.properties', dest: 'etc/node.properties'}
+        - { src: 'config/jvm.config', dest: 'etc/jvm.config'}
+        - { src: 'config/log.properties', dest: 'etc/log.properties'}
+        - { src: 'config/jmx.properties', dest: 'etc/catalog/jmx.properties'}
+        - { src: 'config/hive.properties', dest: 'etc/catalog/hive.properties'}
+
+    - name: sync  modi conf script to desc host
+      copy: src=/data/tools/ansible/modules/ansible/scripts/modi_conf/{{ item }} dest=/data/scripts/{{ item }} owner=hadoop group=hadoop mode=0755
+      tags: config
+      with_items:
+        - make_conf.py
+        - presto.conf
+
+    - name: run modi config script
+      shell: python make_conf.py presto.conf
+      tags: config
+      args:
+        chdir: /data/scripts
+
+    - name: download jar file
+      shell: ncftpget -z -ubigdata -p'whaley!90365' 10.255.130.6 /tmp bigdata/{{ item }}
+      tags: bin
+      with_items:
+        - presto-cli-0.181-executable.jar
+
+    - name: rename bin file
+      shell: mv /tmp/presto-cli-0.181-executable.jar /opt/presto/bin/presto-cli
+      tags: bin
+
+

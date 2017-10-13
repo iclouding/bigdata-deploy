@@ -1,0 +1,48 @@
+---
+- hosts: all
+  tasks:
+    - name: create hue log directory
+      file: path=/data/logs/hue state=directory owner=hadoop group=hadoop
+      tags: install
+    
+    - name: copy hue tar file to remote host
+      shell: ncftpget -z -ubigdata -p'whaley!90365' 10.255.130.6 /tmp bigdata/{{ item }}
+      tags: install
+      with_items:
+        - hue-3.11.0.tgz
+
+    - name: tar hue tar to /app
+      shell: cd /tmp && tar zxvf  hue-3.11.0.tgz -C /app
+      tags: install
+      args:
+        creates: /app/hue-3.11.0/.install
+
+    - name: owner to hadoop
+      shell: chown -R hadoop:hadoop /app/hue-3.11.0
+      tags: install
+      args:
+        creates: /app/hue-3.11.0/.install
+
+    - name: /app/hue owner to hadoop
+      file: name=/app/hue-3.11.0 owner=hadoop group=hadoop
+      tags: install
+
+    - name: create a soft link to hue
+      file: src=/app/hue-3.11.0 dest=/opt/hue state=link owner=hadoop group=hadoop
+      tags: install
+
+    - name: touch install file
+      shell: touch /app/hue-3.11.0/.install
+      tags: install
+      args:
+        creates: /app/hue-3.11.0/.install
+
+    - name: copy hue config file to remote host
+      copy: src=/data/tools/ansible/modules/hue/config_test/{{ item.src }} dest=/opt/hue/{{ item.dest }} owner=hadoop group=hadoop mode={{ item.mode }}
+      tags: config
+      with_items:
+        - { src : "hue.ini" , dest : "desktop/conf" , mode : "0755" }
+        - { src : "log4j.properties" , dest : "desktop/conf" , mode : "0755" }
+        - { src : "launch_supervisor.sh" , dest : "build/env/bin" , mode : "0771" }
+
+

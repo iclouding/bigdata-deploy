@@ -1,0 +1,11 @@
+---
+- hosts: all
+  tasks:
+    - name: copy py file to remote host
+      copy: src=/data/tools/ansible/modules/ansible/scripts/remove_expired/remove_expired.py dest=/data/tools owner=root group=root mode=0775
+
+    - name: copy ini file to remote host
+      copy: src=/data/tools/ansible/modules/ansible/scripts/remove_expired/remove_expired.ini dest=/data/tools owner=root group=root mode=0644
+
+    - name: create remove expired  cron
+      cron: name="clear expired files" minute=10 hour=10  job="cd /data/tools &&  python remove_expired.py"

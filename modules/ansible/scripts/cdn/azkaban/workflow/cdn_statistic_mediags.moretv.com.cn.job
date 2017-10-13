@@ -1,0 +1,6 @@
+type=command
+dependencies=cdn_download_mediags.moretv.com.cn
+host=mediags.moretv.com.cn
+command=sh ${working.dir}/../bin/cdn_statistic.sh --host=${host} --logTime=${startDate} --offset=1 --jdbcUrl=${jdbcUrl} --jdbcUser=${jdbcUser} --jdbcPassword=${jdbcPassword}
+retries=${statisticRetries}
+retry.backoff=${statisticRetryBackOff}

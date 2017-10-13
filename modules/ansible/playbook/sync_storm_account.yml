@@ -1,0 +1,19 @@
+---
+- hosts: all
+  tasks:
+
+    - name: mkdir /home/storm/.ssh
+      shell: mkdir -p /home/storm/.ssh
+
+    - name: rsync spark,hadoop authorized_keys
+      copy: src=/data/tools/ansible/modules/ansible/config/system/host_info/{{ item }}_id dest=/home/{{ item }}/.ssh/authorized_keys owner={{ item }} group=hadoop mode=0600
+      tags: auth
+      with_items:
+        - storm
+
+
+    - name: rsync storm  known_hosts
+      copy: src=/data/tools/ansible/modules/ansible/config/system/host_info/all_host dest=/home/{{ item }}/.ssh/known_hosts owner={{ item }} group=hadoop mode=0644
+      tags: auth
+      with_items:
+        - storm

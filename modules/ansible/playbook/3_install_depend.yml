@@ -1,0 +1,43 @@
+---
+- hosts: all
+  tasks:
+    - name: copy java8_144 tar  to remote host
+      shell: ncftpget -z -ubigdata -p'whaley!90365' 10.255.130.6 /tmp bigdata/{{ item }}
+      with_items:
+        - jdk-8u144-linux-x64.tar.gz
+
+    - name: tar java8_144 jdk to /usr/local/bin
+      shell: cd /tmp && tar zxvf jdk-8u144-linux-x64.tar.gz -C /usr/local/bin
+
+    - name: copy java8_65 tar  to remote host
+      shell: ncftpget -z -ubigdata -p'whaley!90365' 10.255.130.6 /tmp bigdata/{{ item }}
+      with_items:
+        - jdk1.8.0_65.tar.gz
+
+    - name: tar java8_65 jdk to /usr/local/bin
+      shell: cd /tmp && tar zxvf  jdk1.8.0_65.tar.gz -C /usr/local/bin
+
+    - name: /use/lib/jdk owner to root
+      file: name=/usr/local/bin/jdk1.8.0_65 owner=root group=root
+
+    - name: create Create a soft link to root
+      file: src=/usr/local/bin/jdk1.8.0_65 dest=/usr/local/bin/java state=link owner=root group=root
+      
+    - name: copy scala tar  to remote host
+      shell: ncftpget -z -ubigdata -p'whaley!90365' 10.255.130.6 /tmp bigdata/{{ item }}
+      with_items:
+        - scala-2.11.6.tar.gz
+
+    - name: tar scala to /usr/lib
+      shell: cd /tmp && tar zxvf  scala-2.11.6.tar.gz -C /usr/local/bin
+
+    - name: /use/lib/scala owner to root
+      file: name=/usr/local/bin/scala-2.11.6 owner=root group=root
+
+    - name: create Create a soft link to scala
+      file: src=/usr/local/bin/scala-2.11.6 dest=/usr/local/bin/scala state=link owner=root group=root
+      
+    - name: rsync  /etc/profile
+      copy: src=/data/tools/ansible/modules/ansible/config/system/profile.sample dest=/etc/profile
+
+

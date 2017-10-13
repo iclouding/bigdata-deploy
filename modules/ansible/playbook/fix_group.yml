@@ -1,0 +1,19 @@
+---
+- hosts: all
+  tasks:
+    - name: create user group
+      group: name={{ item }} state=present
+      with_items:
+        - hadoop
+        - moretv
+
+    - name: add users
+      user: name={{ item.name }} state=present group={{ item.groups }}
+      with_items:
+        - { name: 'hdfs', groups: 'hadoop' }
+        - { name: 'yarn', groups: 'hadoop' }
+        - { name: 'mesos', groups: 'hadoop' }
+        - { name: 'hadoop', groups: 'hadoop' }
+        - { name: 'moretv', groups: 'moretv' }
+        - { name: 'spark', groups: 'hadoop' }
+        - { name: 'storm', groups: 'hadoop' }

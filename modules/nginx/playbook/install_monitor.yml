@@ -1,0 +1,20 @@
+---
+
+- hosts: all
+  tasks:
+
+    - name: make dir
+      file: dest={{ item }} state=directory  mode=764 owner=root group=root
+      with_items:
+        - /etc/zabbix/zabbix_agentd.d
+        - /etc/zabbix/scripts
+
+    - name: copy  config file to remote host
+      copy: src={{ item.name }} dest={{ item.dest }} owner=root group=root mode=0771
+      with_items:
+        - {name: '/data/tools/ansible/modules/nginx/config/ngx-extsvr-log/nginx.conf', dest: '/opt/openresty/nginx/conf'}
+        - {name: '/data/tools/ansible/modules/nginx/package/userparameter_nginx_error.conf', dest: '/etc/zabbix/zabbix_agentd.d'}
+
+    - name : reload nginx && zabbix
+      shell : /opt/openresty/nginx/sbin/nginx -s reload && /etc/init.d/zabbix-agent restart
+

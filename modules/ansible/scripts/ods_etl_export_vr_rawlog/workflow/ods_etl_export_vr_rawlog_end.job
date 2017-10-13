@@ -1,0 +1,2 @@
+type=command
+command=python ${working.dir}/../bin/hdfs2ftp_vr.py  ${startDate}

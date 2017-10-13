@@ -1,0 +1,10 @@
+--安装用于crontab的脚本
+ansible-playbook -i kylin_cron.host kylin_cron_host.yml
+
+
+--添加crontab
+ansible online_cron_machine -i kylin_cron.host -m cron -a "name='check kylin cube error status and resume it job1' minute=*/2  user='hadoop' job='/bin/python /home/hadoop/monitor_kylin_cube_error_satus.py MEDUSA_PLAY_LIVE_QOS_CUBE >>/data/logs/kylin/MEDUSA_PLAY_LIVE_QOS_CUBE_MONITOR.log 2>&1'  "
+ansible online_cron_machine -i kylin_cron.host -m cron -a "name='check kylin cube error status and resume it job2' minute=*/2  user='hadoop' job='/bin/python /home/hadoop/monitor_kylin_cube_error_satus.py helios_rolling_status_cube >>/data/logs/kylin/helios_rolling_status_cube.log 2>&1'  "
+ansible online_cron_machine -i kylin_cron.host -m cron -a "name='check kylin cube error status and resume it job3' minute=*/2  user='hadoop' job='/bin/python /home/hadoop/monitor_kylin_cube_error_satus.py medusa_hot_play_cube >>/data/logs/kylin/medusa_hot_play_cube.log 2>&1'  "
+ansible online_cron_machine -i kylin_cron.host -m cron -a "name='check kylin cube error status and resume it job4' minute=*/2  user='hadoop' job='/bin/python /home/hadoop/monitor_kylin_cube_error_satus.py hot_play_cube >>/data/logs/kylin/hot_play_cube.log 2>&1'  "
+ansible online_cron_machine -i kylin_cron.host -m cron -a "name='check kylin cube error status and resume it job5' minute=*/2  user='hadoop' job='/bin/python /home/hadoop/monitor_kylin_cube_error_satus.py whaley_thor_probe_cube >>/data/logs/kylin/whaley_thor_probe_cube.log 2>&1'  "

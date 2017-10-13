@@ -1,0 +1,6 @@
+---
+- hosts: all
+  tasks:
+
+    - name: rsync spark,hadoop known_hosts
+      copy: src=/data/tools/ansible/modules/ansible/config/system/hosts.sample dest=/etc/hosts

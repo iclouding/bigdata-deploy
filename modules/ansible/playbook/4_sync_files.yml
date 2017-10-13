@@ -1,0 +1,43 @@
+---
+- hosts: all
+  tasks:
+
+    - name: rsync spark,hadoop authorized_keys
+      copy: src=/data/tools/ansible/modules/ansible/config/system/host_info/{{ item }}_id dest=/home/{{ item }}/.ssh/authorized_keys owner={{ item }} group=hadoop mode=0600
+      tags: auth
+      with_items:
+        - hadoop
+        - yarn
+        - hdfs
+        - spark
+        - mesos
+
+    - name: rsync spark,hadoop known_hosts
+      copy: src=/data/tools/ansible/modules/ansible/config/system/host_info/all_host dest=/home/{{ item }}/.ssh/known_hosts owner={{ item }} group=hadoop mode=0644
+      tags: auth
+      with_items:
+        - hadoop
+        - yarn
+        - hdfs
+        - spark
+        - mesos
+
+    - name: rsync  /etc/profile
+      copy: src=/data/tools/ansible/modules/ansible/config/system/profile.sample dest=/etc/profile
+      tags: profile
+
+    - name: source /etc/profile
+      shell: source /etc/profile
+      tags: profile
+
+    - name: rsync /data/tools/ansible/config/system to spark,moretv which use private env like JAVA_HOME
+      copy: src=/data/tools/ansible/modules/ansible/config/system/hosts.sample dest=/etc/hosts
+      tags: hosts
+
+    - name: rsync hosts files
+      copy: src=/data/tools/ansible/modules/ansible/config/system/hosts.sample dest=/etc/hosts owner=root group=root mode=0644
+      tags: hosts
+
+    - name: rsync process limit  files
+      copy: src=/data/tools/ansible/modules/ansible/config/system/20-nproc.conf dest=/etc/security/limits.d/20-nproc.conf owner=root group=root mode=0644
+      tags: limit

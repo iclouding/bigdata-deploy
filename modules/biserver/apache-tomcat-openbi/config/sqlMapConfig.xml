@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+        PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+
+    <!-- default用于指定某一个数据库环境，可用于数据库环境切换 -->
+    <environments default="development">
+        <environment id="development">
+            <transactionManager type="JDBC" />
+            <dataSource type="POOLED">
+                <property name="driver" value="com.mysql.jdbc.Driver" />
+                <!-- 测试用URL -->
+                <property name="url" value="jdbc:mysql://bigdata-extsvr-db_bi1:3306/eagletv" />
+                <property name="username" value="bi" />
+                <property name="password" value="mlw321@moretv" />
+            </dataSource>
+        </environment>
+    </environments>
+    <!-- 集中管理映射文件 -->
+    <mappers>
+        <mapper resource="sql/mapper/OpenBiUserMapper.xml"/>
+        <mapper resource="sql/mapper/PromotionDetailMapper.xml"/>
+        <mapper resource="sql/mapper/AppRecommendMapper.xml"/>
+    </mappers>
+</configuration>

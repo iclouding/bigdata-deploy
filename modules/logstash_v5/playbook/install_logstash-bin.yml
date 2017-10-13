@@ -1,0 +1,41 @@
+---
+- hosts: nodes
+  tasks:
+
+    - name: copy tar file to remote host
+      shell: ncftpget -z -ubigdata -p'whaley!90365' 10.255.130.6 /tmp bigdata/{{ item }}
+      tags: install
+      with_items:
+        - logstash-5.2.0.tar.gz
+
+    - name: decompress logstash-5.2.0.tar.gz
+      shell: cd /tmp && tar zxvf  logstash-5.2.0.tar.gz -C /app && chown -R moretv:moretv /app/logstash-5.2.0
+      tags: install
+      args:
+        creates: /app/logstash-5.2.0/.install
+
+    - name: touch install file
+      shell: touch /app/logstash-5.2.0/.install
+      tags: install
+      args:
+        creates: /app/logstash-5.2.0/.install
+
+    - name: create soft link
+      file: src=/app/logstash-5.2.0 dest=/opt/logstash_v5 state=link owner=moretv group=moretv
+      tags: install
+
+    - name: make dir
+      file: path={{ item.name }} state=directory owner={{ item.user }} group={{ item.groups }}
+      tags: install
+      with_items:
+         - { name: '/data/logs/logstash_v5', user: 'moretv', groups: 'moretv' }
+
+    - name: copy logstash config file to remote host
+      copy: src=/data/tools/ansible/modules/logstash_v5/config/etc/logstash/{{ item.name }} dest={{ item.dest }} owner=moretv group=moretv mode=755
+      tags: config
+      with_items:
+        - {name: 'jvm.options',                         dest: '/opt/logstash_v5/config'}
+        - {name: 'log4j2.properties',                   dest: '/opt/logstash_v5/config'}
+        - {name: 'logstash.yml',                        dest: '/opt/logstash_v5/config'}
+        - {name: 'start_logstash.sh',                   dest: '/opt/logstash_v5/bin'}
+        - {name: 'stop_logstash.sh',                    dest: '/opt/logstash_v5/bin'}

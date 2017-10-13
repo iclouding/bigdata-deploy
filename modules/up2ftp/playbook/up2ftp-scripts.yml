@@ -1,0 +1,25 @@
+---
+- hosts: all
+  tasks:
+
+    - name: install package from yum repo
+      yum: name={{ item }}  state=present
+      tags: install
+      with_items:
+        - ncftp
+
+    - name: create directory
+      file: path={{ item.name }} state=directory owner={{ item.user }} group={{ item.groups }}
+      tags: install
+      with_items:
+        - { name: '/data/scripts', user: 'root', groups: 'root' }
+
+    - name: copy  script  to remote host
+      tags: install
+      copy: src=/data/tools/ansible/modules/up2ftp/script/{{ item }} dest=/data/scripts
+      with_items:
+        - up2ftp.py
+
+    - name: create script with up2ftp cron
+      tags: cron
+      cron: name="upload nginx logs 2 ftp " minute=0 hour=1  job="/usr/bin/python /data/scripts/up2ftp.py"

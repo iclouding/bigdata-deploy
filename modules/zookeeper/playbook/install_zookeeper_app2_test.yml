@@ -1,0 +1,50 @@
+---
+- hosts: all
+  tasks:
+    - name: copy zookeeper tar file to remote host
+      shell: ncftpget -z -ubigdata -p'whaley!90365' 10.255.130.6 /tmp bigdata/{{ item }}
+      tags: install
+      with_items:
+        - zookeeper2-3.4.6.tar.gz
+
+    - name: tar zookeeper tar to /app
+      shell: cd /tmp && tar zxvf  zookeeper2-3.4.6.tar.gz -C /app
+      args:
+        creates: /app/zookeeper2-3.4.6/.install
+
+    - name: /app/zookeeper-3.4.6 owner to zookeeper
+      file: name=/app/zookeeper2-3.4.6 owner=moretv group=moretv
+
+    - name: /app/zookeeper-3.4.6 owner to zookeeper
+      shell: chown -R moretv:moretv /app/zookeeper2-3.4.6
+
+    - name: create Create a soft link to zookeeper
+      file: src=/app/zookeeper2-3.4.6 dest=/opt/zookeeper2 state=link owner=moretv group=moretv
+
+    - name: copy zookeeper config file to remote host
+      copy: src=/data/tools/ansible/modules/zookeeper/config_test/zoo_app2.cfg dest=/opt/zookeeper2/conf/zoo.cfg owner=moretv group=moretv mode=0771
+
+    - name: create zookeeper need directory
+      file: path={{ item }}  state=directory  owner=moretv group=moretv
+      with_items:
+        - /opt/zookeeper2/data
+        - /data/logs/zookeeper2
+
+    - name: copy zookeeper config file to remote host
+      copy: src=/data/tools/ansible/modules/zookeeper/config_test/myid dest=/opt/zookeeper2/data/myid owner=moretv group=moretv mode=0771
+
+    - name: sync  modi conf script to desc host
+      copy: src=/data/tools/ansible/modules/ansible/scripts/modi_conf/{{ item }} dest=/data/scripts/{{ item }} owner=moretv group=moretv mode=0755
+      with_items:
+        - make_conf.py
+        - zookeeper.conf
+
+    - name: run modi config script
+      shell: python make_conf.py zookeeper.conf
+      args:
+        chdir: /data/scripts
+
+    - name: touch install file
+      shell: touch /app/zookeeper2-3.4.6/.install
+      args:
+        creates: /app/zookeeper2-3.4.6/.install

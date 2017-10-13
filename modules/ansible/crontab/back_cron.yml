@@ -1,0 +1,30 @@
+---
+- hosts: all
+  tasks:
+
+    - name: create directory
+      file: path={{ item.name }} state=directory owner={{ item.user }} group={{ item.groups }}
+      tags: install
+      with_items:
+        - { name: '/data/scripts', user: 'root', groups: 'root' }
+        
+    - name: install package from yum repo
+      yum: name={{ item }}  state=present
+      tags: install
+      with_items:
+        - ncftp
+        - python-pip
+
+    - name:  install arrow
+      shell: pip install arrow
+      tags: install
+
+    - name: copy script  to remote host
+      tags: install
+      copy: src=/data/tools/ansible/modules/ansible/crontab/scripts/back_cron.py dest=/data/scripts/back_cron.py
+
+    - name: create script run cron
+      tags: cron
+      cron: name="backup cron" minute=10 hour=20 weekday=5 job="/usr/bin/python /data/scripts/back_cron.py"
+
+

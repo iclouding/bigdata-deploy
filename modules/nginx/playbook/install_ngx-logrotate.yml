@@ -1,0 +1,7 @@
+---
+
+- hosts: ngx-extsvr-log
+  tasks:
+
+    - name: copy nginx_logrotate.sh  to remote host
+      copy: src=/data/tools/ansible/modules/nginx/logdata-rotate/nginx_logrotate.sh dest=/data/tools owner=root group=root mode=0755

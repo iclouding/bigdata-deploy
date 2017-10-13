@@ -1,0 +1,15 @@
+[nodes]
+bigdata-appsvr-130-4
+bigdata-appsvr-130-5
+bigdata-appsvr-130-6
+bigdata-appsvr-130-7
+bigdata-appsvr-130-8
+bigdata-appsvr-130-9
+
+[run-apps-machine]
+bigdata-appsvr-130-4
+bigdata-appsvr-130-5
+bigdata-appsvr-130-6
+bigdata-appsvr-130-7
+bigdata-appsvr-130-8
+bigdata-appsvr-130-9

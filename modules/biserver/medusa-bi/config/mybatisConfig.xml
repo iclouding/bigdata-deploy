@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+		PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+		"http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+	<properties resource="jdbc.properties"/>
+
+	<environments default="medusa">
+		<environment id="medusa">
+			<transactionManager type="JDBC"/>
+			<dataSource type="POOLED">
+				<property name="driver" value="${medusa.jdbc.driverClassName}"/>
+				<property name="url" value="${medusa.jdbc.url}"/>
+				<property name="username" value="${medusa.jdbc.username}"/>
+				<property name="password" value="${medusa.jdbc.password}"/>
+			</dataSource>
+		</environment>
+
+		<environment id="metis">
+			<transactionManager type="JDBC"/>
+			<dataSource type="POOLED">
+				<property name="driver" value="${metis.jdbc.driverClassName}"/>
+				<property name="url" value="${metis.jdbc.url}"/>
+				<property name="username" value="${metis.jdbc.username}"/>
+				<property name="password" value="${metis.jdbc.password}"/>
+			</dataSource>
+		</environment>
+
+		<environment id="moretv">
+			<transactionManager type="JDBC"/>
+			<dataSource type="POOLED">
+				<property name="driver" value="${moretv.jdbc.driverClassName}"/>
+				<property name="url" value="${moretv.jdbc.url}"/>
+				<property name="username" value="${moretv.jdbc.username}"/>
+				<property name="password" value="${moretv.jdbc.password}"/>
+			</dataSource>
+		</environment>
+
+		<environment id="bi">
+			<transactionManager type="JDBC"/>
+			<dataSource type="POOLED">
+				<property name="driver" value="${bi.jdbc.driverClassName}"/>
+				<property name="url" value="${bi.jdbc.url}"/>
+				<property name="username" value="${bi.jdbc.username}"/>
+				<property name="password" value="${bi.jdbc.password}"/>
+			</dataSource>
+		</environment>
+
+		<environment id="realtime">
+			<transactionManager type="JDBC"/>
+			<dataSource type="POOLED">
+				<property name="driver" value="${realtime.jdbc.driverClassName}"/>
+				<property name="url" value="${realtime.jdbc.url}"/>
+				<property name="username" value="${realtime.jdbc.username}"/>
+				<property name="password" value="${realtime.jdbc.password}"/>
+			</dataSource>
+		</environment>
+
+	</environments>
+	<mappers>
+		<mapper resource="sql/mapper/basic/UserMapper.xml"/>
+		<mapper resource="sql/mapper/basic/PopedomMapper.xml"/>
+		<mapper resource="sql/mapper/basic/GroupMapper.xml"/>
+		<mapper resource="sql/mapper/basic/LoginMapper.xml"/>
+		<mapper resource="sql/mapper/basic/ApplicationMapper.xml"/>
+
+		<!--medusa应用的所有数据sql-->
+		<mapper resource="sql/mapper/medusa/crashLogStatistics/MedusaCrashMapper.xml"/>
+		<mapper resource="sql/mapper/medusa/crashLogStatistics/CrashNumUserTrendMapper.xml"/>
+		<mapper resource="sql/mapper/medusa/crashLogStatistics/MedusaGrayTestingMapper.xml"/>
+		<mapper resource="sql/mapper/medusa/crashLogStatistics/MedusaCrashTrendByMultiDimMapper.xml"/>
+		<!--userDevelop-->
+		<mapper resource="sql/mapper/medusa/usersDevelop/UserDevelopTrends.xml"/>
+		<mapper resource="sql/mapper/medusa/usersDevelop/UserUtilizeTrends.xml"/>
+		<mapper resource="sql/mapper/medusa/usersDevelop/ALiCloudOS.xml"/>
+        <mapper resource="sql/mapper/medusa/usersDevelop/UserChannelDistribution.xml"/>
+		<mapper resource="sql/mapper/medusa/usersDevelop/NewAddLoginPeriodAnalysis.xml"/>
+		<mapper resource="sql/mapper/medusa/usersDevelop/UserApkVersionDistribution.xml"/>
+		<mapper resource="sql/mapper/medusa/usersDevelop/UserTerminalDistribution.xml"/>
+		<!--pageStatistic-->
+		<mapper resource="sql/mapper/medusa/pageStatistics/classificationStatistic.xml"/>
+		<mapper resource="sql/mapper/medusa/pageStatistics/liveStatistic.xml"/>
+		<mapper resource="sql/mapper/medusa/pageStatistics/mytvStatistic.xml"/>
+		<mapper resource="sql/mapper/medusa/pageStatistics/searchStatistic.xml"/>
+		<mapper resource="sql/mapper/medusa/pageStatistics/settingStatistic.xml"/>
+		<mapper resource="sql/mapper/medusa/pageStatistics/SummaryStatistic.xml"/>
+		<mapper resource="sql/mapper/medusa/pageStatistics/todayRecommendStatistic.xml"/>
+		<mapper resource="sql/mapper/medusa/pageStatistics/foundationStatistic/billboardStatistic.xml"/>
+		<mapper resource="sql/mapper/medusa/pageStatistics/foundationStatistic/otherPeopleWatchingStatistic.xml"/>
+		<mapper resource="sql/mapper/medusa/pageStatistics/startpageStatistic.xml"/>
+
+		<!--userParticipate-->
+		<mapper resource="sql/mapper/medusa/userParticipate/UserUtilizeAbstract.xml"/>
+		<mapper resource="sql/mapper/medusa/userParticipate/UtilizeCishuAnalysis.xml"/>
+		<mapper resource="sql/mapper/medusa/userParticipate/UtilizeDurationAnalysis.xml"/>
+		<mapper resource="sql/mapper/medusa/userParticipate/UtilizePeriodAnalysis.xml"/>
+		<mapper resource="sql/mapper/medusa/userParticipate/AreaDistribution.xml"/>
+		<mapper resource="sql/mapper/medusa/userParticipate/UserRetention.xml"/>
+
+		<!--channelAndPrograma-->
+		<mapper resource="sql/mapper/medusa/channelAndPrograma/movieChannel.xml"/>
+		<mapper resource="sql/mapper/medusa/channelAndPrograma/tvChannel.xml"/>
+		<mapper resource="sql/mapper/medusa/channelAndPrograma/hotChannel.xml"/>
+		<mapper resource="sql/mapper/medusa/channelAndPrograma/zongyiChannel.xml"/>
+		<mapper resource="sql/mapper/medusa/channelAndPrograma/comicChannel.xml"/>
+		<mapper resource="sql/mapper/medusa/channelAndPrograma/jiluChannel.xml"/>
+		<mapper resource="sql/mapper/medusa/channelAndPrograma/xiquChannel.xml"/>
+		<mapper resource="sql/mapper/medusa/channelAndPrograma/sportsChannel.xml"/>
+		<mapper resource="sql/mapper/medusa/channelAndPrograma/kidsChannel.xml"/>
+		<mapper resource="sql/mapper/medusa/channelAndPrograma/mvChannel.xml"/>
+                <mapper resource="sql/mapper/medusa/channelAndPrograma/historyCollectChannel.xml"/> 
+		
+		<!--medusa统计需求-->
+		<mapper resource="sql/mapper/medusa/newVersionStatistics/UserTrendMapper.xml"/>
+		<mapper resource="sql/mapper/medusa/newVersionStatistics/UserDurationMapper.xml"/>
+		<mapper resource="sql/mapper/medusa/newVersionStatistics/UserLoginMapper.xml"/>
+		<mapper resource="sql/mapper/medusa/newVersionStatistics/UserPlayDuationMapper.xml"/>
+
+		<!--medusa过滤信息-->
+		<mapper resource="sql/mapper/medusa/filterInfo/ApkVersionInfo.xml"/>
+		<mapper resource="sql/mapper/medusa/filterInfo/ChannelInfo.xml"/>
+		<mapper resource="sql/mapper/medusa/filterInfo/MedusaTabInfo.xml"/>
+		<mapper resource="sql/mapper/medusa/filterInfo/TerminalInfo.xml"/>
+		<mapper resource="sql/mapper/medusa/filterInfo/MedusaApkVersionInfo.xml"/>
+		<mapper resource="sql/mapper/medusa/filterInfo/MedusaProductModelInfo.xml"/>
+		<mapper resource="sql/mapper/medusa/filterInfo/CrashProductCodeInfo.xml"/>
+		<mapper resource="sql/mapper/medusa/filterInfo/BuildDateInfo.xml"/>
+		<mapper resource="sql/mapper/medusa/filterInfo/CrashApkVersion.xml"/>
+
+
+		<!--metis 统计需求-->
+		<mapper resource="sql/mapper/metis/overview/realTimeStatistics.xml"/>
+		<mapper resource="sql/mapper/metis/pagecontentevaluate/functionStatistics.xml"/>
+		<mapper resource="sql/mapper/metis/pagecontentevaluate/timeStatistics.xml"/>
+		<mapper resource="sql/mapper/metis/functionuse/pageAccessPath.xml"/>
+		<mapper resource="sql/mapper/metis/functionuse/virtualControllerConnect.xml"/>
+		<mapper resource="sql/mapper/metis/functionuse/functionUse.xml"/>
+
+
+
+		<!--medusa live-->
+		<mapper resource="sql/mapper/medusa/live/userStatistic.xml"/>
+		<mapper resource="sql/mapper/medusa/live/contentStatistic.xml"/>
+		<mapper resource="sql/mapper/medusa/live/functionStatistic.xml"/>
+		<mapper resource="sql/mapper/medusa/live/overviewStat.xml"/>
+
+		<!--medusa 内容评估-->
+		<mapper resource="sql/mapper/medusa/contentEvaluation/dianboStatistic.xml"/>
+		<mapper resource="sql/mapper/medusa/contentEvaluation/recommendationStatistic.xml"/>
+		<mapper resource="sql/mapper/medusa/contentEvaluation/programQuery.xml"/>
+
+		<!--medusa 功能统计-->
+		<mapper resource="sql/mapper/medusa/functionStatistics/appRecommend.xml"/>
+		<mapper resource="sql/mapper/medusa/functionStatistics/searchStatistic.xml"/>
+
+		<!--medusa 账号系统-->
+		<mapper resource="sql/mapper/medusa/accountSystem/accountOverview.xml"/>
+
+		<!--medusa 灰度测试-->
+		<mapper resource="sql/mapper/medusa/medusaGrayTesting/info.xml"/>
+		<!--medusa 产品升级-->
+		<mapper resource="sql/mapper/medusa/productUpdate/CrashInfo.xml"/>
+
+		<mapper resource="sql/mapper/realtime/HotPlay.xml"/>
+		<mapper resource="sql/mapper/medusa/bi/activedata.xml"/>
+
+
+
+	</mappers>
+</configuration>

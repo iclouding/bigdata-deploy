@@ -1,0 +1,62 @@
+<?xml version="1.0"?>
+<?xml-stylesheet type="text/xsl" href="configuration.xsl"?>
+
+<configuration>
+    <property>
+        <name>hbase.master</name>
+        <value>bigtest-cmpt-129-18</value>
+    </property>
+    <property>
+        <name>hbase.rootdir</name>
+        <value>hdfs://hans/apache-hbase</value>
+    </property>
+    <property>
+        <name>hbase.cluster.distributed</name>
+        <value>true</value>
+    </property>
+    <property>
+        <name>hbase.tmp.dir</name>
+        <value>/data/logs/hbase/hbase-${user.name}</value>
+    </property>
+    <property>
+        <name>hbase.fs.tmp.dir</name>
+        <value>/user/${user.name}/hbase-staging</value>
+    </property>
+    <property>
+        <name>hbase.zookeeper.quorum</name>
+        <value>bigtest-cmpt-129-18,bigtest-cmpt-129-19,bigtest-cmpt-129-20</value>
+    </property>
+    <property>
+        <name>hbase.zookeeper.property.clientPort</name>
+        <value>2181</value>
+    </property>
+    <property>
+        <name>fail.fast.expired.active.master</name>
+        <value>true</value>
+    </property>
+    <property>
+        <name>hbase.regionserver.wal.codec</name>
+        <value>org.apache.hadoop.hbase.regionserver.wal.IndexedWALEditCodec</value>
+    </property>
+    <!-- enable doAs Impersonation -->
+    <!--
+    <property>
+        <name>hbase.thrift.support.proxyuser</name>
+        <value>true</value>
+    </property>
+    <property>
+      <name>hbase.regionserver.thrift.http</name>
+      <value>true</value>
+    </property>
+    -->
+    <!--
+    <property>
+        <name>phoenix.schema.isNamespaceMappingEnabled</name>
+        <value>true</value>
+    </property>
+    -->
+    <property>
+        <name>phoenix.query.dateFormatTimeZone</name>
+        <value>LOCAL</value>
+    </property>
+</configuration>

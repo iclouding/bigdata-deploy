@@ -1,0 +1,65 @@
+---
+- hosts: all
+  tasks:
+
+    - name: create directory
+      file: path={{ item }} state=directory owner=moretv group=moretv
+      tags: install
+      with_items:
+        - /data/logs/logcenter/current
+        - /app/logcenter4-1.0.0
+
+    - name: copy tar.gz file to remote host
+      copy: src=/data/tools/ansible/modules/logcenter/package/logcenter-1.0.0.tar.gz dest=/tmp owner=root group=root mode=755
+      tags: install
+
+    - name: decompress
+      shell: cd /tmp && tar zxvf  logcenter-1.0.0.tar.gz -C /app/logcenter{{item}}-1.0.0
+      tags: install
+      args:
+        creates: /app/logcenter{{item}}-1.0.0/.install
+      with_items:
+        - 4
+
+    - name: change owner
+      shell: chown -R moretv:moretv /app/logcenter{{item}}-1.0.0
+      tags: install
+      with_items:
+        - 4
+
+    - name: create Create a soft link to spark
+      file: src=/app/logcenter{{item}}-1.0.0 dest=/opt/logcenter{{item}} state=link owner=moretv group=moretv
+      tags: install
+      with_items:
+        - 4
+
+    - name: touch install file
+      shell: touch /app/logcenter{{item}}-1.0.0/.install
+      tags: install
+      args:
+        creates: /app/logcenter{{item}}-1.0.0/.install
+      with_items:
+        - 4
+
+    - name: copy config file to remote host
+      copy: src=/data/tools/ansible/modules/logcenter/config/{{ item.file }} dest=/opt/logcenter{{item.index}}/conf/{{ item.file }} owner=moretv group=moretv mode=0771
+      tags: config
+      with_items:
+        - { index: '4', file: 'application.conf'}
+        - { index: '4', file: 'application.ini'}
+        - { index: '4', file: 'logback.xml'}
+
+    - name: sync  modi conf script to desc host
+      copy: src=/data/tools/ansible/modules/ansible/scripts/modi_conf/{{ item }} dest=/data/scripts/{{ item }} owner=moretv group=moretv mode=0755
+      tags: config
+      with_items:
+        - make_conf.py
+        - logcenter.conf
+
+    - name: run modi config script
+      shell: python make_conf.py logcenter.conf
+      tags: config
+      args:
+        chdir: /data/scripts
+
+

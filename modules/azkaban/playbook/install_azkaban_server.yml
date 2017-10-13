@@ -1,0 +1,53 @@
+---
+- hosts: all
+  tasks:
+    - name: create azkaban  directory
+      file: path={{ item }} state=directory owner=hadoop group=hadoop
+      tags: install
+      with_items:
+        - /data/logs/azkaban
+        - /app/azkaban
+
+    - name: copy azkaban tar file to remote host
+      shell: ncftpget -z -ubigdata -p'whaley!90365' 10.255.130.6 /tmp bigdata/{{ item }}
+      tags: install
+      with_items:
+        - azkaban-exec-server-3.0.tar.gz
+
+    - name: tar azkaban tar to /app/azkaban
+      shell: cd /tmp && tar -zxvf  azkaban-exec-server-3.0.tar.gz -C /app/azkaban
+      args:
+        creates: /app/azkaban/azkaban-exec-server-3.0/.install
+
+    - name: owner to hadoop
+      shell: chown -R hadoop:hadoop /app/azkaban/azkaban-exec-server-3.0
+      args:
+        creates: /app/azkaban/azkaban-exec-server-3.0/.install
+
+    - name: /app/azkaban owner to hadoop
+      file: name=/app/azkaban owner=hadoop group=hadoop
+
+    - name: create a soft link to azkaban
+      file: src=/app/azkaban dest=/opt/azkaban state=link owner=hadoop group=hadoop
+
+    - name: touch install file
+      shell: touch /app/azkaban/azkaban-exec-server-3.0/.install
+      tags: install
+      args:
+        creates: /app/azkaban/azkaban-exec-server-3.0/.install
+
+    - name: copy azkaban config file to remote host
+      copy: src=/data/tools/ansible/modules/azkaban/config_server/{{ item }} dest=/opt/azkaban/azkaban-exec-server-3.0/conf/{{ item }} owner=hadoop group=hadoop mode=0771
+      with_items:
+        - azkaban.properties
+        - global.properties
+        - log4j.properties
+        - execute-as-user
+    - name: copy azkaban config file to remote host
+      copy: src=/data/tools/ansible/modules/azkaban/config_server/{{ item }} dest=/opt/azkaban/azkaban-exec-server-3.0/plugins/jobtypes/{{ item }} owner=hadoop group=hadoop mode=0771
+      with_items:
+        - commonprivate.properties
+
+
+
+

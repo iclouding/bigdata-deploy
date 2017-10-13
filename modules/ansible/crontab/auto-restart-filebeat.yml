@@ -1,0 +1,9 @@
+---
+- hosts: all
+  tasks:
+
+    - name: create start_filebeat_medusa_raw_log.sh cron
+      cron: name="filebeat autostart job 1" minute=*/6 user="moretv" job="sh /opt/filebeat_v5/start_filebeat_medusa_raw_log.sh >/dev/null 2>&1"
+
+    - name: create start_filebeat_helios_raw_log.sh  cron
+      cron: name="filebeat autostart job 2" minute=*/6 user="moretv" job="sh /opt/filebeat_v5/start_filebeat_helios_raw_log.sh >/dev/null 2>&1"

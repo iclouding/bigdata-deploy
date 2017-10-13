@@ -1,0 +1,38 @@
+---
+- hosts: all
+  tasks:
+
+    - name: copy tar file to remote host
+      tags: install
+      copy: src=/data/tools/ansible/modules/hive/package/hplsql-0.3.17.tar.gz dest=/tmp owner=hadoop group=hadoop mode=0771
+
+    - name: tar to /app
+      shell: cd /tmp && tar zxvf  hplsql-0.3.17.tar.gz -C /app
+      tags: install
+      args:
+        creates: /app/hplsql-0.3.17/.install
+
+    - name: chown to hadoop
+      tags: install
+      file: name=/app/hplsql-0.3.17 owner=hadoop group=hadoop
+
+    - name: create a soft link
+      tags: install
+      file: src=/app/hplsql-0.3.17 dest=/opt/hplsql state=link owner=hadoop group=hadoop
+
+    - name: touch install file
+      shell: touch /app/hplsql-0.3.17/.install
+      tags: install
+      args:
+        creates: /app/hplsql-0.3.17/.install
+
+    - name: copy config file to remote host
+      copy: src=/data/tools/ansible/modules/hive/config_test/{{ item.name }} dest=/app/hplsql-0.3.17/{{ item.dest }} owner=hadoop group=hadoop mode=0771
+      tags: config
+      with_items:
+        - {name: 'hplsql/hplsql', dest: ''}
+        - {name: 'hplsql/hplsql-site.xml', dest: ''}
+
+    - name: create a soft link
+      tags: config
+      file: src=/app/hplsql-0.3.17/hplsql dest=/usr/bin/hplsql state=link owner=hadoop group=hadoop

@@ -1,0 +1,146 @@
+{
+  "sparkConf": {
+    "spark.executor.memory": "5g",
+    "spark.scheduler.mode": "FAIR",
+    "spark.eventLog.enabled": "true",
+    "spark.eventLog.dir": "hdfs://hans/spark-log/spark-events",
+    "spark.cores.max": "100"
+  },
+  "kafkaConf": {
+    "metadata.broker.list": "bigdata-appsvr-130-1:9092,bigdata-appsvr-130-2:9092,bigdata-appsvr-130-3:9092,bigdata-appsvr-130-4:9092,bigdata-appsvr-130-5:9092,bigdata-appsvr-130-6:9092",
+    "serializer.class": "kafka.serializer.StringEncoder",
+    "partitioner.class": "kafka.producer.DefaultPartitioner",
+    "request.required.acks": "1",
+    "producer.type": "async",
+    "batch.num.messages": "500",
+    "compression.codec": "snappy"
+  },
+  "cassandraConf": {
+    "cassandra_host": "bigdata-appsvr-130-1,bigdata-appsvr-130-2,bigdata-appsvr-130-3,bigdata-appsvr-130-4,bigdata-appsvr-130-5",
+    "cluster_name": "Big Data Cluster"
+  },
+  "jdbc-helios-bi-whaley_bi": {
+    "driver": "com.mysql.jdbc.Driver",
+    "url": "jdbc:mysql://bigdata-appsvr-130-1:3306/whaley_bi?useUnicode=true&characterEncoding=utf-8&autoReconnect=true",
+    "user": "bi",
+    "password": "mlw321@moretv"
+  },
+  "jdbc-helios-bi-orca_bi": {
+    "driver": "com.mysql.jdbc.Driver",
+    "url": "jdbc:mysql://bigdata-appsvr-130-1:3306/orca_bi?useUnicode=true&characterEncoding=utf-8&autoReconnect=true",
+    "user": "bi",
+    "password": "mlw321@moretv"
+  },
+  "jdbc-helios-slave-dolphin_terminal": {
+    "driver": "com.mysql.jdbc.Driver",
+    "url": "jdbc:mysql://bigdata-extsvr-db_whaley_dlph_tmnl:3306/dolphin_terminal?useUnicode=true&characterEncoding=utf-8&autoReconnect=true",
+    "user": "bislave",
+    "password": "slave4bi@whaley"
+  },
+  "jdbc-helios-slave-ucenter": {
+    "driver": "com.mysql.jdbc.Driver",
+    "url": "jdbc:mysql://bigdata-extsvr-db_whaley_ucenter:3306/ucenter?useUnicode=true&characterEncoding=utf-8&autoReconnect=true",
+    "user": "bislave",
+    "password": "slave4bi@whaley"
+  },
+  "jdbc-helios-slave-terminal_upgrade": {
+    "driver": "com.mysql.jdbc.Driver",
+    "url": "jdbc:mysql://bigdata-extsvr-db_whaley_tmnl_upg:3306/terminal_upgrade?useUnicode=true&characterEncoding=utf-8&autoReconnect=true",
+    "user": "bislave",
+    "password": "slave4bi@whaley"
+  },
+  "jdbc-whaley-bi-illidan": {
+    "driver": "com.mysql.jdbc.Driver",
+    "url": "jdbc:mysql://bigdata-appsvr-130-7:3306/illidan?useUnicode=true&characterEncoding=utf-8&autoReconnect=true",
+    "user": "bigdata",
+    "password": "bigdata@whaley666"
+  },
+  "jdbc-moretv-slave-mtv_cms": {
+    "driver": "com.mysql.jdbc.Driver",
+    "url": "jdbc:mysql://bigdata-appsvr-130-2:3306/mtv_cms?useUnicode=true&characterEncoding=utf-8&autoReconnect=true",
+    "user": "bislave",
+    "password": "slave4bi@whaley"
+  },
+  "jdbc-helios-slave-mtv_cms": {
+    "driver": "com.mysql.jdbc.Driver",
+    "url": "jdbc:mysql://bigdata-appsvr-130-1:3306/mtv_cms?useUnicode=true&characterEncoding=utf-8&autoReconnect=true",
+    "user": "bislave",
+    "password": "slave4bi@whaley"
+  },
+  "jdbc-moretv-bi-bi": {
+    "driver": "com.mysql.jdbc.Driver",
+    "url": "jdbc:mysql://bigdata-appsvr-130-1:3306/bi?useUnicode=true&characterEncoding=utf-8&autoReconnect=true",
+    "user": "bi",
+    "password": "mlw321@moretv"
+  },
+  "jdbc-moretv-bi-medusa": {
+    "driver": "com.mysql.jdbc.Driver",
+    "url": "jdbc:mysql://bigdata-appsvr-130-1:3306/medusa?useUnicode=true&characterEncoding=utf-8&autoReconnect=true",
+    "user": "bi",
+    "password": "mlw321@moretv"
+  },
+  "jdbc-moretv-slave-tvservice-user": {
+    "driver": "com.mysql.jdbc.Driver",
+    "url": "jdbc:mysql://bigdata-appsvr-130-3:3306/tvservice?useUnicode=true&characterEncoding=utf-8&autoReconnect=true",
+    "user": "bislave",
+    "password": "slave4bi@whaley"
+  },
+  "jdbc-moretv-slave-tvservice-program": {
+    "driver": "com.mysql.jdbc.Driver",
+    "url": "jdbc:mysql://bigdata-appsvr-130-4:3306/tvservice?useUnicode=true&characterEncoding=utf-8&autoReconnect=true",
+    "user": "bislave",
+    "password": "slave4bi@whaley"
+  },
+  "jdbc-metis-bi-metis": {
+    "driver": "com.mysql.jdbc.Driver",
+    "url": "jdbc:mysql://bigdata-appsvr-130-1:3306/metis?useUnicode=true&characterEncoding=utf-8&autoReconnect=true",
+    "user": "bi",
+    "password": "mlw321@moretv"
+  },
+  "jdbc-moretv-bi-eagletv": {
+    "driver": "com.mysql.jdbc.Driver",
+    "url": "jdbc:mysql://bigdata-appsvr-130-1:3306/eagletv?useUnicode=true&characterEncoding=utf-8&autoReconnect=true",
+    "user": "bi",
+    "password": "mlw321@moretv"
+  },
+  "jdbc-helios-slave-tvservice-program": {
+    "driver": "com.mysql.jdbc.Driver",
+    "url": "jdbc:mysql://bigdata-appsvr-130-5:3306/tvservice?useUnicode=true&characterEncoding=utf-8&autoReconnect=true",
+    "user": "bislave",
+    "password": "slave4bi@whaley"
+  },
+  "jdbc-whaley-bi-advertising": {
+    "driver": "com.mysql.jdbc.Driver",
+    "url": "jdbc:mysql://bigdata-appsvr-130-1:3306/advertising?useUnicode=true&characterEncoding=utf-8&autoReconnect=true",
+    "user": "bi",
+    "password": "mlw321@moretv"
+  },
+  "jdbc-vr-bi-vr_bi": {
+    "driver": "com.mysql.jdbc.Driver",
+    "url": "jdbc:mysql://bigdata-appsvr-130-1:3306/vr_bi?useUnicode=true&characterEncoding=utf-8&autoReconnect=true",
+    "user": "bi",
+    "password": "mlw321@moretv"
+  },
+  "jdbc-eagle-bi-eagle_bi": {
+    "driver": "com.mysql.jdbc.Driver",
+    "url": "jdbc:mysql://bigdata-appsvr-130-1:3306/eagle_bi?useUnicode=true&characterEncoding=utf-8&autoReconnect=true",
+    "user": "bi",
+    "password": "mlw321@moretv"
+  },
+  "jdbc-moretv-slave-ucenter": {
+    "driver": "com.mysql.jdbc.Driver",
+    "url": "jdbc:mysql://bigdata-extsvr-db_moretv_ucenter:3306/ucenter?useUnicode=true&characterEncoding=utf-8&autoReconnect=true",
+    "user": "bislave",
+    "password": "slave4bi@whaley"
+  },
+  "redis-whaley-ai": {
+    "metadata_host": "bigdata-appsvr-130-7",
+    "metadata_port": "6379",
+    "metadata_db": "0"
+  },
+  "redis-whaley-bi": {
+    "metadata_host": "bigdata-appsvr-130-6",
+    "metadata_port": "6379",
+    "metadata_db": "0"
+  }
+}

@@ -1,0 +1,39 @@
+---
+- hosts: all
+  tasks:
+    - name: rsync init scripts
+      shell: ncftpget -z -ubigdata -p'whaley!90365' 10.255.130.6 /tmp bigdata/{{ item }}
+      with_items:
+        - mesos-1.0.1-2.0.93.centos701406.x86_64.rpm
+
+    - name: install package from yum repo
+      yum: name={{ item }}  state=present
+      with_items:
+        - subversion
+        - cyrus-sasl-md5
+        - libevent-devel
+
+    - name : run install  script
+      shell : rpm -i /home/mesos/mesos-1.0.1-2.0.93.centos701406.x86_64.rpm
+      args:
+        chdir: /tmp
+        creates: /opt/mesos/.install
+
+    - name: create directory
+      file: path=/opt/mesos state=directory owner=mesos group=hadoop
+
+    - name: create  a soft link to nginx
+      file: src={{ item.src }} dest={{ item.dest }} state=link owner=root group=root
+      with_items:
+        - {src: '/usr/bin/mesos', dest: '/opt/mesos/mesos'}
+        - {src: '/usr/sbin/mesos-slave', dest: '/opt/mesos/mesos-slave'}
+        - {src: '/usr/sbin/mesos-master', dest: '/opt/mesos/mesos-master'}
+
+    - name: touch install file
+      shell: touch /opt/mesos/.install
+      tags: install
+      args:
+        creates: /opt/mesos/.install
+
+    - name: create directory
+      file: path=/data/logs/mesos state=directory owner=mesos group=hadoop

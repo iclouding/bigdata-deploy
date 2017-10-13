@@ -1,0 +1,43 @@
+---
+
+- hosts: all
+  tasks:
+
+    - name: create user group
+      group: name={{ item }} state=present
+      with_items:
+        - hadoop
+
+    - name: add users
+      user: name={{ item.name }} state=present groups={{ item.groups }}
+      with_items:
+        - { name: 'spark', groups: 'hadoop' }
+
+    - name: make dir
+      file: dest={{ item }} state=directory  mode=764 owner=spark group=hadoop
+      with_items:
+        - /app/logupload
+        - /data/logs/logupload
+
+    - name: create soft link
+      file: src=/app/logupload dest=/opt/logupload state=link owner=spark group=hadoop
+      tags: install
+
+    - name: copy script file to remote host
+      copy: src=/data/tools/ansible/modules/bi-scripts/logcenter-upload/bin/{{ item }} dest=/app/logupload/{{ item }} owner=spark group=hadoop mode=0771
+      tags: bin
+      with_items:
+        - LogBackUp.sh
+        - LogUpload.sh
+        - LogBackUp_daily.sh
+        - LogUpload_daily.sh
+        - NginxLogBackup.sh
+        - NginxLogUpload.sh
+        - moretvloginlog.sh
+        - mtvkidsloginlog.sh
+        - GetMoretvLoginlogAndUpload2Hdfs.sh
+        - GetMtvkidsLoginlogAndUpload2Hdfs.sh
+        - MoretvRecommendLogUpload.sh
+
+
+

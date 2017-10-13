@@ -1,0 +1,52 @@
+{
+	"sparkConf": {"spark.executor.memory":"5g",
+	              "spark.scheduler.mode":"FAIR",
+	              "spark.eventLog.enabled":"true",
+	              "spark.eventLog.dir":"hdfs://hans/spark-log/spark-events",
+	              "spark.cores.max":"100"}
+	,
+	"tag_mysql":{"driver":"com.mysql.jdbc.Driver",
+                  "url":"jdbc:mysql://bigdata-appsvr-130-6:3306/europa?useUnicode=true&characterEncoding=utf-8&autoReconnect=true",
+				  "user":"bislave",
+				  "password":"slave4bi@whaley"}
+	,
+    "job_bi_mysql":{"driver":"com.mysql.jdbc.Driver",
+                  "url":"jdbc:mysql://bigdata-appsvr-130-7:3306/illidan?useUnicode=true&characterEncoding=utf-8&autoReconnect=true",
+                                  "user":"bigdata",
+                                  "password":"bigdata@whaley666"}		  
+	,				  
+	"moretv_cms_mysql":{"driver":"com.mysql.jdbc.Driver",
+                  "url":"jdbc:mysql://bigdata-appsvr-130-2:3306/mtv_cms?useUnicode=true&characterEncoding=utf-8&autoReconnect=true",
+				  "user":"bislave",
+				  "password":"slave4bi@whaley"}
+    ,  
+	"helios_cms_mysql":{"driver":"com.mysql.jdbc.Driver",
+                  "url":"jdbc:mysql://bigdata-appsvr-130-1:3306/mtv_cms?useUnicode=true&characterEncoding=utf-8&autoReconnect=true",
+				  "user":"bislave",
+				  "password":"slave4bi@whaley"}			  
+     ,                  
+	"moretv_recommend_mysql":{"driver":"com.mysql.jdbc.Driver",
+                  "url":"jdbc:mysql://bigdata-appsvr-130-4:3306/tvservice?useUnicode=true&characterEncoding=utf-8&autoReconnect=true",
+				  "user":"bi",
+				  "password":"mlw321@moretv"}
+	,
+	"helios_recommend_mysql":{"driver":"com.mysql.jdbc.Driver",
+                  "url":"jdbc:mysql://bigdata-appsvr-130-5:3306/tvservice?useUnicode=true&characterEncoding=utf-8&autoReconnect=true",
+				  "user":"bislave",
+				  "password":"slave4bi@whaley"}
+	,
+	"redis_rankingList":{"metadata_host":"bigdata-appsvr-130-7",
+                  "metadata_port":"6379",
+				  "metadata_db":"10"}
+	,
+	"kafkaConf":{"bootstrap.servers":"bigdata-appsvr-130-1:9092,bigdata-appsvr-130-2:9092,bigdata-appsvr-130-3:9092,bigdata-appsvr-130-4:9092,bigdata-appsvr-130-5:9092,bigdata-appsvr-130-6:9092",
+				"serializer.class":"kafka.serializer.StringEncoder",
+				"partitioner.class":"kafka.producer.DefaultPartitioner",
+				"request.required.acks":"1",
+				"producer.type":"async",
+	            "batch.num.messages":"500",
+				"compression.codec":"snappy"}
+	,
+	"cassandraConf":{"cassandra_host":"bigdata-appsvr-130-1,bigdata-appsvr-130-2,bigdata-appsvr-130-3,bigdata-appsvr-130-4,bigdata-appsvr-130-5",
+					"cluster_name":"Big Data Cluster"}
+}

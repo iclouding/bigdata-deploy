@@ -1,0 +1,44 @@
+---
+- hosts: mysql2redis-node
+  tasks:
+
+    - name: make dir
+      file: path={{ item.name }} state=directory owner={{ item.user }} group={{ item.groups }}
+      tags: install
+      with_items:
+        - { name: '/app/bi', user: 'spark', groups: 'hadoop' }
+        - { name: '/opt/bi', user: 'spark', groups: 'hadoop' }
+        - { name: '/data/logs/bi/mysql2redis', user: 'spark', groups: 'hadoop' }
+
+    - name: copy tar file
+      shell: ncftpget -z -ubigdata -p'whaley!90365' 10.255.130.6 /tmp bigdata/{{ item }}
+      tags: install
+      with_items:
+        - mysql2redis-1.0.0.tar.gz
+
+    - name: decompress tar file
+      shell: cd /tmp && tar zxvf  mysql2redis-1.0.0.tar.gz -C /app/bi && chown -R spark:hadoop /app/bi/mysql2redis-1.0.0
+      tags: install
+      args:
+        creates: /app/bi/mysql2redis-1.0.0/.install
+
+    - name: create soft link
+      file: src=/app/bi/mysql2redis-1.0.0 dest=/opt/bi/mysql2redis state=link owner=spark group=hadoop
+      tags: install
+
+    - name: touch install file
+      shell: touch /app/bi/mysql2redis-1.0.0/.install
+      tags: install
+      args:
+        creates: /app/bi/mysql2redis-1.0.0/.install
+
+    - name: copy bin & conf file
+      copy: src=/data/tools/ansible/modules/bi-scripts/mysql2redis/config/{{ item.name }} dest=/app/bi/mysql2redis-1.0.0/{{ item.dest }} owner=hadoop group=hadoop mode=755
+      tags: config
+      with_items:
+        - {name: 'bin/launch.sh', dest: 'bin/'}
+        - {name: 'bin/submit.sh', dest: 'bin/'}
+        - {name: 'bin/dateFn.sh', dest: 'bin/'}
+        - {name: 'bin/envFn.sh', dest: 'bin/'}
+        - {name: 'conf/log4j.properties', dest: 'conf/'}
+        - {name: 'conf/spark.properties', dest: 'conf/'}

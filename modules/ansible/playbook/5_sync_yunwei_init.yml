@@ -1,0 +1,17 @@
+---
+- hosts: all
+  tasks:
+
+    - name: rsync yunwei_init scripts
+      copy: src=/data/tools/ansible/modules/ansible/scripts/yunwei_init.sh dest=/tmp owner=root group=root mode=0755
+      tags: yunwei_init
+
+    - name : run yunwei_init script
+      command : sh /tmp/yunwei_init.sh
+      tags: yunwei_init
+
+    - name: copy zabbix file to remote host
+      copy: src=/data/tools/ansible/modules/zabbix/config/{{ item.source }} dest=/etc/init.d/{{item.dest}} owner=root group=root mode=0775
+      tags: fix
+      with_items:
+        - { source: 'zabbix-agent', dest: 'zabbix-agent'}

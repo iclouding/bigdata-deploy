@@ -1,0 +1,36 @@
+---
+- hosts: all
+  tasks:
+    - name: copy storm tar file to remote host
+      shell: ncftpget -z -ubigdata -p'whaley!90365' 10.255.130.6 /tmp bigdata/{{ item }}
+      with_items:
+        - apache-storm-0.10.0.tar.gz
+
+    - name: tar storm tar to /app
+      shell: cd /tmp && tar zxvf  apache-storm-0.10.0.tar.gz -C /app
+      args:
+        creates: /app/apache-storm-0.10.0/.install
+
+    - name: owner to storm
+      shell: chown -R storm:hadoop /app/apache-storm-0.10.0
+
+    - name: /app/apache-storm-0.10.0 owner to kafka1
+      file: name=/app/apache-storm-0.10.0 owner=storm group=hadoop
+
+    - name: create Create a soft link to storm
+      file: src=/app/apache-storm-0.10.0 dest=/opt/storm state=link owner=storm group=hadoop
+
+    - name: touch install file
+      shell: touch /app/apache-storm-0.10.0/.install
+      tags: install
+      args:
+        creates: /app/apache-storm-0.10.0/.install
+
+    - name: copy storm config file to remote host
+      copy: src=/data/tools/ansible/modules/storm/config/storm.yaml dest=/opt/storm/conf/storm.yaml owner=storm group=hadoop mode=0771
+
+    - name: create storm need directory
+      file: path={{ item }}  state=directory  owner=storm group=hadoop
+      with_items:
+        - /data/logs/storm
+

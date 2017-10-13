@@ -1,0 +1,44 @@
+---
+- hosts: nodes
+  tasks:
+    - name: copy tomcat tar file to remote host
+      shell: ncftpget -z -ubigdata -p'whaley!90365' 10.255.130.6 /tmp bigdata/{{ item }}
+      with_items:
+        - apache-tomcat-7.0.73.tar.gz
+
+    - name: tar tomcat tar to /app
+      shell: cd /tmp && tar zxvf  apache-tomcat-7.0.73.tar.gz -C /app
+
+    - name: rename tomcat dir
+      shell: cd /app && rm -rf tomcat-lion && mv apache-tomcat-7.0.73 tomcat-lion
+
+    - name: owner to tomcat
+      shell: chown -R moretv:moretv /app/tomcat-lion
+
+    - name: create Create a soft link to tomcat
+      file: src=/app/tomcat-lion dest=/opt/tomcat-lion state=link owner=moretv group=moretv
+
+    - name: copy lion war file to remote host
+      shell: ncftpget -z -ubigdata -p'whaley!90365' 10.255.130.6 /tmp bigdata/{{ item }}
+      with_items:
+        - lion-console-1.0.0.war
+
+    - name: rename file
+      shell: mv /tmp/lion-console-1.0.0.war /opt/tomcat-lion/webapps/ROOT.war
+
+    - name: change mode
+      file: path=/opt/tomcat-lion/webapps/ROOT.war state=file owner=moretv group=moretv mode=0771
+
+    - name: copy tomcat config file to remote host
+      copy: src=/data/tools/ansible/modules/lion/config/{{ item }} dest=/opt/tomcat-lion/conf/{{ item }} owner=moretv group=moretv mode=0771
+      with_items:
+        - server.xml
+
+    - name: create lion need directory
+      file: path={{ item }}  state=directory  owner=moretv group=moretv
+      with_items:
+        - /data/logs/lion-console
+        - /data/webapps
+
+    - name: copy tomcat config file to remote host
+      copy: src=/data/tools/ansible/modules/lion/config/appenv dest=/data/webapps/appenv owner=moretv group=moretv mode=0771

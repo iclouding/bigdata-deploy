@@ -1,0 +1,42 @@
+---
+- hosts: all
+  tasks:
+    - name: copy kylin tar file to remote host
+      shell: ncftpget -z -ubigdata -p'whaley!90365' 10.255.130.6 /tmp bigdata/{{ item }}
+      tags: install
+      with_items:
+        - apache-kylin-2.0.0-bin-hbase1x.tar.gz
+
+    - name: tar kylin tar to /app
+      shell: cd /tmp && tar zxvf  apache-kylin-2.0.0-bin-hbase1x.tar.gz -C /app
+      args:
+        creates: /app/apache-kylin-2.0.0-bin/.install
+
+    - name: owner to kylin
+      shell: chown -R hadoop:hadoop /app/apache-kylin-2.0.0-bin
+
+    - name: create Create a soft link to kylin
+      file: src=/app/apache-kylin-2.0.0-bin dest=/opt/kylin state=link owner=hadoop group=hadoop
+
+    - name: touch install file
+      shell: touch /app/apache-kylin-2.0.0-bin/.install
+      tags: install
+      args:
+        creates: /app/apache-kylin-2.0.0-bin/.install
+
+    - name: copy kylin config file to remote host
+      copy: src=/data/tools/ansible/modules/kylin2/config_test/{{ item }} dest=/opt/kylin/conf/{{ item }} owner=hadoop group=hadoop mode=0771
+      with_items:
+        - kylin.properties
+        - kylin_job_conf.xml
+        - kylin_job_conf_inmem.xml
+        - kylin_hive_conf.xml 
+        - kylin-server-log4j.properties
+
+    - name: copy  kafka sh file to remote host bin
+      copy: src=/data/tools/ansible/modules/kylin2/config_test/{{ item.name }} dest={{ item.dest }} owner=hadoop group=hadoop mode=755
+      with_items:
+        - {name: 'kylin_monitor.sh',                         dest: '/opt/kylin/bin'}
+        - {name: 'setenv.sh',                                dest: '/opt/kylin/bin'}
+        - {name: 'kylin_query_server_restart.sh',            dest: '/opt/kylin/bin'}
+

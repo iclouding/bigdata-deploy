@@ -1,0 +1,15 @@
+---
+- hosts: all
+  tasks:
+
+    - name: create kafka_topic_distribute_helios_hot_16 cron
+      cron: name="logstash autostart job 1" minute=*/6 user="moretv" job="sh /opt/logstash_v5/bin/start_logstash.sh kafka_topic_distribute_helios_hot_16.conf>/dev/null 2>&1"
+
+    - name: create start_filebeat_helios_raw_log.sh  cron
+      cron: name="logstash autostart job 2" minute=*/6 user="moretv" job="sh /opt/logstash_v5/bin/start_logstash.sh kafka_topic_distribute_helios_status.conf>/dev/null 2>&1"
+
+    - name: create kafka_topic_distribute_helios_hot_16 cron
+      cron: name="logstash autostart job 3" minute=*/6 user="moretv" job="sh /opt/logstash_v5/bin/start_logstash.sh kafka_topic_distribute_medusa_hot.conf>/dev/null 2>&1"
+
+    - name: create start_filebeat_helios_raw_log.sh  cron
+      cron: name="logstash autostart job 4" minute=*/6 user="moretv" job="sh /opt/logstash_v5/bin/start_logstash.sh kafka_topic_distribute_jianianhua.conf>/dev/null 2>&1"

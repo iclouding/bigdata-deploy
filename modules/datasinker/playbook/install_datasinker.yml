@@ -1,0 +1,65 @@
+---
+- hosts: all
+  tasks:
+
+    - name: create directory
+      file: path={{ item }} state=directory owner=moretv group=moretv
+      tags: install
+      with_items:
+        - /app/datasinker-price-1.0.2
+        - /app/datasinker-cis-1.0.2
+
+    - name: copy tar.gz file to remote host
+      shell: ncftpget -z -ubigdata -p'whaley!90365' 10.255.130.6 /tmp bigdata/{{ item }}
+      tags: install
+      with_items:
+        - datasinker-price.tar.gz
+        - datasinker-cis.tar.gz
+
+    - name: decompress
+      shell: cd /tmp && tar zxvf  {{ item.src }} -C /app/{{ item.dest }}
+      tags: install
+      args:
+        creates: /app/{{ item.dest }}/.install
+      with_items:
+        - { src: 'datasinker-price.tar.gz', dest: 'datasinker-price-1.0.2'}
+        - { src: 'datasinker-cis.tar.gz', dest: 'datasinker-cis-1.0.2'}
+
+    - name: change owner
+      shell: chown -R moretv:moretv /app/{{ item }}
+      tags: install
+      with_items:
+        - datasinker-price-1.0.2
+        - datasinker-cis-1.0.2
+
+    - name: create Create a soft link to spark
+      file: src=/app/{{ item.src }} dest=/opt/{{ item.dest }} state=link owner=moretv group=moretv
+      tags: install
+      with_items:
+        - { src: 'datasinker-price-1.0.2', dest: 'datasinker-price'}
+        - { src: 'datasinker-cis-1.0.2', dest: 'datasinker-cis'}
+
+    - name: touch install file
+      shell: touch /app/{{ item }}/.install
+      tags: install
+      args:
+        creates: /app/{{ item }}/.install
+      with_items:
+        - datasinker-price-1.0.2
+        - datasinker-cis-1.0.2
+
+    - name: copy config file to remote host
+      copy: src=/data/tools/ansible/modules/datasinker/config/{{ item.dir }}/{{item.file}} dest=/opt/{{item.dir}}/conf/{{ item.file }} owner=moretv group=moretv mode=0771
+      tags: config
+      with_items:
+        - { dir: 'datasinker-price', file: 'app.properties'}
+        - { dir: 'datasinker-price', file: 'application.ini'}
+        - { dir: 'datasinker-price', file: 'jdbc.properties'}
+        - { dir: 'datasinker-price', file: 'mybatisConfig.xml'}
+        - { dir: 'datasinker-cis', file: 'app.properties'}
+        - { dir: 'datasinker-cis', file: 'application.ini'}
+        - { dir: 'datasinker-cis', file: 'jdbc.properties'}
+        - { dir: 'datasinker-cis', file: 'mybatisConfig.xml'}
+        - { dir: 'datasinker-cis', file: 'settings.properties'}
+
+

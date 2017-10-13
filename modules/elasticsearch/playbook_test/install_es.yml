@@ -1,0 +1,53 @@
+---
+- hosts: all
+  tasks:
+    - name: copy elasticsearch tar file to remote host
+      copy: src=/data/tools/ansible/modules/elasticsearch/package/elasticsearch-2.3.3.tar.gz dest=/tmp/elasticsearch-2.3.3.tar.gz owner=root group=root mode=0771
+
+    - name: tar elasticsearch tar to /app
+      shell: cd /tmp && tar zxvf  elasticsearch-2.3.3.tar.gz -C /app
+      # args:
+      #   creates: /app/elasticsearch-2.3.3/.install
+
+    - name: owner to elasticsearch
+      shell: chown -R moretv:moretv /app/elasticsearch-2.3.3
+
+    - name: create Create a soft link to elasticsearch
+      file: src=/app/elasticsearch-2.3.3 dest=/opt/elasticsearch state=link owner=moretv group=moretv
+
+    - name: copy elasticsearch shell file to remote host
+      copy: src=/data/tools/ansible/modules/elasticsearch/config_test/{{ item }} dest=/opt/elasticsearch/bin/{{ item }} owner=moretv group=moretv mode=0771
+      with_items:
+        - start.sh
+        - stop.sh
+
+    - name: create elasticsearch need directory
+      file: path={{ item }}  state=directory  owner=moretv group=moretv
+      with_items:
+        - /data/logs/elasticsearch
+        - /data/apps/elasticsearch
+
+    - name: copy elasticsearch config file to remote host
+      copy: src=/data/tools/ansible/modules/elasticsearch/config_test/{{ item }} dest=/opt/elasticsearch/config/{{ item }} owner=moretv group=moretv mode=0771
+      tags: config
+      with_items:
+        - elasticsearch.yml
+
+    - name: sync  modi conf script to desc host
+      copy: src=/data/tools/ansible/modules/ansible/scripts/modi_conf/{{ item }} dest=/data/scripts/{{ item }} owner=moretv group=moretv mode=0755
+      tags: config
+      with_items:
+        - make_conf.py
+        - es.conf
+
+    - name: run modi config script
+      shell: python make_conf.py es.conf
+      tags: config
+      args:
+        chdir: /data/scripts
+
+    - name: touch install file
+      shell: touch /app/elasticsearch-2.3.3/.install
+      tags: install
+      args:
+        creates: /app/elasticsearch-2.3.3/.install

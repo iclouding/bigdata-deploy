@@ -1,0 +1,54 @@
+---
+- hosts: all
+  tasks: 
+    - name: add hadoop users
+      user: name={{ item.name }} state=present groups={{ item.groups }}
+      with_items: 
+        - { name: 'hadoop', groups: 'hadoop' }
+
+
+    - name: copy hadoop tar file to remote host 
+      copy: src=/data/tools/ansible/package/hadoop-2.6.2.tar.gz dest=/tmp/hadoop-2.6.2.tar.gz owner=hadoop group=whaley mode=0771
+
+    - name: tar hadoop to /app
+      shell: cd /tmp && tar zxvf  hadoop-2.6.2.tar.gz -C /app
+      args:
+        chdir: /tmp
+        creates: /app/hadoop
+
+
+    - name: owner to hadoop
+      shell: chown -R hadoop:whaley /app/hadoop
+
+    - name: /app/hadoop owner to hadoop
+      file: name=/app/hadoop owner=hadoop group=hadoop
+
+    - name: create Create a soft link to java
+      file: src=/app/hadoop dest=/opt/hadoop state=link owner=hadoop group=hadoop
+
+    - name: copy hadoop config file to remote host
+      copy: src=/data/tools/ansible/config/hadoop/hadoop/{{ item.name }} dest={{ item.dest }} group=hadoop mode=0771
+      with_items:
+        - { name: 'core-site.xml', dest: '/opt/hadoop/etc/hadoop' }
+        - { name: 'hadoop-env.sh', dest: '/opt/hadoop/etc/hadoop' }
+        - { name: 'hdfs-site.xml', dest: '/opt/hadoop/etc/hadoop' }
+        - { name: 'mapred-site.xml', dest: '/opt/hadoop/etc/hadoop' }
+        - { name: 'slaves', dest: '/opt/hadoop/etc/hadoop' }
+        - { name: 'yarn-site.xml', dest: '/opt/hadoop/etc/hadoop' }
+        - { name: 'getRack.py', dest: '/opt/hadoop/etc/hadoop' }
+        - { name: 'mapred-env.sh', dest: '/opt/hadoop/etc/hadoop' }
+        - { name: 'yarn-env.sh', dest: '/opt/hadoop/etc/hadoop' }
+
+    - name: create hadoop log path
+      file: path=/var/log/hadoop  state=directory  owner=hadoop group=hadoop
+    
+    - name: create hadoop need path
+      file: path={{ item }}  state=directory  owner=hadoop group=hadoop
+      with_items: 
+        - /opt/hadoop/tmp
+        - /data1/hdfs/journal
+        - /data1/hdfs/name
+        - /data1/hdfs/data
+        - /data2/hdfs/data
+        - /data3/hdfs/data
+        - /data4/hdfs/data

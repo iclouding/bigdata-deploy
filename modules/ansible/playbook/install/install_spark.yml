@@ -1,0 +1,46 @@
+---
+- hosts: all
+  tasks: 
+    - name: add spark users
+      user: name=spark state=present groups=whaley
+
+    - name: copy spark profile  to remote host
+      copy: src=/root/tools/ansible/config/system/bash_profile_spark dest=/home/spark/.bash_profile owner=spark group=spark mode=0644
+    
+    - name: copy scala 2.10 tar file to remote host
+      copy: src=/root/tools/ansible/package/scala-2.10.4.tar.gz dest=/tmp/scala-2.10.4.tar.gz owner=spark group=whaley mode=0771
+
+    - name: tar scala to /app
+      shell: cd /tmp && tar zxvf  scala-2.10.4.tar.gz -C /app
+
+    - name: owner scala directory to spark
+      shell: chown -R spark:whaley /app/scala-2.10.4
+
+    - name: /app/scala-2.10.4 owner to spark
+      file: name=/app/scala-2.10.4 owner=spark group=whaley
+
+    - name: copy spark-1.6.0.tar.gz tar file to remote host
+      copy: src=/root/tools/ansible/package/spark-1.6.0.tar.gz dest=/tmp/spark-1.6.0.tar.gz owner=spark group=whaley mode=0771
+
+    - name: tar spark to /app
+      shell: cd /tmp && tar zxvf  spark-1.6.0.tar.gz -C /app
+
+    - name: owner spark directory to spark
+      shell: chown -R spark:whaley /app/spark
+
+    - name: /app/spark owner to spark
+      file: name=/app/spark owner=spark group=whaley
+
+    - name: create Create a soft link to spark
+      file: src=/app/spark dest=/opt/spark state=link owner=spark group=whaley
+
+    - name: copy spark config file to remote host
+      copy: src=/root/tools/ansible/config/spark/{{ item.name }} dest={{ item.dest }} owner=spark group=whaley mode=0771
+      with_items:
+        - { name: 'core-site.xml', dest: '/opt/spark/conf' }
+        - { name: 'hdfs-site.xml', dest: '/opt/spark/conf' }
+        - { name: 'slaves', dest: '/opt/spark/conf' }
+        - { name: 'spark-env.sh', dest: '/opt/spark/conf' }
+
+    - name: create spark log path
+      file: path=/var/log/spark  state=directory  owner=spark group=whaley

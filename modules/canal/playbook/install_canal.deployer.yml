@@ -1,0 +1,71 @@
+---
+- hosts: all
+  tasks:
+
+    - name: copy hbase tar file to remote host
+      copy: src=/data/tools/ansible/modules/canal/package/canal.deployer-1.0.23.tar.gz dest=/tmp/canal.deployer-1.0.23.tar.gz
+      tags: install
+
+    - name: tar file to /app
+      shell: mkdir -p /app/canal.deployer-1.0.23 && cd /tmp && tar zxvf canal.deployer-1.0.23.tar.gz -C /app/canal.deployer-1.0.23
+      tags: install
+      args:
+        creates: /app/canal.deployer-1.0.23/.install
+
+    - name: create log directory
+      file: path=/data/logs/canal state=directory owner=moretv group=moretv mode=0777
+      tags: install
+
+    - name: change owner
+      shell: chown -R moretv:moretv /app/canal.deployer-1.0.23
+      tags: install
+
+    - name: touch install file
+      shell: touch /app/canal.deployer-1.0.23/.install
+      tags: install
+      args:
+        creates: /app/canal.deployer-1.0.23/.install
+
+    - name: create Create a soft link
+      file: src=/app/canal.deployer-1.0.23 dest=/opt/canal.deployer state=link owner=moretv group=moretv
+      tags: link
+
+    - name: create config directory
+      file: path=/app/canal.deployer-1.0.23/conf/whaley_tvservice state=directory owner=moretv group=moretv mode=0777
+      tags: config
+
+    - name: remove example config directory
+      shell: rm -rf /app/canal.deployer-1.0.23/example
+      tags: config
+
+    - name: copy config file
+      copy: src=/data/tools/ansible/modules/canal/config/conf/{{ item }} dest=/app/canal.deployer-1.0.23/conf/{{ item }} owner=moretv group=moretv mode=755
+      tags: config
+      with_items:
+        - spring/default-instance.xml
+        - spring/file-instance.xml
+        - spring/group-instance.xml
+        - spring/local-instance.xml
+        - spring/memory-instance.xml
+        - whaley_tvservice/instance.properties
+        - canal.properties
+        - logback.xml
+
+    - name: sync  modi conf script to desc host
+      copy: src=/data/tools/ansible/modules/ansible/scripts/modi_conf/{{ item }} dest=/data/scripts/{{ item }} owner=moretv group=moretv mode=0755
+      tags: config
+      with_items:
+        - canal.deployer.conf
+
+    - name: run modi config script
+      shell: python make_conf.py canal.deployer.conf
+      tags: config
+      args:
+        chdir: /data/scripts
+
+    - name: update jar file
+      copy: src=/data/tools/ansible/modules/canal/package/{{ item }} dest=/app/canal.deployer-1.0.23/lib/{{ item }} owner=moretv group=moretv mode=755
+      tags: updatejar
+      with_items:
+        - canal.parse-1.0.23.jar
+

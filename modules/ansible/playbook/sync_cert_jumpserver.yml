@@ -1,0 +1,50 @@
+---
+- hosts: all
+  tasks:
+    - name: create user group
+      group: name={{ item }} state=present
+      with_items:
+        - hadoop
+        - moretv
+
+    - name: add users
+      user: name={{ item.name }} state=present group={{ item.groups }}
+      with_items:
+        - { name: 'hdfs', groups: 'hadoop' }
+        - { name: 'yarn', groups: 'hadoop' }
+        - { name: 'mesos', groups: 'hadoop' }
+        - { name: 'hadoop', groups: 'hadoop' }
+        - { name: 'moretv', groups: 'moretv' }
+        - { name: 'spark', groups: 'hadoop' }
+        - { name: 'storm', groups: 'hadoop' }
+
+    - name: create directory
+      file: path={{ item.name }} state=directory owner={{ item.user }} group={{ item.groups }}
+      with_items:
+        - { name: '/home/hdfs/.ssh', user: 'hdfs', groups: 'hadoop' }
+        - { name: '/home/yarn/.ssh', user: 'yarn', groups: 'hadoop' }
+        - { name: '/home/mesos/.ssh', user: 'mesos', groups: 'hadoop' }
+        - { name: '/home/hadoop/.ssh', user: 'hadoop', groups: 'hadoop' }
+        - { name: '/home/moretv/.ssh', user: 'moretv', groups: 'moretv' }
+        - { name: '/home/spark/.ssh', user: 'spark', groups: 'hadoop' }
+        - { name: '/home/storm/.ssh', user: 'storm', groups: 'hadoop' }
+
+
+    - name: rsync spark,hadoop authorized_keys
+      copy: src=/data/tools/ansible/modules/ansible/config/system/host_info/{{ item }}_id dest=/home/{{ item }}/.ssh/authorized_keys owner={{ item }} group=hadoop mode=0600
+      tags: auth
+      with_items:
+        - hadoop
+        - yarn
+        - hdfs
+        - spark
+        - mesos
+        - moretv
+        - storm
+
+    - name: rsync spark,hadoop known_hosts
+      copy: src=/data/tools/ansible/modules/ansible/config/system/host_info/all_host dest=/home/{{ item }}/.ssh/known_hosts owner={{ item }} group=hadoop mode=0644
+      tags: auth
+      with_items:
+        - hadoop
+        - yarn

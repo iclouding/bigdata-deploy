@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>高升CDN节目数据,By 微鲸运维团队！！</title>
+</head>
+<body>
+<h2>
+    <strong><span style="font-size:22px;">{{days}} 高升CDN节目数据存在错误，请修正</span></strong>
+</h2>
+<p>
+    <br/>
+</p>
+<h3>
+    <strong><span style="font-size:18px;">高升CDN 蘑菇源(mediags.moguv.com) 数据</span></strong>
+</h3>
+<table border="1">
+    <tr>
+        <th>日期</th>
+        <th>来源</th>
+        <th>节目ID</th>
+        <th>节目名称</th>
+        <th>流量占比%</th>
+        <th>下载排名</th>
+    </tr>
+    {% for line in data_moguv %}
+    <tr>
+        {% for item in line %}
+        <th>{{ item }}</th>
+        {% endfor %}
+    </tr>
+    {% endfor %}
+</table>
+<p>
+    <br/>
+</p>
+</p>
+<h3>
+    <strong><span style="font-size:18px;">高升CDN 蘑菇源(mediags2.moguv.com) 数据</span></strong>
+</h3>
+<table border="1">
+    <tr>
+        <th>日期</th>
+        <th>来源</th>
+        <th>节目ID</th>
+        <th>节目名称</th>
+        <th>流量占比%</th>
+        <th>下载排名</th>
+    </tr>
+    {% for line in data_moguv_2 %}
+    <tr>
+        {% for item in line %}
+        <th>{{ item }}</th>
+        {% endfor %}
+    </tr>
+    {% endfor %}
+</table>
+<p>
+    <br/>
+</p>
+
+<h3>
+    <strong><span style="font-size:18px;">高升CDN 香菇源(mediags.moretv.com.cn) 数据</span></strong>
+</h3>
+<table border="1">
+    <tr>
+        <th>日期</th>
+        <th>来源</th>
+        <th>节目ID</th>
+        <th>节目名称</th>
+        <th>流量占比%</th>
+        <th>下载排名</th>
+    </tr>
+    {% for line in data_moretv %}
+    <tr>
+        {% for item in line %}
+        <th>{{ item }}</th>
+        {% endfor %}
+    </tr>
+    {% endfor %}
+</table>
+
+<h3 style="text-align:center;">
+    <strong> BY <a href="whaley_alert@whaley.cn" target="_blank">Whaley运维报警邮箱</a></strong>
+</h3>
+<!--{{ a_variable }}-->
+
+<!--{# a comment #}-->
+</body>
+</html>

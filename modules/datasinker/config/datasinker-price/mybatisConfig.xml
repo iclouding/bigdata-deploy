@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+		PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+		"http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+	<properties resource="jdbc.properties"/>
+
+	<environments default="apcp">
+		<environment id="apcp">
+			<transactionManager type="JDBC"/>
+			<dataSource type="POOLED">
+				<property name="driver" value="${apcp.jdbc.driverClassName}"/>
+				<property name="url" value="${apcp.jdbc.url}"/>
+				<property name="username" value="${apcp.jdbc.username}"/>
+				<property name="password" value="${apcp.jdbc.password}"/>
+			</dataSource>
+		</environment>
+
+	</environments>
+	<mappers>
+		<mapper resource="sql/mapper/apcp/PriceInfo.xml"/>
+		<mapper resource="sql/mapper/apcp/PriceInfoHistory.xml"/>
+		<mapper resource="sql/mapper/apcp/PriceUpdateHistory.xml"/>
+	</mappers>
+</configuration>

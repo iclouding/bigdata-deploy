@@ -1,0 +1,38 @@
+---
+- hosts: all
+  tasks:
+
+    - name: install package from yum repo
+      yum: name={{ item }}  state=present
+      with_items:
+        - libaio
+
+    - name: copy mysql tar file to remote host
+      shell: ncftpget -z -ubigdata -p'whaley!90365' 10.255.130.6 /tmp bigdata/{{ item }}
+      with_items:
+        - mysql-5.5.tar.gz
+
+    - name: create directory
+      file: path={{ item.name }} state=directory owner={{ item.user }} group={{ item.groups }}
+      with_items:
+        - { name: '/app', user: 'root', groups: 'root' }
+        - { name: '/data/logs', user: 'root', groups: 'root' }
+        - { name: '/data/tools', user: 'root', groups: 'root' }
+
+    - name: tar mysql to /tmp
+      shell:  tar zxvf mysql-5.5.tar.gz -C /app
+      args:
+        chdir: /tmp
+        creates: /data/lib/mysql/.install
+
+    - name: run install script
+      shell: sh install_mysql.sh
+      args:
+        chdir: /app/mysql_5.5
+        creates: /data/lib/mysql/.install
+
+    - name: touch install file
+      shell: touch /data/lib/mysql/.install
+      tags: install
+      args:
+        creates: /data/lib/mysql/.install

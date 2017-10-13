@@ -1,0 +1,10 @@
+---
+- hosts: all
+  tasks:
+
+    - name: copy scripts  to remote host
+      copy: src=/data/tools/ansible/modules/monitor/monitor_cpu.py dest=/data/scripts/monitor_cpu.py owner=root  mode=0775
+
+
+    - name: create monitor_cpu  cron
+      cron: name="monitor_cpu" minute=*/5 user="root" job="cd /data/scripts &&  python monitor_cpu.py"

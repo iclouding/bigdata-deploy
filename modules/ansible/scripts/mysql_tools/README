@@ -1,0 +1,9 @@
+step 1：
+python mysql_diff_tables_row.py 1.conf '2016-06-20'
+统计1.conf中2个DB的表中数据，如有不同，写入diff_row.log文件
+
+step 2：
+python mysql_diff_tables_values.py 1.conf '2016-06-20'
+比对1.conf中字段内容，路由不同写入sql_diff_tables_values.log，本脚本默认2个talbes的条数是相同的
+如：
+2017-03-07 17:55:34,528 Level 2 check_values:tables new_add_collect ,values not find :[	 "2016-06-20", 	 "fh45motvd4k7", 	 "Careless Whisper", 	 2	]

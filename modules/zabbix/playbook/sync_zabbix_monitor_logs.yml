@@ -1,0 +1,24 @@
+---
+- hosts: all
+  tasks:
+
+    - name: create directory
+      file: path={{ item }} state=directory owner=root group=root
+      tags: script
+      with_items:
+        - /data/scripts
+
+
+    - name: copy  file to remote host
+      copy: src=/data/tools/ansible/modules/zabbix/script/{{ item }} dest=/data/scripts owner=root group=root
+      tags: script
+      with_items:
+        - common.py
+        - monitor_logs_hdfs.py
+        - logs_info.conf
+
+
+    - name: create crontab
+      cron: name="monitor files in hdfs &size " minute="40" job="cd /data/scripts && python monitor_logs_hdfs.py logs_info.conf "
+      tags: script
+

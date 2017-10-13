@@ -1,0 +1,2 @@
+add jar hdfs:///libs/udf/DataWarehouseUdf-1.0-SNAPSHOT.jar
+create temporary function getOtaVersion as 'cn.whaley.udf.OtaVersionUdf' ;

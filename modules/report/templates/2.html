@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>高升CDN节目数据</title>
+</head>
+<body>
+<p>{{days}}高升CDN节目数据</p>
+<p><b>我是正文</b></p>
+
+<table border="1">
+    <tr>
+        <th>日期</th>
+        <th>来源</th>
+        <th>节目id</th>
+        <th>节目名称</th>
+        <th>流量G</th>
+        <th>流量占比%</th>
+        <th>下载排名</th>
+    </tr>
+    {% for line in data %}
+    <tr>
+        {% for item in line %}
+        <th>{{ item }}</th>
+        {% endfor %}
+    </tr>
+    {% endfor %}
+</table>
+
+<h2><b>微鲸运维小组提供</b></h2>
+<!--{{ a_variable }}-->
+
+<!--{# a comment #}-->
+</body>
+</html>

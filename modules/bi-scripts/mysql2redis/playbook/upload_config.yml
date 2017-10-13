@@ -1,0 +1,20 @@
+---
+- hosts: mysql2redis-node
+  tasks:
+
+    - name: copy test config file
+      copy: src=/data/tools/ansible/modules/bi-scripts/mysql2redis/package/bisdk-config-test.json dest=/tmp owner=spark group=hadoop mode=755
+      tags: test
+
+    - name: upload test config file
+      shell: su - spark -c "hadoop fs -put -f /tmp/bisdk-config-test.json /libs/config/bisdk-config.json"
+      tags: test
+
+    - name: copy product config file
+      copy: src=/data/tools/ansible/modules/bi-scripts/mysql2redis/package/bisdk-config-product.json dest=/tmp owner=spark group=hadoop mode=755
+      tags: product
+
+    - name: upload product config file
+      shell: su - spark -c "hadoop fs -put -f /tmp/bisdk-config-product.json /libs/config/bisdk-config.json"
+      tags: product
+

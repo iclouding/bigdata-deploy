@@ -1,0 +1,53 @@
+---
+- hosts: all
+  tasks:
+    - name: create forest log directory
+      file: path={{ item }} state=directory owner=moretv group=moretv
+      tags: install
+      with_items:
+        - /app/forest-bi-1.0.0
+        - /data/logs/forest-bi
+    
+    - name: copy package to remote host
+      shell: ncftpget -z -ubigdata -p'whaley!90365' 10.255.130.6 /tmp bigdata/{{ item }}
+      tags: install
+      with_items:
+        - forest-1.0.0-SNAPSHOT-bin.tar.gz
+
+    - name: decompress package
+      shell: cd /tmp && tar -zvxf forest-1.0.0-SNAPSHOT-bin.tar.gz -C /app/forest-bi-1.0.0 && chown -R moretv:moretv /app/forest-bi-1.0.0
+      tags: install
+
+    - name: create a soft link
+      file: src=/app/forest-bi-1.0.0 dest=/opt/forest-bi state=link owner=moretv group=moretv
+      tags: install
+
+    - name: copy filebeat config file to remote host
+      copy: src=/data/tools/ansible/modules/forest/config/{{ item.name }} dest={{ item.dest }} owner=moretv group=moretv mode=755
+      tags: config
+      with_items:
+        - {name: 'new_machine_submit.sh',          dest: '/opt/forest-bi/Forest-1.0.0-SNAPSHOT-bin/bin'}
+        - {name: 'helios_product_start.sh',        dest: '/opt/forest-bi/Forest-1.0.0-SNAPSHOT-bin/bin'}
+        - {name: 'medusa_product_start.sh',        dest: '/opt/forest-bi/Forest-1.0.0-SNAPSHOT-bin/bin'}
+        - {name: 'whaley_thorprobe_start.sh',      dest: '/opt/forest-bi/Forest-1.0.0-SNAPSHOT-bin/bin'}
+        - {name: 'medusa_playqos_start.sh',        dest: '/opt/forest-bi/Forest-1.0.0-SNAPSHOT-bin/bin'}
+        - {name: 'whaley_thorprobe_restart.sh',    dest: '/opt/forest-bi/Forest-1.0.0-SNAPSHOT-bin/bin'}
+        - {name: 'medusa_product_restart.sh',      dest: '/opt/forest-bi/Forest-1.0.0-SNAPSHOT-bin/bin'}
+        - {name: 'medua_playqos_restart.sh',       dest: '/opt/forest-bi/Forest-1.0.0-SNAPSHOT-bin/bin'}
+        - {name: 'helios_product_restart.sh',      dest: '/opt/forest-bi/Forest-1.0.0-SNAPSHOT-bin/bin'}
+        - {name: 'forest.properties',              dest: '/opt/forest-bi/Forest-1.0.0-SNAPSHOT-bin/conf'}
+        - {name: 'Forest-1.0.0-SNAPSHOT.jar',      dest: '/opt/forest-bi/Forest-1.0.0-SNAPSHOT-bin/lib'}
+
+    - name: copy filebeat config file to remote host
+      copy: src=/data/tools/ansible/modules/forest/config/{{ item.name }} dest={{ item.dest }} owner=moretv group=moretv mode=755
+      tags: config_for_nginx
+      with_items:
+        - {name: 'nginx_helios_product_start.sh',  dest: '/opt/forest-bi/Forest-1.0.0-SNAPSHOT-bin/bin'}
+        - {name: 'nginx_helios_product_restart.sh',dest: '/opt/forest-bi/Forest-1.0.0-SNAPSHOT-bin/bin'}
+        - {name: 'nginx_medusa_product_restart.sh',dest: '/opt/forest-bi/Forest-1.0.0-SNAPSHOT-bin/bin'}
+        - {name: 'nginx_medusa_product_start.sh',  dest: '/opt/forest-bi/Forest-1.0.0-SNAPSHOT-bin/bin'}
+        - {name: 'fastjson-1.2.28.jar',            dest: '/opt/forest-bi/Forest-1.0.0-SNAPSHOT-bin/lib'}
+        - {name: 'forest.properties',              dest: '/opt/forest-bi/Forest-1.0.0-SNAPSHOT-bin/conf'}
+        - {name: 'Forest-1.0.0-SNAPSHOT.jar',      dest: '/opt/forest-bi/Forest-1.0.0-SNAPSHOT-bin/lib'}
+
+

@@ -1,0 +1,16 @@
+---
+- hosts: all
+  tasks:
+    - name: copy java tar  to remote host
+      shell: ncftpget -z -ubigdata -p'whaley!90365' 10.255.130.6 /tmp bigdata/{{ item }}
+      with_items:
+        - go1.7.4.linux-amd64.tar.gz
+
+    - name: tar java jdk to /usr/local/bin
+      shell: cd /tmp && tar zxvf go1.7.4.linux-amd64.tar.gz -C /usr/local/bin
+
+    - name:  owner to root
+      file: name=/usr/local/bin/go owner=root group=root
+
+    - name: ln go
+      shell: cd /usr/bin && ln -s /usr/local/bin/go/bin/go go

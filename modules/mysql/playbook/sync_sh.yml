@@ -1,0 +1,9 @@
+---
+- hosts: all
+  tasks:
+    - name: rsync iptables scripts
+      copy: src=/data/tools/ansible/modules/ansible/scripts/add_mysql_account.sh dest=/data/tools/add_mysql_account.sh owner=root group=root mode=0755
+
+    - name : run iptables script
+      command : sh /data/tools/add_mysql_account.sh
+

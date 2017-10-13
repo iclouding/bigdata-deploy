@@ -1,0 +1,68 @@
+[client]
+port            = 3306
+socket          = /data/lib/mysql/mysql.sock
+
+[mysqld]
+port            = 3306
+socket          = /var/lib/mysql/mysql.sock
+datadir=/data/lib/mysql
+server-id = 7
+#replicate-do-db=tvservice
+
+replicate-ignore-db = mysql
+skip-external-locking
+
+auto_increment_increment=1  
+auto_increment_offset=1
+
+log-bin = mysql-bin			#设置此参数表示启用binlog功能，并指定路径名称
+max_binlog_size=1024M  #Binlog最大值
+expire_logs_days=5  #保留Binlog天数 
+sync_binlog=0		#这个参数直接影响mysql的性能和完整性，0 为追求性能但有掉电数据丢失风险
+max_allowed_packet = 32M
+table_open_cache = 256
+sort_buffer_size = 2M
+read_buffer_size = 2M
+read_rnd_buffer_size = 4M
+query_cache_size= 32M 
+binlog_cache_size=8M   #参数表示binlog使用的内存大小，可以通过状态变量binlog_cache_use和binlog_cache_disk_use来帮助测试
+binlog_format = mixed  
+default-storage-engine = innodb
+innodb_file_per_table = 1
+innodb_data_file_path = ibdata1:2048M:autoextend
+innodb_log_file_size = 512M                  
+innodb_log_buffer_size = 100M
+innodb_flush_log_at_trx_commit = 2
+innodb_flush_method = O_DIRECT
+innodb_lock_wait_timeout = 300
+character-set-server = utf8
+skip-name-resolve
+ft_min_word_len = 1
+max_length_for_sort_data = 64
+max_connections=3000
+max_connect_errors=3000
+
+#thread_cache_size =2				#以下4列参照服务器硬件配置设定
+#thread_concurrency =4
+#innodb_buffer_pool_size =12G
+#innodb_additional_mem_pool_size =4G
+
+
+long_query_time = 1
+slow-query-log-file = /data/logs/log-slow.log
+
+federated
+
+innodb_file_per_table=1
+[mysqldump]
+quick
+max_allowed_packet = 64M
+
+[mysql]
+no-auto-rehash
+
+[mysqlhotcopy]
+interactive-timeout
+
+[myisamchk]
+key_buffer_size = 256M

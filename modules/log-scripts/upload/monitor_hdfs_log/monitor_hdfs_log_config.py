@@ -1,0 +1,29 @@
+# -*- coding: utf-8 -*-
+
+# sendto = "peng.tao@whaley.cn"
+sendto = "lian.kai@whaley.cn,peng.tao@whaley.cn,wang.baozhi@whaley.cn"
+logs = "/data/logs/monitor_hdfs_log/monitor_hdfs_log.log"
+hours = 4
+
+rule1_file_pattern = "/log/{rule1_project_keys}/rawlog/{rule_date_str1}/log.{rule1_project_values}.{rule_date_str2}_{hostname}_{rule1_index}.log"
+rule2_file_pattern = "/log/{appids_values}/rawlog/{rule_date_str1}/{appids_keys}.log-{rule_date_str3}-{hostname}"
+rule3_file_pattern = "/data_warehouse/ods_origin.db/log_raw/key_day={rule_date_str1}/key_hour={rule_date_str4}/{appids_keys}.log-{rule_date_str3}-{hostname}"
+
+rule1_index = (1, 2, 3, 4)
+rule1_project = {"whaley": "helios", "medusa": "medusa", "eagle": "eagle", "vr": "vr"}
+
+# # rule_hostname = ("bigdata-extsvr-log1", "bigdata-extsvr-log2", "bigdata-extsvr-log3", "bigdata-extsvr-log4", "bigdata-extsvr-log5","bigdata-extsvr-log6", "bigdata-extsvr-log7")
+# rule_hostname = ("bigdata-extsvr-log3", "bigdata-extsvr-log7")
+rule_hostname = ("bigdata-extsvr-log1", "bigdata-extsvr-log2", "bigdata-extsvr-log3", "bigdata-extsvr-log4", "bigdata-extsvr-log5","bigdata-extsvr-log6", "bigdata-extsvr-log7")
+rule_date_str1 = "yyyyMMdd"
+rule_date_str2 = "yyyy-MM-dd-HH"
+rule_date_str3 = "yyyyMMddHH"
+rule_date_str4 = "HH"
+appids = {"mtvkidslog.moretv": "mtvkids", "log.moretv": "moretv2x", "activity.moretv": "activity",
+          "weixinlog.moretv": "weixin", "danmulog.moretv": "danmu",
+          "boikgpokn78sb95kjhfrendoj8ilnoi7": "boikgpokn78sb95kjhfrendoj8ilnoi7",
+          "boikgpokn78sb95k0000000000000000": "boikgpokn78sb95k0000000000000000",
+          "boikgpokn78sb95kjhfrendoepkseljn": "boikgpokn78sb95kjhfrendoepkseljn",
+          "boikgpokn78sb95kjhfrendojtihcg26": "boikgpokn78sb95kjhfrendojtihcg26"}
+
+white_list_pattern = ("boikgpokn78sb95kjhfrendobgjgjolq.log-(\d{8}0[1-6])-([\w\-]+)","boikgpokn78sb95kjhfrendoepkseljn.log-(\d{8}0[1-6])-([\w\-]+)")

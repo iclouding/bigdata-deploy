@@ -1,0 +1,10 @@
+---
+- hosts: all
+  tasks:
+    - name: sync  modi conf script to desc host
+      copy: src=/data/tools/ansible/modules/ansible/scripts/check_disk/check_disk.py dest=/tmp  owner=root group=root mode=0755
+
+    - name: run modi config script
+      shell: python check_disk.py
+      args:
+        chdir: /tmp

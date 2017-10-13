@@ -1,0 +1,76 @@
+# Routes
+# This file defines all application routes (Higher priority routes first)
+# ~~~~
+
+# Home page
+GET         /                                                     heliosbi.controllers.LoginController.toLoginPage(msg:String ?= null)
+POST        /login/login                                          heliosbi.controllers.LoginController.login
+GET         /login/login                                          heliosbi.controllers.LoginController.toLoginPage(msg:String ?= null)
+GET         /login/logout                                         heliosbi.controllers.LoginController.logout
+GET         /index                                                heliosbi.controllers.LoginController.index
+
+# admin pages
+#user managment pages
+GET         /admin/user/list                                      heliosbi.controllers.UserController.list
+GET         /admin/user/new                                       heliosbi.controllers.UserController.newUser
+GET         /admin/user/checkUsername                             heliosbi.controllers.UserController.checkUsername(username)
+POST        /admin/user/save                                      heliosbi.controllers.UserController.saveUser
+POST        /admin/user/update                                    heliosbi.controllers.UserController.updateUser
+GET         /admin/user/:userId/delete                            heliosbi.controllers.UserController.deleteUser(userId:Int)
+GET         /admin/user/:userId/toEdit                            heliosbi.controllers.UserController.toEdit(userId:Int)
+GET         /admin/user/:userId/getRolePopedomList                heliosbi.controllers.UserController.getRolePopedomList(userId:Int)
+
+#role managment pages
+GET         /admin/role/list                                      heliosbi.controllers.RoleController.list
+GET         /admin/role/create                                    heliosbi.controllers.RoleController.create
+POST        /admin/role/save                                      heliosbi.controllers.RoleController.save
+POST        /admin/role/update                                    heliosbi.controllers.RoleController.update
+GET         /admin/role/:roleId/toEdit                            heliosbi.controllers.RoleController.toEdit(roleId:Int)
+
+#role managment pages
+GET         /admin/group/list                                     heliosbi.controllers.GroupController.list
+GET         /admin/group/create                                   heliosbi.controllers.GroupController.create
+POST        /admin/group/save                                     heliosbi.controllers.GroupController.save
+POST        /admin/group/update                                   heliosbi.controllers.GroupController.update
+GET         /admin/group/:groupId/toEdit                          heliosbi.controllers.GroupController.toEdit(groupId)
+POST        /admin/group/assign/popedom/update                    heliosbi.controllers.AssignController.updateGroupPopedom
+GET         /admin/group/assign/popedom/:groupId                  heliosbi.controllers.AssignController.toAssignGroupPopedom(groupId)
+
+#popedom managment pages
+GET         /admin/popedom/list                                   heliosbi.controllers.PopedomController.list
+GET         /admin/popedom/create                                 heliosbi.controllers.PopedomController.create
+POST        /admin/popedom/save                                   heliosbi.controllers.PopedomController.save
+POST        /admin/popedom/update                                 heliosbi.controllers.PopedomController.update
+GET         /admin/popedom/:popedomId/toEdit                      heliosbi.controllers.PopedomController.toEdit(popedomId)
+GET         /admin/popedom/assign/toGroupAssign/:popedomId        heliosbi.controllers.AssignController.toGroupPopedomAssign(popedomId)
+#popedom assign to role or group
+POST        /admin/popedom/assign/groupAssign/update              heliosbi.controllers.AssignController.groupAssignUpdate
+GET         /admin/popedom/assign/toRoleAssign/:popedomId         heliosbi.controllers.AssignController.toRolePopedomAssign(popedomId)
+POST        /admin/popedom/assign/roleAssign/update               heliosbi.controllers.AssignController.roleAssignUpdate
+GET         /admin/popedom/assign/home                            heliosbi.controllers.PopedomController.assignHome
+
+#assign popedom & user for role
+GET         /admin/assign/home                                    heliosbi.controllers.AssignController.list
+GET         /admin/assign/user/toAssign/:roleId                   heliosbi.controllers.AssignController.toUserAssign(roleId:Int)
+GET         /admin/assign/popedom/toAssign/:roleId                heliosbi.controllers.AssignController.toPopedomAssign(roleId:Int)
+POST        /admin/assign/role/popedom/update                     heliosbi.controllers.AssignController.updateRolePopedom
+POST        /admin/assign/role/user/update                        heliosbi.controllers.AssignController.updateRoleUser
+
+#user setting
+GET         /user/modifyPassword                                  heliosbi.controllers.UserController.toModifyPassword
+POST        /user/modifyPassword                                  heliosbi.controllers.UserController.modifyPassword
+
+#message pages
+GET         /message/todo                                         heliosbi.controllers.MessageController.todo
+
+
+# Map static resources from the /public folder to the /assets URL path
+GET         /assets/*file                                         controllers.Assets.at(path="/public/", file)
+# Map static data pages from the /public/bi-pages folder to the /bi URL path
+GET         /bi/*file                                             controllers.Assets.at(path="/public/bi-pages/", file)
+
+#get json data
+POST         /common/getJsonData                                heliosbi.controllers.CommonController.getJsonData
+POST         /common/getTableJsonData                           heliosbi.controllers.CommonController.getTableJsonData
+POST         /common/getGroupedJsonData                         heliosbi.controllers.CommonController.getGroupedJsonData
+POST         /common/getUserRetentionData                       heliosbi.controllers.CommonController.getUserRetentionData

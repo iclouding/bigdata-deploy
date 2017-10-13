@@ -1,0 +1,46 @@
+---
+- hosts: all
+  tasks:
+    - name: get file
+      copy: src=/data/tools/ansible/modules/hive/package/slider-0.93.0-incubating-SNAPSHOT.tar.gz dest=/tmp/slider-0.93.0-incubating-SNAPSHOT.tar.gz owner=root group=root mode=0771
+      tags: install
+
+    - name: tar file to /app
+      shell: cd /tmp && tar zxvf  slider-0.93.0-incubating-SNAPSHOT.tar.gz -C /app
+      tags: install
+      args:
+        creates: /app/slider-0.93.0-incubating-SNAPSHOT/.install
+
+    - name: create log directory
+      file: path=/data/logs/hive state=directory owner=hadoop group=hadoop
+      tags: install
+
+    - name: change owner
+      file: name=/app/slider-0.93.0-incubating-SNAPSHOT owner=hadoop group=hadoop
+      tags: install
+
+    - name: touch install file
+      shell: touch /app/slider-0.93.0-incubating-SNAPSHOT/.install
+      tags: install
+      args:
+        creates: /app/slider-0.93.0-incubating-SNAPSHOT/.install
+
+
+    - name: copy config file
+      copy: src=/data/tools/ansible/modules/hive/config_test/slider/{{ item }} dest=/app/slider-0.93.0-incubating-SNAPSHOT/conf/{{ item }} owner=hadoop group=hadoop mode=755
+      tags: config
+      with_items:
+        - slider-env.sh
+        - slider-server.xml
+        - slider-client.xml
+        - log4j.properties
+        - log4j-server.properties
+
+    - name: create Create a soft link
+      file: src=/app/slider-0.93.0-incubating-SNAPSHOT dest=/opt/slider state=link owner=hadoop group=hadoop
+      tags: link
+
+    - name: create Create a soft link
+      file: src=/app/slider-0.93.0-incubating-SNAPSHOT/bin/slider dest=/usr/bin/slider state=link owner=hadoop group=hadoop
+      tags: link
+

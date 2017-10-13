@@ -1,0 +1,60 @@
+---
+- hosts: all
+  tasks:
+
+    - name: create directory
+      file: path={{ item }} state=directory owner=spark group=hadoop
+      tags: install
+      with_items:
+        - /app/illidan-1.0.0
+        - /app/illidan-1.0.0/portal
+        - /app/illidan-1.0.0/application
+
+    - name: copy tar.gz file to remote host
+      shell: ncftpget -z -ubigdata -p'whaley!90365' 10.255.130.6 /tmp bigdata/{{ item }}
+      tags: install
+      with_items:
+        - illidan-1.0.0.tar.gz
+        - BISparkStatistics.tar.gz
+
+    - name: decompress
+      shell: cd /tmp && tar zxvf  {{ item.file }} -C /app/illidan-1.0.0/{{ item.dir }}
+      tags: install
+      args:
+        creates: /app/{{ item }}/.install
+      with_items:
+        - { file: 'illidan-1.0.0.tar.gz', dir: 'portal'}
+        - { file: 'BISparkStatistics.tar.gz', dir: 'application'}
+
+    - name: change owner
+      shell: chown -R spark:hadoop /app/{{ item }}
+      tags: install
+      with_items:
+        - illidan-1.0.0
+
+    - name: create Create a soft link
+      file: src=/app/{{ item.src }} dest=/opt/{{ item.dest }} state=link owner=spark group=hadoop
+      tags: install
+      with_items:
+        - { src: 'illidan-1.0.0', dest: 'illidan'}
+
+    - name: touch install file
+      shell: touch /app/{{ item }}/.install
+      tags: install
+      args:
+        creates: /app/{{ item }}/.install
+      with_items:
+        - illidan-1.0.0
+
+    - name: copy config file to remote host
+      copy: src=/data/tools/ansible/modules/illidan/config/{{ item }} dest=/opt/illidan/portal/config/{{ item }} owner=spark group=hadoop mode=0771
+      tags: config
+      with_items:
+        - connections.js
+
+    - name: copy jar file to remote host
+      copy: src=/data/tools/ansible/modules/illidan/lib/{{ item }} dest=/opt/illidan/portal/{{ item }} owner=spark group=hadoop mode=0771
+      tags: config
+      with_items:
+        - startup.sh
+

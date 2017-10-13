@@ -1,0 +1,17 @@
+---
+- hosts: all
+  tasks:
+    - name: create ai directory
+      file: path={{ item }} state=directory owner=spark group=hadoop
+      tags: install
+      with_items:
+        - /app/ai
+        - /data/logs/ai
+
+
+    - name: create a soft link
+      file: src=/app/ai dest=/opt/ai state=link owner=spark group=hadoop
+      tags: install
+
+
+

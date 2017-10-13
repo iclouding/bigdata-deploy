@@ -1,0 +1,15 @@
+---
+- hosts: all
+  tasks:
+
+    - name: rsync hosts files
+      copy: src=/data/tools/ansible/modules/ansible/config/system/hosts.sample dest=/etc/hosts owner=root group=root mode=0644
+      tags: hosts
+
+    - name: rsync bashrc files
+      copy: src=/data/tools/ansible/modules/ansible/config/system/bashrc.sample dest=/etc/bashrc owner=root group=root mode=0644
+      tags: bashrc
+
+    - name: source bashrc
+      shell: source /etc/bashrc
+      tags: bashrc

@@ -1,0 +1,31 @@
+此项目包括kafka（包括0.8.2和0.10.0.0两个版本）的部署包及其部署脚本
+一、启动
+1.按照storm.host文件中定义的主机进行分发tar包和配置文件
+
+注意：
+        playbook/install_kafka_bin_{1,2,3}.yml: 是修改kafka启动文件，设置：KAFKA_HEAP_OPTS="-Xmx4G -Xms4G";kafka关闭脚本
+        config/kafka{1,2,3}: 新的kafka启动和关闭文件
+
+2.执行命令
+   第一步：进入所有部署机器执行以下命令
+        su - moretv
+        cd /opt/kafka
+        nohup ./bin/kafka-server-start.sh config/server.properties &
+
+        或者执行命令
+       开启： ansible all -i kafka.host -mshell -a"su - moretv -c 'cd /opt/kafka1/ &&  nohup ./bin/kafka-server-start.sh config/server.properties > /opt/kafka1/nohup.out 2>&1 & '"
+       关闭： ansible all -i kafka.host -mshell -a"su - moretv -c 'cd /opt/kafka1/ &&  nohup ./bin/kafka-server-stop.sh config/server.properties '"
+   第二步：验证
+        建立topic，测试
+
+3.创建topic
+    第一步：使用通用脚本下发createtopic文件夹下的shellwenjian
+    第二部：执行sh文件
+
+
+-----
+守护进程启动kafka server
+./bin/kafka-server-start.sh  -daemon ./config/server.properties
+
+#配置文件下发
+ansible-playbook -i kafka.host install_kafka_3.yml -t config

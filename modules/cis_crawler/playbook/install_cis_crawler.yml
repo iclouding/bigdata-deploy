@@ -1,0 +1,25 @@
+---
+- hosts: all
+  tasks:
+    - name: create cis_crawler log directory
+      file: path={{ item }} state=directory owner=moretv group=moretv
+      tags: install
+      with_items:
+        - /app/cis_crawler
+        - /data/logs/cis_crawler
+    
+    - name: copy package to remote host
+      copy: src=/data/tools/ansible/modules/cis_crawler/package/cis.tar.gz dest=/tmp owner=moretv group=moretv mode=0771
+      tags: install
+
+    - name: decompress package
+      shell: cd /tmp && tar -zvxf cis.tar.gz -C /app/cis_crawler && chown -R moretv:moretv /app/cis_crawler
+      tags: install
+
+    - name: create a soft link
+      file: src=/app/cis_crawler dest=/opt/cis_crawler state=link owner=moretv group=moretv
+      tags: install
+
+
+
+
