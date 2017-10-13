@@ -22,6 +22,8 @@
         - {name: 'online/nginx_whaleytv.conf', dest: 'online/'}
         - {name: 'online/nginx_whaleyvr.conf', dest: 'online/'}
         - {name: 'online/nginx_monitor.conf', dest: 'online/'}
+        - {name: 'online/wlslog_aginomoto_com.crt', dest: 'online/'}
+        - {name: 'online/wlslog_aginomoto_com.key', dest: 'online/'}
 
     - name : reload nginx worker process
       shell : /opt/openresty/nginx/sbin/nginx -t -c /opt/openresty/nginx/conf/nginx.conf && /opt/openresty/nginx/sbin/nginx -s reload

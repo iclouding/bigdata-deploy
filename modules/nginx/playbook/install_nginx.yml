@@ -46,10 +46,10 @@
 #    - name: rsync  /etc/profile
 #      copy: src=/data/tools/ansible/modules/ansible/config/system/profile.sample dest=/etc/profile
 
-    - name : start nginx
-      shell : ./nginx
-      args:
-        chdir: /opt/openresty/nginx/sbin
+#    - name : start nginx
+#      shell : ./nginx
+#      args:
+#        chdir: /opt/openresty/nginx/sbin
 
 
 
