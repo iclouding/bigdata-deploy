@@ -44,6 +44,17 @@
 
     - name: copy spark sql lib file to remote host
       copy: src=/data/tools/ansible/modules/spark/config/spark2.2.0/lib/{{ item }} dest=/opt/spark220/jars/{{ item }} owner=spark group=hadoop mode=0644
-      tags: config
+      tags: config_jar
       with_items:
         - spark-sql_2.11-2.2.0.jar
+
+    - name: copy spark config file to remote host
+      copy: src=/data/tools/ansible/modules/spark/config/spark2.2.0/{{ item }} dest=/opt/spark220/conf/{{ item }} owner=spark group=hadoop mode=0771
+      tags: config
+      with_items:
+        - slaves
+        - hive-site.xml
+        - spark-defaults.conf
+        - spark-env.sh
+        - spark-thrift-sparkconf.conf
+        - log4j.properties
