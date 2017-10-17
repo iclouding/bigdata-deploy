@@ -46,7 +46,7 @@ ansible run-apps-machine -i forest.host -mshell -a"su - moretv -c  'cd /opt/fore
 --检查 helios平展化进程(logcenter)
 ansible run-apps-machine -i forest.host -mshell -a"su - moretv -c  'ps -ef|grep cn.whaley.turbo.forest.main.HeliosLogProcessingNewApp2|grep -v grep'"
 --检查 medusa 平展化进程(logcenter)
-ansible run-apps-machine -i forest.host -mshell -a"su - moretv -c  'ps -ef|grep cn.whaley.turbo.forest.main.MedusaLogProcessingNewApp2|grep -v grep'"
+ansible run-apps-machine -i forest.host -mshell -a"su - moretv -c  'ps -ef|grep cn.whaley.turbo.forest.main.MedusaLogProcessingNewApp2|grep -v grep|wc -l'"
 --检查 雷神 平展化进程
 ansible run-apps-machine -i forest.host -mshell -a"su - moretv -c  'ps -ef|grep cn.whaley.turbo.forest.main.ThorProbeLogProcessingApp2|grep -v grep'"
 --检查 电视猫点播直播播放质量
@@ -56,7 +56,7 @@ ansible run-apps-machine -i forest.host -mshell -a"su - moretv -c  'md5sum /opt/
 --检查 helios平展化进程(nginx)
 ansible run-apps-machine -i forest.host -mshell -a"su - moretv -c  'ps -ef|grep cn.whaley.turbo.forest.main.NginxHeliosLogProcessingApp|grep -v grep'"
 --检查 medusa 平展化进程(nginx)
-ansible run-apps-machine -i forest.host -mshell -a"su - moretv -c  'ps -ef|grep cn.whaley.turbo.forest.main.NginxMedusaLogProcessingApp|grep -v grep'"
+ansible run-apps-machine -i forest.host -mshell -a"su - moretv -c  'ps -ef|grep cn.whaley.turbo.forest.main.NginxMedusaLogProcessingApp|grep -v grep|wc -l'"
 
 
 

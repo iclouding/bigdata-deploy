@@ -19,32 +19,32 @@ ansible-playbook -i filebeat.host install_filebeat-bin.yml -t install
 ansible-playbook -i filebeat.host install_filebeat-bin.yml -t config
 ansible-playbook -i filebeat.host install_filebeat-bin.yml -t config_for_nginx
 
---启动 helios raw filebeat
+--启动 helios raw filebeat(logcenter)
 ansible filebeats -i filebeat.host -mshell -a"su - moretv -c  'cd /opt/filebeat_v5;sh start_filebeat_helios_raw_log.sh'"
 
---启动 medusa raw filebeat
+--启动 medusa raw filebeat(logcenter)
 ansible filebeats -i filebeat.host -mshell -a"su - moretv -c  'cd /opt/filebeat_v5;sh start_filebeat_medusa_raw_log.sh'"
 
---停止 helios raw filebeat
+--停止 helios raw filebeat(logcenter)
 ansible filebeats -i filebeat.host -mshell -a"su - moretv -c  'cd /opt/filebeat_v5;sh stop_filebeat_helios_raw_log.sh'"
 
---停止 medusa raw filebeat
+--停止 medusa raw filebeat(logcenter)
 ansible filebeats -i filebeat.host -mshell -a"su - moretv -c  'cd /opt/filebeat_v5;sh stop_filebeat_medusa_raw_log.sh'"
 
---重启 helios raw filebeat
+--重启 helios raw filebeat(logcenter)
 ansible filebeats -i filebeat.host -mshell -a"su - moretv -c  'cd /opt/filebeat_v5;sh restart_filebeat_helios_raw_log.sh'"
 
---重启 medusa raw filebeat
+--重启 medusa raw filebeat(logcenter)
 ansible filebeats -i filebeat.host -mshell -a"su - moretv -c  'cd /opt/filebeat_v5;sh restart_filebeat_medusa_raw_log.sh'"
 
---检查 helios raw filebeat
+--检查 helios raw filebeat(logcenter)
 ansible filebeats -i filebeat.host -mshell -a"su - moretv -c  'cd /opt/filebeat_v5;sh check_filebeat_helios_raw_log.sh'"
 
---检查 medusa raw filebeat
+--检查 medusa raw filebeat(logcenter)
 ansible filebeats -i filebeat.host -mshell -a"su - moretv -c  'cd /opt/filebeat_v5;sh check_filebeat_medusa_raw_log.sh'"
 
 
---增加cronjob
+--增加cronjob(logcenter)
 ansible filebeats -i filebeat.host -m cron -a "name='filebeat autostart job 1' minute=*/6  user='moretv' job='. /etc/profile;sh /opt/filebeat_v5/start_filebeat_medusa_raw_log.sh >/dev/null 2>&1'"
 ansible filebeats -i filebeat.host -m cron -a "name='filebeat autostart job 2' minute=#*/6  user='moretv' job='. /etc/profile;sh /opt/filebeat_v5/start_filebeat_helios_raw_log.sh >/dev/null 2>&1'"
 
@@ -83,6 +83,8 @@ ansible filebeats -i filebeat.host -mshell -a"su - moretv -c 'cd /opt/filebeat_v
 #启动mobilehelper产品线nginx日志的filebeat，暂不启用
 ansible filebeats -i filebeat.host -mshell -a"su - moretv -c 'cd /opt/filebeat_v5 && bin/startFilebeat.sh filebeat_log-raw-boikgpokn78sb95kjtihcg26.yml'"
 
+
+
 --------------------filebeat直接读取nginx写日志--------------------
 #监控电视猫main3x的nginx日志的kafka topic
 cd /opt/kafka3;
@@ -93,8 +95,21 @@ cd /opt/kafka3;
 bin/kafka-topics.sh --create --topic log-raw-boikgpokn78sb95kjhfrendo8dc5mlsr --zookeeper bigdata-appsvr-130-1:2183 --replication-factor 2 --partition 48
 
 
---检查电视猫main3x的nginx日志的filebeat
+--启动 helios raw filebeat(nginx)
+ansible filebeats -i filebeat.host -mshell -a"su - moretv -c  'cd /opt/filebeat_v5;sh start_filebeat_nginx_whaleytv_main.sh'"
+
+--启动 medusa raw filebeat(nginx)
+ansible filebeats -i filebeat.host -mshell -a"su - moretv -c  'cd /opt/filebeat_v5;sh start_filebeat_nginx_medusa_3x.sh'"
+
+--停止 helios raw filebeat(nginx)
+ansible filebeats -i filebeat.host -mshell -a"su - moretv -c  'cd /opt/filebeat_v5;sh stop_filebeat_nginx_whaleytv_main.sh'"
+
+--停止 medusa raw filebeat(nginx)
+ansible filebeats -i filebeat.host -mshell -a"su - moretv -c  'cd /opt/filebeat_v5;sh stop_filebeat_nginx_medusa_3x.sh'"
+
+--检查电视主程序的nginx日志的filebeat(nginx)
+ansible filebeats -i filebeat.host -mshell -a"su - moretv -c  'ps -ef|grep filebeat_nginx_whaleytv_main.yml|grep -v grep|wc -l'"
+
+--检查电视猫main3x的nginx日志的filebeat(nginx)
 ansible filebeats -i filebeat.host -mshell -a"su - moretv -c  'ps -ef|grep filebeat_nginx_medusa_3x.yml|grep -v grep|wc -l'"
 
---检查电视主程序的nginx日志的filebeat
-ansible filebeats -i filebeat.host -mshell -a"su - moretv -c  'ps -ef|grep filebeat_nginx_whaleytv_main.yml|grep -v grep|wc -l'"
