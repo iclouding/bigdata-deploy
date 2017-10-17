@@ -34,18 +34,18 @@ medusa平展化进程(nginx)
 ansible run-apps-machine -i forest.host -mshell -a"su - moretv -c  'cd /opt/forest-bi/Forest-1.0.0-SNAPSHOT-bin/bin;sh nginx_medusa_product_stop.sh'"
 
 
---重启 helios平展化进程
+--重启 helios平展化进程(logcenter)
 ansible run-apps-machine -i forest.host -mshell -a"su - moretv -c  'cd /opt/forest-bi/Forest-1.0.0-SNAPSHOT-bin/bin;sh helios_product_restart.sh'"
---重启 medusa平展化进程
+--重启 medusa平展化进程(logcenter)
 ansible run-apps-machine -i forest.host -mshell -a"su - moretv -c  'cd /opt/forest-bi/Forest-1.0.0-SNAPSHOT-bin/bin;sh medusa_product_restart.sh'"
 --重启 雷神平展化进程
 ansible run-apps-machine -i forest.host -mshell -a"su - moretv -c  'cd /opt/forest-bi/Forest-1.0.0-SNAPSHOT-bin/bin;sh whaley_thorprobe_restart.sh'"
 --重启 电视猫点播直播播放质量
 ansible run-apps-machine -i forest.host -mshell -a"su - moretv -c  'cd /opt/forest-bi/Forest-1.0.0-SNAPSHOT-bin/bin;sh medua_playqos_restart.sh'"
 
---检查 helios平展化进程
+--检查 helios平展化进程(logcenter)
 ansible run-apps-machine -i forest.host -mshell -a"su - moretv -c  'ps -ef|grep cn.whaley.turbo.forest.main.HeliosLogProcessingNewApp2|grep -v grep'"
---检查 medusa 平展化进程
+--检查 medusa 平展化进程(logcenter)
 ansible run-apps-machine -i forest.host -mshell -a"su - moretv -c  'ps -ef|grep cn.whaley.turbo.forest.main.MedusaLogProcessingNewApp2|grep -v grep'"
 --检查 雷神 平展化进程
 ansible run-apps-machine -i forest.host -mshell -a"su - moretv -c  'ps -ef|grep cn.whaley.turbo.forest.main.ThorProbeLogProcessingApp2|grep -v grep'"
@@ -53,6 +53,10 @@ ansible run-apps-machine -i forest.host -mshell -a"su - moretv -c  'ps -ef|grep 
 ansible run-apps-machine -i forest.host -mshell -a"su - moretv -c  'ps -ef|grep cn.whaley.turbo.forest.main.MedusaPlayqosProcessingApp|grep -v grep'"
 --检查 jar包一致性
 ansible run-apps-machine -i forest.host -mshell -a"su - moretv -c  'md5sum /opt/forest-bi/Forest-1.0.0-SNAPSHOT-bin/lib/Forest-1.0.0-SNAPSHOT.jar'"
+--检查 helios平展化进程(nginx)
+ansible run-apps-machine -i forest.host -mshell -a"su - moretv -c  'ps -ef|grep cn.whaley.turbo.forest.main.NginxHeliosLogProcessingApp|grep -v grep'"
+--检查 medusa 平展化进程(nginx)
+ansible run-apps-machine -i forest.host -mshell -a"su - moretv -c  'ps -ef|grep cn.whaley.turbo.forest.main.NginxMedusaLogProcessingApp|grep -v grep'"
 
 
 
@@ -135,3 +139,4 @@ medusa日志处理，4，5，6，7，8，9六台机器，每台启动8个线程�
 
 --nginx配置分发
 ansible-playbook -i forest.host install_forest.yml -t config_for_nginx
+ansible-playbook -i forest.host install_forest.yml -t config_for_stop
