@@ -56,6 +56,8 @@
       with_items:
         - {name: 'helios_product_stop.sh',  dest: '/opt/forest-bi/Forest-1.0.0-SNAPSHOT-bin/bin'}
         - {name: 'medusa_product_stop.sh',  dest: '/opt/forest-bi/Forest-1.0.0-SNAPSHOT-bin/bin'}
+        - {name: 'nginx_helios_product_stop.sh',  dest: '/opt/forest-bi/Forest-1.0.0-SNAPSHOT-bin/bin'}
+        - {name: 'nginx_medusa_product_stop.sh',  dest: '/opt/forest-bi/Forest-1.0.0-SNAPSHOT-bin/bin'}
 
 
 
