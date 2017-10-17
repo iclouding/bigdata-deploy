@@ -22,7 +22,7 @@
       file: src=/app/forest-bi-1.0.0 dest=/opt/forest-bi state=link owner=moretv group=moretv
       tags: install
 
-    - name: copy filebeat config file to remote host
+    - name: copy sh config file to remote host1
       copy: src=/data/tools/ansible/modules/forest/config/{{ item.name }} dest={{ item.dest }} owner=moretv group=moretv mode=755
       tags: config
       with_items:
@@ -38,7 +38,7 @@
         - {name: 'forest.properties',              dest: '/opt/forest-bi/Forest-1.0.0-SNAPSHOT-bin/conf'}
         - {name: 'Forest-1.0.0-SNAPSHOT.jar',      dest: '/opt/forest-bi/Forest-1.0.0-SNAPSHOT-bin/lib'}
 
-    - name: copy filebeat config file to remote host
+    - name: copy sh config file to remote host2
       copy: src=/data/tools/ansible/modules/forest/config/{{ item.name }} dest={{ item.dest }} owner=moretv group=moretv mode=755
       tags: config_for_nginx
       with_items:
@@ -49,5 +49,13 @@
         - {name: 'fastjson-1.2.28.jar',            dest: '/opt/forest-bi/Forest-1.0.0-SNAPSHOT-bin/lib'}
         - {name: 'forest.properties',              dest: '/opt/forest-bi/Forest-1.0.0-SNAPSHOT-bin/conf'}
         - {name: 'Forest-1.0.0-SNAPSHOT.jar',      dest: '/opt/forest-bi/Forest-1.0.0-SNAPSHOT-bin/lib'}
+
+    - name: copy sh config file to remote host3
+      copy: src=/data/tools/ansible/modules/forest/config/{{ item.name }} dest={{ item.dest }} owner=moretv group=moretv mode=755
+      tags: config_for_stop
+      with_items:
+        - {name: 'helios_product_stop.sh',  dest: '/opt/forest-bi/Forest-1.0.0-SNAPSHOT-bin/bin'}
+        - {name: 'medusa_product_stop.sh',  dest: '/opt/forest-bi/Forest-1.0.0-SNAPSHOT-bin/bin'}
+
 
 
