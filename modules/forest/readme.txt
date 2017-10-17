@@ -9,20 +9,29 @@ ansible-playbook -i forest.host install_forest.yml -t config
 #启动与检查操作
 
 --启动
-helios平展化进程
+helios平展化进程(logcenter)
 ansible run-apps-machine -i forest.host -mshell -a"su - moretv -c  'cd /opt/forest-bi/Forest-1.0.0-SNAPSHOT-bin/bin;sh helios_product_start.sh'"
-medusa平展化进程
+medusa平展化进程(logcenter)
 ansible run-apps-machine -i forest.host -mshell -a"su - moretv -c  'cd /opt/forest-bi/Forest-1.0.0-SNAPSHOT-bin/bin;sh medusa_product_start.sh'"
 雷神平展化进程
 ansible run-apps-machine -i forest.host -mshell -a"su - moretv -c  'cd /opt/forest-bi/Forest-1.0.0-SNAPSHOT-bin/bin;sh whaley_thorprobe_start.sh'"
 电视猫点播直播播放质量
 ansible run-apps-machine -i forest.host -mshell -a"su - moretv -c  'cd /opt/forest-bi/Forest-1.0.0-SNAPSHOT-bin/bin;sh medusa_playqos_start.sh'"
+helios平展化进程(nginx)
+ansible run-apps-machine -i forest.host -mshell -a"su - moretv -c  'cd /opt/forest-bi/Forest-1.0.0-SNAPSHOT-bin/bin;sh nginx_helios_product_start.sh'"
+medusa平展化进程(nginx)
+ansible run-apps-machine -i forest.host -mshell -a"su - moretv -c  'cd /opt/forest-bi/Forest-1.0.0-SNAPSHOT-bin/bin;sh nginx_medusa_product_start.sh'"
+
 
 --停止
-helios平展化进程
+helios平展化进程(logcenter)
 ansible run-apps-machine -i forest.host -mshell -a"su - moretv -c  'cd /opt/forest-bi/Forest-1.0.0-SNAPSHOT-bin/bin;sh helios_product_stop.sh'"
-medusa平展化进程
+medusa平展化进程(logcenter)
 ansible run-apps-machine -i forest.host -mshell -a"su - moretv -c  'cd /opt/forest-bi/Forest-1.0.0-SNAPSHOT-bin/bin;sh medusa_product_stop.sh'"
+helios平展化进程(nginx)
+ansible run-apps-machine -i forest.host -mshell -a"su - moretv -c  'cd /opt/forest-bi/Forest-1.0.0-SNAPSHOT-bin/bin;sh nginx_helios_product_stop.sh'"
+medusa平展化进程(nginx)
+ansible run-apps-machine -i forest.host -mshell -a"su - moretv -c  'cd /opt/forest-bi/Forest-1.0.0-SNAPSHOT-bin/bin;sh nginx_medusa_product_stop.sh'"
 
 
 --重启 helios平展化进程
