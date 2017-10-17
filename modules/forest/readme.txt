@@ -61,10 +61,18 @@ ansible run-apps-machine -i forest.host -mshell -a"su - moretv -c  'ps -ef|grep 
 
 
 --cronjob分发
+(logcenter old)
 ansible run-apps-machine -i forest.host -m cron -a "name='forest autostart job 1' minute=*/6  user='moretv' job=' . /etc/profile;sh /opt/forest-bi/Forest-1.0.0-SNAPSHOT-bin/bin/helios_product_start.sh > /dev/null 2>&1'  "
+(logcenter old)
 ansible run-apps-machine -i forest.host -m cron -a "name='forest autostart job 2' minute=*/6  user='moretv' job=' . /etc/profile;sh /opt/forest-bi/Forest-1.0.0-SNAPSHOT-bin/bin/medusa_product_start.sh > /dev/null 2>&1'  "
+
 ansible run-apps-machine -i forest.host -m cron -a "name='forest autostart job 3' minute=*/6  user='moretv' job=' . /etc/profile;sh /opt/forest-bi/Forest-1.0.0-SNAPSHOT-bin/bin/whaley_thorprobe_start.sh > /dev/null 2>&1'  "
 ansible run-apps-machine -i forest.host -m cron -a "name='forest autostart job 4' minute=*/6  user='moretv' job=' . /etc/profile;sh /opt/forest-bi/Forest-1.0.0-SNAPSHOT-bin/bin/medusa_playqos_start.sh > /dev/null 2>&1'  "
+
+(nginx)
+ansible run-apps-machine -i forest.host -m cron -a "name='forest autostart job 5' minute=*/6  user='moretv' job=' . /etc/profile;sh /opt/forest-bi/Forest-1.0.0-SNAPSHOT-bin/bin/nginx_helios_product_start.sh > /dev/null 2>&1'  "
+(nginx)
+ansible run-apps-machine -i forest.host -m cron -a "name='forest autostart job 6' minute=*/6  user='moretv' job=' . /etc/profile;sh /opt/forest-bi/Forest-1.0.0-SNAPSHOT-bin/bin/nginx_medusa_product_start.sh > /dev/null 2>&1'  "
 
 
 #创建基本topic
