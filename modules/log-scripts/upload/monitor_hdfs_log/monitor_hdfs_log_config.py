@@ -14,7 +14,9 @@ rule1_project = {"whaley": "helios", "medusa": "medusa", "eagle": "eagle", "vr":
 
 # # rule_hostname = ("bigdata-extsvr-log1", "bigdata-extsvr-log2", "bigdata-extsvr-log3", "bigdata-extsvr-log4", "bigdata-extsvr-log5","bigdata-extsvr-log6", "bigdata-extsvr-log7")
 # rule_hostname = ("bigdata-extsvr-log3", "bigdata-extsvr-log7")
-rule_hostname = ("bigdata-extsvr-log1", "bigdata-extsvr-log2", "bigdata-extsvr-log3", "bigdata-extsvr-log4", "bigdata-extsvr-log5","bigdata-extsvr-log6", "bigdata-extsvr-log7")
+rule_hostname = (
+"bigdata-extsvr-log1", "bigdata-extsvr-log2", "bigdata-extsvr-log3", "bigdata-extsvr-log4", "bigdata-extsvr-log5",
+"bigdata-extsvr-log6", "bigdata-extsvr-log7")
 rule_date_str1 = "yyyyMMdd"
 rule_date_str2 = "yyyy-MM-dd-HH"
 rule_date_str3 = "yyyyMMddHH"
@@ -24,6 +26,9 @@ appids = {"mtvkidslog.moretv": "mtvkids", "log.moretv": "moretv2x", "activity.mo
           "boikgpokn78sb95kjhfrendoj8ilnoi7": "boikgpokn78sb95kjhfrendoj8ilnoi7",
           "boikgpokn78sb95k0000000000000000": "boikgpokn78sb95k0000000000000000",
           "boikgpokn78sb95kjhfrendoepkseljn": "boikgpokn78sb95kjhfrendoepkseljn",
+          "boikgpokn78sb95ktmsc1bnkechpgj9l": "boikgpokn78sb95ktmsc1bnkechpgj9l",
+          "boikgpokn78sb95kjhfrendo8dc5mlsr": "boikgpokn78sb95kjhfrendo8dc5mlsr",
           "boikgpokn78sb95kjhfrendojtihcg26": "boikgpokn78sb95kjhfrendojtihcg26"}
 
-white_list_pattern = ("boikgpokn78sb95kjhfrendobgjgjolq.log-(\d{8}0[1-6])-([\w\-]+)","boikgpokn78sb95kjhfrendoepkseljn.log-(\d{8}0[1-6])-([\w\-]+)")
+white_list_pattern = ("boikgpokn78sb95kjhfrendobgjgjolq.log-(\d{8}0[1-6])-([\w\-]+)",
+                      "boikgpokn78sb95kjhfrendoepkseljn.log-(\d{8}0[1-6])-([\w\-]+)")

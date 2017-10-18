@@ -4,7 +4,7 @@ local_paths = '/data/logs/nginx'
 sendto = "lian.kai@whaley.cn,peng.tao@whaley.cn,wang.baozhi@whaley.cn"
 logs = "/data/logs/nginx-upload/nginx2hdfs.log"
 hours = 6
-step = 1
+step = 4
 retry = 2
 appids = {"mtvkidslog.moretv": "mtvkids", "log.moretv": "moretv2x", "activity.moretv": "activity",
           "weixinlog.moretv": "weixin", "danmulog.moretv": "danmu",
