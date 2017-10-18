@@ -53,8 +53,8 @@
 
     - name: create script with nginx upload cron
       tags: cron
-      cron: name="nginx upload 2 hdfs " minute=40 hour=*  job="/usr/bin/python /opt/nginx-upload/nginx_upload.py"
+      cron: name="nginx upload 2 hdfs " minute=20 hour=*  job="/usr/bin/python /opt/nginx-upload/nginx_upload.py"
 
     - name: create script with logcenter upload cron
       tags: cron
-      cron: name="logcenter upload 2 hdfs " minute=20 hour=*  job="/usr/bin/python /opt/logcenter-upload/logcenter2hdfs.py"
+      cron: name="logcenter upload 2 hdfs " state=absent
