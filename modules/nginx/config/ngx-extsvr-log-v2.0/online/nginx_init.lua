@@ -110,7 +110,7 @@ end
 
 
 --消息体签名验证
---@return -1:签名校验失败； 0：没有做签名校验； 1：签名校验成功
+--@return -2:空请求体；-1:签名校验失败； 0：没有做签名校验； 1：签名校验成功
 function doMsgSign()
     local headers = ngx.req.get_headers()
     local logSignMethod = headers["log-sign-method"]
@@ -138,7 +138,7 @@ function doMsgSign()
         ngx.req.read_body();
         local req_body = ngx.req.get_body_data()
         if (req_body == nil) then
-            return -1
+            return -2
         end
 
         local md5 = ngx.md5(logSignKey .. logSignTs .. req_body)
