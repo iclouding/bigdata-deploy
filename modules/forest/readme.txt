@@ -9,43 +9,70 @@ ansible-playbook -i forest.host install_forest.yml -t config
 #启动与检查操作
 
 --启动
-helios平展化进程
+helios平展化进程(logcenter)
 ansible run-apps-machine -i forest.host -mshell -a"su - moretv -c  'cd /opt/forest-bi/Forest-1.0.0-SNAPSHOT-bin/bin;sh helios_product_start.sh'"
-medusa平展化进程
+medusa平展化进程(logcenter)
 ansible run-apps-machine -i forest.host -mshell -a"su - moretv -c  'cd /opt/forest-bi/Forest-1.0.0-SNAPSHOT-bin/bin;sh medusa_product_start.sh'"
 雷神平展化进程
 ansible run-apps-machine -i forest.host -mshell -a"su - moretv -c  'cd /opt/forest-bi/Forest-1.0.0-SNAPSHOT-bin/bin;sh whaley_thorprobe_start.sh'"
 电视猫点播直播播放质量
 ansible run-apps-machine -i forest.host -mshell -a"su - moretv -c  'cd /opt/forest-bi/Forest-1.0.0-SNAPSHOT-bin/bin;sh medusa_playqos_start.sh'"
+helios平展化进程(nginx)
+ansible run-apps-machine -i forest.host -mshell -a"su - moretv -c  'cd /opt/forest-bi/Forest-1.0.0-SNAPSHOT-bin/bin;sh nginx_helios_product_start.sh'"
+medusa平展化进程(nginx)
+ansible run-apps-machine -i forest.host -mshell -a"su - moretv -c  'cd /opt/forest-bi/Forest-1.0.0-SNAPSHOT-bin/bin;sh nginx_medusa_product_start.sh'"
 
 
---重启 helios平展化进程
+--停止
+helios平展化进程(logcenter)
+ansible run-apps-machine -i forest.host -mshell -a"su - moretv -c  'cd /opt/forest-bi/Forest-1.0.0-SNAPSHOT-bin/bin;sh helios_product_stop.sh'"
+medusa平展化进程(logcenter)
+ansible run-apps-machine -i forest.host -mshell -a"su - moretv -c  'cd /opt/forest-bi/Forest-1.0.0-SNAPSHOT-bin/bin;sh medusa_product_stop.sh'"
+helios平展化进程(nginx)
+ansible run-apps-machine -i forest.host -mshell -a"su - moretv -c  'cd /opt/forest-bi/Forest-1.0.0-SNAPSHOT-bin/bin;sh nginx_helios_product_stop.sh'"
+medusa平展化进程(nginx)
+ansible run-apps-machine -i forest.host -mshell -a"su - moretv -c  'cd /opt/forest-bi/Forest-1.0.0-SNAPSHOT-bin/bin;sh nginx_medusa_product_stop.sh'"
+
+
+--重启 helios平展化进程(logcenter)
 ansible run-apps-machine -i forest.host -mshell -a"su - moretv -c  'cd /opt/forest-bi/Forest-1.0.0-SNAPSHOT-bin/bin;sh helios_product_restart.sh'"
---重启 medusa平展化进程
+--重启 medusa平展化进程(logcenter)
 ansible run-apps-machine -i forest.host -mshell -a"su - moretv -c  'cd /opt/forest-bi/Forest-1.0.0-SNAPSHOT-bin/bin;sh medusa_product_restart.sh'"
 --重启 雷神平展化进程
 ansible run-apps-machine -i forest.host -mshell -a"su - moretv -c  'cd /opt/forest-bi/Forest-1.0.0-SNAPSHOT-bin/bin;sh whaley_thorprobe_restart.sh'"
 --重启 电视猫点播直播播放质量
 ansible run-apps-machine -i forest.host -mshell -a"su - moretv -c  'cd /opt/forest-bi/Forest-1.0.0-SNAPSHOT-bin/bin;sh medua_playqos_restart.sh'"
 
---检查 helios平展化进程
+--检查 helios平展化进程(logcenter)
 ansible run-apps-machine -i forest.host -mshell -a"su - moretv -c  'ps -ef|grep cn.whaley.turbo.forest.main.HeliosLogProcessingNewApp2|grep -v grep'"
---检查 medusa 平展化进程
-ansible run-apps-machine -i forest.host -mshell -a"su - moretv -c  'ps -ef|grep cn.whaley.turbo.forest.main.MedusaLogProcessingNewApp2|grep -v grep'"
+--检查 medusa 平展化进程(logcenter)
+ansible run-apps-machine -i forest.host -mshell -a"su - moretv -c  'ps -ef|grep cn.whaley.turbo.forest.main.MedusaLogProcessingNewApp2|grep -v grep|wc -l'"
 --检查 雷神 平展化进程
 ansible run-apps-machine -i forest.host -mshell -a"su - moretv -c  'ps -ef|grep cn.whaley.turbo.forest.main.ThorProbeLogProcessingApp2|grep -v grep'"
 --检查 电视猫点播直播播放质量
 ansible run-apps-machine -i forest.host -mshell -a"su - moretv -c  'ps -ef|grep cn.whaley.turbo.forest.main.MedusaPlayqosProcessingApp|grep -v grep'"
 --检查 jar包一致性
 ansible run-apps-machine -i forest.host -mshell -a"su - moretv -c  'md5sum /opt/forest-bi/Forest-1.0.0-SNAPSHOT-bin/lib/Forest-1.0.0-SNAPSHOT.jar'"
+--检查 helios平展化进程(nginx)
+ansible run-apps-machine -i forest.host -mshell -a"su - moretv -c  'ps -ef|grep cn.whaley.turbo.forest.main.NginxHeliosLogProcessingApp|grep -v grep'"
+--检查 medusa 平展化进程(nginx)
+ansible run-apps-machine -i forest.host -mshell -a"su - moretv -c  'ps -ef|grep cn.whaley.turbo.forest.main.NginxMedusaLogProcessingApp|grep -v grep|wc -l'"
 
 
 
 --cronjob分发
+(logcenter old)
 ansible run-apps-machine -i forest.host -m cron -a "name='forest autostart job 1' minute=*/6  user='moretv' job=' . /etc/profile;sh /opt/forest-bi/Forest-1.0.0-SNAPSHOT-bin/bin/helios_product_start.sh > /dev/null 2>&1'  "
+(logcenter old)
 ansible run-apps-machine -i forest.host -m cron -a "name='forest autostart job 2' minute=*/6  user='moretv' job=' . /etc/profile;sh /opt/forest-bi/Forest-1.0.0-SNAPSHOT-bin/bin/medusa_product_start.sh > /dev/null 2>&1'  "
+
 ansible run-apps-machine -i forest.host -m cron -a "name='forest autostart job 3' minute=*/6  user='moretv' job=' . /etc/profile;sh /opt/forest-bi/Forest-1.0.0-SNAPSHOT-bin/bin/whaley_thorprobe_start.sh > /dev/null 2>&1'  "
 ansible run-apps-machine -i forest.host -m cron -a "name='forest autostart job 4' minute=*/6  user='moretv' job=' . /etc/profile;sh /opt/forest-bi/Forest-1.0.0-SNAPSHOT-bin/bin/medusa_playqos_start.sh > /dev/null 2>&1'  "
+
+(nginx)
+ansible run-apps-machine -i forest.host -m cron -a "name='forest autostart job 5' minute=*/6  user='moretv' job=' . /etc/profile;sh /opt/forest-bi/Forest-1.0.0-SNAPSHOT-bin/bin/nginx_helios_product_start.sh > /dev/null 2>&1'  "
+(nginx)
+ansible run-apps-machine -i forest.host -m cron -a "name='forest autostart job 6' minute=*/6  user='moretv' job=' . /etc/profile;sh /opt/forest-bi/Forest-1.0.0-SNAPSHOT-bin/bin/nginx_medusa_product_start.sh > /dev/null 2>&1'  "
 
 
 #创建基本topic
@@ -120,3 +147,4 @@ medusa日志处理，4，5，6，7，8，9六台机器，每台启动8个线程�
 
 --nginx配置分发
 ansible-playbook -i forest.host install_forest.yml -t config_for_nginx
+ansible-playbook -i forest.host install_forest.yml -t config_for_stop
