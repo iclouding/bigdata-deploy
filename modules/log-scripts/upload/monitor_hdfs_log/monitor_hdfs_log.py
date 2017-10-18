@@ -169,11 +169,11 @@ class MyLocal():
     
     def check_workflows(self):
         # pdb.set_trace()
-        check_rule1 = self._str_filename_rule1()
+        #check_rule1 = self._str_filename_rule1()
         # check_rule2 = self._str_filename_rule2()
         check_rule3 = self._str_filename_rule3()
         
-        self._check_filename(check_rule1, "Rule1")
+        #self._check_filename(check_rule1, "Rule1")
         # self._check_filename(check_rule2, "Rule2")
         self._check_filename(check_rule3, "Rule3")
 
