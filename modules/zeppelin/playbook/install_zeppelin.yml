@@ -66,7 +66,7 @@
         - zeppelin-0.7.2-bin-all-rom
 
     - name: copy config file to remote host
-      copy: src=/data/tools/ansible/modules/zeppelin/config/{{ item.src }} dest=/opt/{{item.dest}}/conf/{{ item.file }} owner=hadoop group=hadoop mode=0771
+      copy: src=/data/tools/ansible/modules/zeppelin/config/{{ item.src }} dest=/opt/{{item.dest}} owner=hadoop group=hadoop mode=0771
       tags: config
       with_items:
         - { src: 'bigdata/zeppelin-env.sh', dest: 'zeppelin/conf/zeppelin-env.sh'}
