@@ -47,7 +47,8 @@ def index():
     data_moguv = get_data_mysql(conn_data, sql_moguv)
     data_moguv_2 = get_data_mysql(conn_data, sql_moguv_2)
     data_moretv = get_data_mysql(conn_data, sql_moretv)
-    if data_moguv and data_moretv and data_moguv_2 :
+    #if data_moguv and data_moretv and data_moguv_2 :
+    if data_moguv and data_moguv_2 :
         msg = Message('主题', sender="whaley_alert@whaley.cn",
                       recipients=["peng.tao@whaley.cn", "zhang.qiangjun@whaley.cn", "wu.qi@whaley.cn",
                                   "wu.qiang@whaley.cn", "ge.yongliang@whaley.cn"]
