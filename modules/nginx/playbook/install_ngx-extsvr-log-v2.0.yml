@@ -1,6 +1,6 @@
 ---
 
-- hosts: ngx-extsvr-log-v2.0
+- hosts: ngx-extsvr-log
   tasks:
 
     - name: make online dir
