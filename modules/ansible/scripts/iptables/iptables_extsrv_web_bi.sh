@@ -34,16 +34,19 @@ iptables -A INPUT -p udp --dport 53 -j ACCEPT
 #################PING#################################
 iptables -A INPUT -p icmp --icmp-type 0 -j ACCEPT
 #################office NETWORK#################################
-iptables -A INPUT -p tcp -s 116.236.190.58 -j ACCEPT
-iptables -A INPUT -p tcp -s 116.236.190.59 -j ACCEPT
-iptables -A INPUT -p tcp -s 116.236.190.60 -j ACCEPT
-iptables -A INPUT -p tcp -s 116.236.190.61 -j ACCEPT
-iptables -A INPUT -p tcp -s 116.236.190.62 -j ACCEPT
-iptables -A INPUT -p tcp -s 180.166.221.42 -j ACCEPT
-iptables -A INPUT -p tcp -s 180.166.221.43 -j ACCEPT
-iptables -A INPUT -p tcp -s 180.166.221.44 -j ACCEPT
-#iptables -A INPUT -p tcp -s 180.166.221.45 -j ACCEPT
-iptables -A INPUT -p tcp -s 180.166.221.46 -j ACCEPT 
+
+
+iptables -A INPUT -p tcp -s 180.169.235.10 -j ACCEPT
+iptables -A INPUT -p tcp -s 180.169.235.11 -j ACCEPT
+iptables -A INPUT -p tcp -s 180.169.235.12 -j ACCEPT
+iptables -A INPUT -p tcp -s 180.169.235.13 -j ACCEPT
+iptables -A INPUT -p tcp -s 180.169.235.14 -j ACCEPT
+iptables -A INPUT -p tcp -s 180.169.235.42 -j ACCEPT
+iptables -A INPUT -p tcp -s 180.169.235.43 -j ACCEPT
+iptables -A INPUT -p tcp -s 180.169.235.44 -j ACCEPT
+iptables -A INPUT -p tcp -s 180.169.235.45 -j ACCEPT
+iptables -A INPUT -p tcp -s 180.169.235.46 -j ACCEPT
+
 iptables -A INPUT -p tcp -s 116.236.232.242 -j ACCEPT
 iptables -A INPUT -p tcp -s 116.236.232.243 -j ACCEPT
 iptables -A INPUT -p tcp -s 116.236.232.244 -j ACCEPT

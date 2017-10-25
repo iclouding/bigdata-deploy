@@ -6,14 +6,8 @@ from ftplib import FTP, error_perm
 import time
 import sys
 
-config = {
-    'ftp_user': 'metisftp',
-    'ftp_pswd': 'gZy4humhqb5wosUc',
-    'ftp_host': '10.19.13.214',
-    'localpath': '/tmp/hdfs2ftp',
-    'hdfspath': '/log/vr/rawlog',
-    'ftppath': 'BIData'
-}
+config = {'ftp_user': 'metisftp', 'ftp_pswd': 'gZy4humhqb5wosUc', 'ftp_host': '10.19.13.214',
+    'localpath': '/tmp/hdfs2ftp', 'hdfspath': '/data_warehouse/ods_origin.db/log_raw/', 'ftppath': 'BIData'}
 
 
 def logMsg(fun_name, err_msg, level):
@@ -199,12 +193,12 @@ class ftpBase():
 
 def checkLocalPath(localpath, suffix):
     checkPath = "%s/%s" % (localpath, suffix)
-    if not os.path.isdir(localpath):
-        mkdir_localpath_cmd = "mkdir -p %s" % localpath
+    if not os.path.isdir(checkPath):
+        mkdir_localpath_cmd = "mkdir -p %s" % checkPath
         run_cmd(mkdir_localpath_cmd)
-        logMsg("checkpath", "no found path in local %s ,make it!" % localpath, 2)
+        logMsg("checkpath", "no found path in local %s ,make it!" % checkPath, 2)
     if os.path.isdir(checkPath):
-        cmd = "rm -rf %s" % checkPath
+        cmd = "cd  %s;rm -f *" % checkPath
         run_cmd(cmd)
         logMsg("checkpath", "find path in local %s ,remove it!" % checkPath, 2)
 
@@ -213,8 +207,10 @@ def getFromHdfs(suffix):
     localpath = config['localpath']
     hdfspath = config['hdfspath']
     checkLocalPath(localpath, suffix)
+    current_local = "%s/%s" % (localpath, suffix)
     # su - hdfs -c 'hadoop fs -get /log/vr/rawlog/20170612  /tmp'
-    cmd = 'hadoop fs -get  %s/%s  %s ' % (hdfspath, suffix, localpath)
+    cmd = 'hadoop fs -get  %s/key_day=%s/key_hour=*/boikgpokn78sb95kbqei6cc98dc5mlsr.log*   %s ' % (
+    hdfspath, suffix, current_local)
     k, v = run_cmd(cmd)
     if k == 1:
         return True
