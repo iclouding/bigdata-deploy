@@ -83,8 +83,12 @@ ansible all -i spark.host -mcopy -a"src=/data/tools/ansible/modules/spark/packag
 ansible all -i spark.host -mshell -a"mkdir /opt/spark2/bk ; mv /opt/spark2/jars/jersey-client-*.jar /opt/spark2/bk ;  mv /opt/spark2/jars/jersey-core-*.jar /opt/spark2/bk"
 
 启动spark thrift server
-ansible thriftserver -i spark.host -mshell -a"su - spark -c 'cd /opt/spark2 && ./sbin/launch-thriftserver.sh'"
-
+ --root用户
+ ansible thriftserver -i spark.host -mshell -a"su - spark -c 'cd /opt/spark2 && ./sbin/launch-thriftserver.sh'"
+ --spark用户
+ ansible thriftserver -i spark.host -mshell -a"cd /opt/spark2 && ./sbin/launch-thriftserver.sh"
+ 停止Thriftserver
+ ansible thriftserver -i spark.host -mshell -a"cd /opt/spark2 && ./sbin/stop-thriftserver.sh"
 
 ==================spark2.2.0==============================
 
