@@ -40,7 +40,7 @@
     </queue>
     <queue name="long_running">
         <minResources>204800 mb, 50 vcores</minResources>
-        <maxResources>1048576 mb, 200 vcores</maxResources>
+        <maxResources>2097152 mb, 500 vcores</maxResources>
         <schedulingMode>fair</schedulingMode>
         <weight>0.4</weight>
         <minSharePreemptionTimeout>2</minSharePreemptionTimeout>
