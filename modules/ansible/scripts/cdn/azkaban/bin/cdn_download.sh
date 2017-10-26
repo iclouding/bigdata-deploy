@@ -43,13 +43,13 @@ if [ ! -f "$filePath" ] || [ "$ret" != "0" ]; then
 fi
 
 #最小不能小于100K,否则认为是无效文件
-count=`wc -c $filePath|awk '{print $1}'`
-ret=$?
-if [ $count -lt 102400 ]; then
-    echo `date` "$filePath is too small. size=$count";
-    exit 1
-fi
-echo `date` "end get file. size=$count"
+#count=`wc -c $filePath|awk '{print $1}'`
+#ret=$?
+#if [ $count -lt 102400 ]; then
+#    echo `date` "$filePath is too small. size=$count";
+#    exit 1
+#fi
+#echo `date` "end get file. size=$count"
 
 hdfsDir=/log/cdn/$logTime/$host/
 hadoop fs -mkdir -p $hdfsDir
