@@ -74,12 +74,21 @@ ansible-playbook -i spark.host install_spark-2.1.0.yml -t install
 
 --配置分发
 ansible-playbook -i spark.host install_spark-2.1.0.yml -t config
+ansible-playbook -i spark.host install_spark-2.1.0.yml -t config_launch
+
 
 --替换jersey相关jar包
 ansible all -i spark.host -mcopy -a"src=/data/tools/ansible/modules/spark/package/jersey-client-1.9.jar dest=/opt/spark2/jars  owner=spark group=hadoop mode=755"
 ansible all -i spark.host -mcopy -a"src=/data/tools/ansible/modules/spark/package/jersey-core-1.9.jar dest=/opt/spark2/jars  owner=spark group=hadoop mode=755"
 ansible all -i spark.host -mshell -a"mkdir /opt/spark2/bk ; mv /opt/spark2/jars/jersey-client-*.jar /opt/spark2/bk ;  mv /opt/spark2/jars/jersey-core-*.jar /opt/spark2/bk"
 
+启动spark thrift server
+ --root用户
+ ansible thriftserver -i spark.host -mshell -a"su - spark -c 'cd /opt/spark2 && ./sbin/launch-thriftserver.sh'"
+ --spark用户
+ ansible thriftserver -i spark.host -mshell -a"cd /opt/spark2 && ./sbin/launch-thriftserver.sh"
+ 停止Thriftserver
+ ansible thriftserver -i spark.host -mshell -a"cd /opt/spark2 && ./sbin/stop-thriftserver.sh"
 
 ==================spark2.2.0==============================
 
