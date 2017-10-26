@@ -1,0 +1,15 @@
+---
+- hosts: all
+  tasks:
+
+    - name: rsync tar files
+      copy: src=/data/tools/ansible/modules/ansible/package/numpy.tar.gz dest=/tmp
+      tags: install
+
+    - name: decompress numpys files
+      shell: cd /tmp && tar zxvf numpy.tar.gz && cp -r numpy  /usr/lib64/python2.7/site-packages
+      tags: install
+
+    - name: rsync test script
+      copy: src=/tmp/1.py dest=/tmp
+      tags: install

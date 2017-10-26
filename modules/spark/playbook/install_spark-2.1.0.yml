@@ -52,3 +52,9 @@
         - spark-env.sh
         - spark-thrift-sparkconf.conf
         - log4j.properties
+
+    - name: copy launch file
+      copy: src=/data/tools/ansible/modules/spark/config/spark2.1.0/{{ item }} dest=/opt/spark2/sbin/{{ item }} owner=spark group=hadoop mode=0771
+      tags: config_launch
+      with_items:
+        - launch-thriftserver.sh
