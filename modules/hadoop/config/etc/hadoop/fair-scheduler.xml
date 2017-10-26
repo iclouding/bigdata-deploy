@@ -38,6 +38,13 @@
         <weight>0.3</weight>
         <minSharePreemptionTimeout>2</minSharePreemptionTimeout>
     </queue>
+    <queue name="long_running">
+        <minResources>204800 mb, 50 vcores</minResources>
+        <maxResources>1048576 mb, 200 vcores</maxResources>
+        <schedulingMode>fair</schedulingMode>
+        <weight>0.4</weight>
+        <minSharePreemptionTimeout>2</minSharePreemptionTimeout>
+    </queue>
     <queue name="ai">
         <minResources>204800 mb, 50 vcores</minResources>
         <maxResources>3145728 mb, 750 vcores</maxResources>
@@ -49,7 +56,7 @@
         <minResources>204800 mb, 50 vcores</minResources>
         <maxResources>2097152 mb, 500 vcores</maxResources>
         <schedulingMode>fair</schedulingMode>
-        <weight>0.3</weight>
+        <weight>0.4</weight>
         <minSharePreemptionTimeout>2</minSharePreemptionTimeout>
     </queue>
     <queue name="bi">
@@ -70,7 +77,7 @@
         <minResources>204800 mb, 50 vcores</minResources>
         <maxResources>2097152 mb, 500 vcores</maxResources>
         <schedulingMode>fair</schedulingMode>
-        <weight>0.5</weight>
+        <weight>0.3</weight>
         <minSharePreemptionTimeout>2</minSharePreemptionTimeout>
     </queue>
 </allocations>
