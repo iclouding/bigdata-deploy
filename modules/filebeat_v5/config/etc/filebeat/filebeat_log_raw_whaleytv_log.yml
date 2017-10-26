@@ -151,7 +151,7 @@ filebeat.prospectors:
   #tail_files: false
 
   # Experimental: If symlinks is enabled, symlinks are opened and harvested. The harvester is openening the
-  # original for harvesting but will report the symlink name as source.
+  # original for harvesting but will report_nouse the symlink name as source.
   #symlinks: false
 
   # Backoff values define how aggressively filebeat crawls new files for updates
