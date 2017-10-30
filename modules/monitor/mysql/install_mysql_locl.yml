@@ -1,0 +1,32 @@
+---
+- hosts: all
+  tasks:
+
+    - name: install package from yum repo
+      yum: name={{ item }}  state=present
+      tags: install_dependency
+      with_items:
+        - python-pip
+
+    - name:  install arrow
+      shell: pip install requests
+      tags: install_dependency
+
+    - name: create directory
+      file: path={{ item.name }} state=directory owner={{ item.user }} group={{ item.groups }}
+      tags: install
+      with_items:
+        - { name: '/data/scripts', user: 'root', groups: 'root' }
+
+    - name: copy  script  to remote host
+      tags: install
+      copy: src=/data/tools/ansible/modules/monitor/mysql/{{ item }} dest=/data/scripts
+      with_items:
+        - check_mysql_lock.py
+
+
+    - name: create script with nginx each upload cron
+      tags: cron
+      cron: name="check mysql lock  " minute=*/2  job="/usr/bin/python /data/scripts/check_mysql_lock.py"
+
+
