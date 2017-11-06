@@ -1,0 +1,37 @@
+部署机器
+bigdata-appsvr-130-6
+bigdata-appsvr-130-7
+
+依赖配置文件：
+kafka_topic_distribute_medusa_player_sdk_startplay.conf
+kafka_topic_distribute_helios_player_sdk_startplay.conf
+kafka_topic_distribute_player_sdk_startplay_merge.conf
+
+
+kafka对外topic：
+openrs-helios-medusa-play-vod-quality
+sh /opt/kafka3/bin/kafka-console-consumer.sh --topic openrs-helios-medusa-play-vod-quality  -bootstrap-server bigdata-appsvr-130-1:9094  | head
+
+监控下线节目：
+moretv@bigdata-appsvr-130-6
+nohup sh /opt/kafka3/bin/kafka-console-consumer.sh --topic openrs-helios-medusa-play-vod-quality  -bootstrap-server bigdata-appsvr-130-1:9094  >/data/logs/logstash_v5/xiaxian.log 2>&1 &
+
+
+业务简介：
+对于电视猫业务：
+  当eventId为medusa-player-sdk-startPlay，并且errorCode为304303_101_62，并且playType为vod，并且source为tencent2或qq
+ 输出 ["videoSid","^source$","playUrl"] 为kafka topic1
+
+对于电视业务：
+  当eventId为helios-player-sdk-startPlay，并且errorCode为304303_101_62，并且playType为vod，并且source为tencent或qq
+ 输出 ["episodeSid","^source$","playUrl"] 为kafka topic2
+
+当时电视猫业务videoSid，episodeSid的打点打反了，所以将videoSid重命名为episodeSid，方便统一输出kafka3给cms同学使用
+rename => { "videoSid" => "episodeSid" }
+
+kafka topic1【经过rename】 + kafka topic2  ==>kafka topic3
+
+最终kafka topic3的输出样式为：
+{"source":"qq","playUrl":"l0567qqsw5q","episodeSid":"g6vwnos912d3"}
+
+cms同学获得kafka topic3中的数据，做逻辑，满足逻辑下线。
