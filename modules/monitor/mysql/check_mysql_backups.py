@@ -14,7 +14,7 @@ import os
 
 SEND_TO = "peng.tao@whaley.cn，lian.kai@whaley.cn"
 BASE_PATH = '/data/databack'
-HOSTLIST = ("bigdata-extsvr-db_bi2", "bigdata-appsvr-130-7", "bigdata-cmpt-128-25", "bigdata-extsvr-sdkconfsvr1",)
+HOSTLIST = ("bigdata-extsvr-db_bi1","bigdata-extsvr-db_bi2", "bigdata-appsvr-130-7", "bigdata-cmpt-128-25", "bigdata-extsvr-sdkconfsvr1",)
 
 
 def log_msg(fun_name, err_msg, level):
