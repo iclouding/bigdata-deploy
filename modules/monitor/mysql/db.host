@@ -1,4 +1,5 @@
 bigdata-extsvr-db_bi1
 bigdata-extsvr-db_bi2
 bigdata-appsvr-130-[1:7]
-bigdata-cmpt-128-[13,25]
+bigdata-cmpt-128-13
+bigdata-cmpt-128-25
