@@ -8,7 +8,7 @@ import json
 import requests
 import pdb
 
-
+#delopy in 10.255.128.[1/13/25]
 def logMsg(fun_name, err_msg, level):
     message = fun_name + ':' + err_msg
     logger = logging.getLogger()
