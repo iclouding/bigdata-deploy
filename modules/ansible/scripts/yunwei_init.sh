@@ -12,10 +12,10 @@ yum install -y percona-xtrabackup --enablerepo=[moretv]
 
 yum install -y puppet --enablerepo=[moretv]
 
-#设置puppet
-echo '10.10.96.33 moretv-puppet01' >> /etc/hosts
-echo '    server = moretv-puppet01' >> /etc/puppet/puppet.conf
-puppet agent -t
+##设置puppet
+#echo '10.10.96.33 moretv-puppet01' >> /etc/hosts
+#echo '    server = moretv-puppet01' >> /etc/puppet/puppet.conf
+#puppet agent -t
 
 #Install puppet===========================================================END
 cd /tmp/
@@ -72,23 +72,23 @@ else
         /etc/init.d/zabbix-agent restart
 fi
 #/sbin/chkconfig --add zabbix-agent
-#/sbin/chkconfig zabbix-agent on
-systemctl start zabbix-agent.service
-systemctl enable zabbix-agent.service
+##/sbin/chkconfig zabbix-agent on
+#systemctl start zabbix-agent.service
+#systemctl enable zabbix-agent.service
 
 mkdir -p /data/tools/
 cd /data/tools/
-wget http://${REMOTE_HOST}/whaley_tools/agent_install.zip
-unzip agent_install.zip
-cd agent
-./agent install
-
-sed -i 's+10.10.114.116+'$HMS_IP'+g' /data/tools/agent/config/config.ini
-#/etc/init.d/agent start
-systemctl start agent.service
-sleep 10
-#/etc/init.d/agent restart
-systemctl restart agent.service
-systemctl enable  agent.service
+#wget http://${REMOTE_HOST}/whaley_tools/agent_install.zip
+#unzip agent_install.zip
+#cd agent
+#./agent install
+#
+#sed -i 's+10.10.114.116+'$HMS_IP'+g' /data/tools/agent/config/config.ini
+##/etc/init.d/agent start
+#systemctl start agent.service
+#sleep 10
+##/etc/init.d/agent restart
+#systemctl restart agent.service
+#systemctl enable  agent.service
 #/sbin/chkconfig --add agent
 #/sbin/chkconfig agent on

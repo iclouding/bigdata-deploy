@@ -76,7 +76,7 @@ wget "http://${REMOTE_HOST}/whaley_tools/moretv.repo" -P /etc/yum.repos.d/
 #wget "http://monitor.whaley.cn/whaley_tools/moretv.repo" -P /etc/yum.repos.d/
 
 yum clean all
-yum install -y vim net-tools lsof net-snmp  OpenIPMI nmap telnet yum-plugin-downloadonly systemtap psacct   bind-utils crontabs  openssl-devel pcre-devel zlib-devel  nc  screen ftp lftp iotop   python-psutil MySQL-python m2crypto  numactl libev   MySQL-python m2crypto  python-requests  gcc gcc-c++ make cmake curl curl-devel  sudo ntp python-devel ntp sysstat  pip
+yum install -y vim net-tools iftop ncftp lsof net-snmp  OpenIPMI nmap telnet yum-plugin-downloadonly systemtap psacct   bind-utils crontabs  openssl-devel pcre-devel zlib-devel  nc  screen ftp lftp iotop   python-psutil MySQL-python m2crypto  numactl libev   MySQL-python m2crypto  python-requests  gcc gcc-c++ make cmake curl curl-devel  sudo ntp ncftp python-devel ntp sysstat  python-pip
 
 echo 'UseDNS  no' >> /etc/ssh/sshd_config
 systemctl restart sshd.service
