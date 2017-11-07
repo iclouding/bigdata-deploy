@@ -22,7 +22,7 @@ class MyUcloud():
             Parameters = {"Action": "DescribeEIP", "Region": "cn-bj2", "Limit": 100, "Offset": i}
             # data = list()
             response = self.ApiClient.get("/", Parameters)
-            if response:
+            if not response['EIPSet']:
                 for one_item in response['EIPSet']:
                     if one_item['Resource']['ResourceType'] != 'uhost':
                         temp = (one_item['Bandwidth'], one_item['EIPAddr'][0]['IP'], one_item['EIPId'],
@@ -71,13 +71,16 @@ def main():
 
     u = MyUcloud()
     filename = 'get_eip.log'
+    filename_csv="get_eip.csv"
     while 1:
 
         for i in range(len(eip_id)):
-             eipid_dict[ip_list[i]] = u.get_single_bandwidth(eip_id[i])
+            eipid_dict[ip_list[i]] = u.get_single_bandwidth(eip_id[i])
+            line="{0},{1},{2}\n".format(now,ip_list[i],u.get_single_bandwidth(eip_id[i]))
+            write_file(filename_csv,line)
 
-    # filename  print "get data"
-    # print json.dumps(eipid_dict, indent=1)
+            # filename  print "get data"
+            # print json.dumps(eipid_dict, indent=1)
 
         now = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
         data = "{0}\n{1}\n".format(now, json.dumps(eipid_dict, indent=1))
@@ -87,20 +90,20 @@ def main():
 
 
 
-    # eip_info = u.get_eip_info()
-    # eipid_list = list()
-    # for info in eip_info:
-    #     eipid_list.append(info[2])
-    # eip_bandwith = u.get_eip_bandwidth(eipid_list)
-    #
-    # for item in eip_bandwith.keys():
-    #     for a in eip_info:
-    #         if item == a[2]:
-    #             print "{0}  :   {1}".format(a[1], eip_bandwith[item])
-    #
-    #             # print json.dumps(eip_bandwith,indent=1)
-    #
-    #             # http://api.ucloud.cn/?Action=DescribeBandwidthUsage&Region=cn-bj2&EIPIds.1=eip-vwulua
+        # eip_info = u.get_eip_info()
+        # eipid_list = list()
+        # for info in eip_info:
+        #     eipid_list.append(info[2])
+        # eip_bandwith = u.get_eip_bandwidth(eipid_list)
+        #
+        # for item in eip_bandwith.keys():
+        #     for a in eip_info:
+        #         if item == a[2]:
+        #             print "{0}  :   {1}".format(a[1], eip_bandwith[item])
+        #
+        #             # print json.dumps(eip_bandwith,indent=1)
+        #
+        #             # http://api.ucloud.cn/?Action=DescribeBandwidthUsage&Region=cn-bj2&EIPIds.1=eip-vwulua
 
 
 if __name__ == '__main__':
