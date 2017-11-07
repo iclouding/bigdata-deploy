@@ -73,8 +73,9 @@ def main():
     filename = 'get_eip.log'
     filename_csv="get_eip.csv"
     while 1:
-
+        now = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
         for i in range(len(eip_id)):
+
             eipid_dict[ip_list[i]] = u.get_single_bandwidth(eip_id[i])
             line="{0},{1},{2}\n".format(now,ip_list[i],u.get_single_bandwidth(eip_id[i]))
             write_file(filename_csv,line)
@@ -82,7 +83,7 @@ def main():
             # filename  print "get data"
             # print json.dumps(eipid_dict, indent=1)
 
-        now = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
+        #now = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
         data = "{0}\n{1}\n".format(now, json.dumps(eipid_dict, indent=1))
         write_file(filename, data)
         time.sleep(60)
