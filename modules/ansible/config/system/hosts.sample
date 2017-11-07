@@ -102,6 +102,8 @@
 10.19.18.75  bigdata-test-log_collect01
 10.19.23.227 bigdata-test-log_collect02
 
+10.19.64.94  bigdata-extsvr-log01
+
 10.19.35.248 tableau.whaley.cn
 10.19.35.248  azkaban.whaley.cn
 
@@ -139,5 +141,7 @@
 10.255.129.111 bigdev-cmpt-11
 10.255.129.112 bigdev-cmpt-12
 10.255.129.113 bigdev-cmpt-13
+
+
 
 10.19.47.155 bigtest-extsvr-log3
