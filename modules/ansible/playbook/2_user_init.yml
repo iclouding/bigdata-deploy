@@ -91,7 +91,7 @@
       copy: src=/data/tools/ansible/modules/ansible/config/system/profile.sample dest=/etc/profile
 
     - name: rsync /data/tools/ansible/modules/ansible/config/system to spark,moretv which use private env like JAVA_HOME
-      copy: src=/data/tools/ansible/modules/ansible/config/system/bash_profile.sample dest=/home/{{ item }}/.bash_profile owner={{ item }} group={{ item }}
+      copy: src=/data/tools/ansible/modules/ansible/config/system/bash_profile.sample dest=/home/{{ item }}/.bash_profile owner={{ item }}
       with_items:
         - spark
         - moretv
