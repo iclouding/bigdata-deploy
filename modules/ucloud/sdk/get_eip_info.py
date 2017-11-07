@@ -76,10 +76,10 @@ def main():
     print "get data"
     print json.dumps(eipid_dict, indent=1)
 
-    write_file = 'get_eip.log'
+    filename = 'get_eip.log'
     now = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
-    data = now + "\n" + json.dumps(eipid_dict, indent=1) + "\n"
-    write_file(data)
+    data = "{0}\n{1}\n".format(now, json.dumps(eipid_dict, indent=1))
+    write_file(filename, data)
 
 
 
