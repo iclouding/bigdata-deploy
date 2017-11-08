@@ -126,6 +126,7 @@ ansible all -i hadoop.host -mshell -a"ls -al /opt/hadoop/share/hadoop/kms/tomcat
 
 
 -------------------hadoop分发给云主机的模版机器-------------------
+cd /data/tools/ansible/modules/hadoop/playbook
 --安装包分发
 ansible-playbook -i hadoop-template.host install_hadoop-bin.yml -t install
 
