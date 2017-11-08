@@ -113,3 +113,11 @@ ansible filebeats -i filebeat.host -mshell -a"su - moretv -c  'ps -ef|grep fileb
 --检查电视猫main3x的nginx日志的filebeat(nginx)
 ansible filebeats -i filebeat.host -mshell -a"su - moretv -c  'ps -ef|grep filebeat_nginx_medusa_3x.yml|grep -v grep|wc -l'"
 
+
+-------------------filebeat分发给云主机的模版机器-------------------
+cd /data/tools/ansible/modules/filebeat_v5/playbook
+--安装包分发
+ansible-playbook -i filebeat_template.host install_filebeat-bin.yml -t install
+
+--配置分发
+ansible-playbook -i filebeat_template.host install_filebeat-bin.yml -t config_for_nginx
