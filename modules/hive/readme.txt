@@ -142,5 +142,18 @@ ansible all -i hive.host -m shell -a 'cd /opt/hive/conf/; chmod 771 .hiverc '
 ansible hiveserver2 -i hive.host -m shell -a "ps -ef|grep HiveServer2|grep -v grep| awk '{print \$2}'|xargs kill -9 ; nohup /opt/hive/bin/hiveserver2 > /data/logs/hive/hiveserver2.log 2>&1 &'"
 
 
+-------------------hive分发给云主机的模版机器[顺便梳理hive客户端的安装方式]-------------------
+hive客户端安装
+ansible-playbook -i hive-template.host install_hive2.1.1-template.yml -t install
+ansible-playbook -i hive-template.host install_hive2.1.1-template.yml -t config
+ansible-playbook -i hive-template.host install_hive2.1.1-template.yml -t link
+ansible-playbook -i hive-template.host install_hive2.1.1-template.yml -t updatejar
+ansible-playbook -i hive-template.host install_hive2.1.1-template.yml -t updatejar-hcatalog
 
+#tez客户端安装【hive依赖于tez执行引擎】
+ansible-playbook -i hive-template.host install_tez-template.yml -t install
 
+#tez配置更新
+ansible-playbook -i hive-template.host install_tez-template.yml -t config
+
+-------------------hive分发给云主机的模版机器[顺便梳理hive客户端的安装方式]-------------------end

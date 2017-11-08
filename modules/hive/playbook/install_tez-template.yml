@@ -1,0 +1,35 @@
+---
+- hosts: all
+  tasks:
+
+    - name: copy tar file to remote host
+      shell: ncftpget -z -ubigdata -p'whaley!90365' 10.255.130.6 /tmp bigdata/{{ item }}
+      tags: install
+      with_items:
+        - apache-tez-0.8.4-bin.tar.gz
+
+    - name: tar to /app
+      shell: cd /tmp && tar zxvf  apache-tez-0.8.4-bin.tar.gz -C /app
+      tags: install
+      args:
+        creates: /app/apache-tez-0.8.4-bin/.install
+
+    - name: chown to hadoop
+      tags: install
+      file: name=/app/apache-tez-0.8.4-bin owner=hadoop group=hadoop
+
+    - name: create a soft link
+      tags: install
+      file: src=/app/apache-tez-0.8.4-bin dest=/opt/tez state=link owner=hadoop group=hadoop
+
+    - name: touch install file
+      shell: touch /app/apache-tez-0.8.4-bin/.install
+      tags: install
+      args:
+        creates: /app/apache-tez-0.8.4-bin/.install
+
+    - name: copy config file to remote host
+      copy: src=/data/tools/ansible/modules/hive/config/{{ item.name }} dest=/app/apache-tez-0.8.4-bin/{{ item.dest }} owner=hadoop group=hadoop mode=0771
+      tags: config
+      with_items:
+        - {name: 'tez/tez-site.xml', dest: 'conf'}
