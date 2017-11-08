@@ -125,3 +125,12 @@ ansible all -i hadoop.host -mshell -a"ls -al /opt/hadoop/share/hadoop/httpfs/tom
 ansible all -i hadoop.host -mshell -a"ls -al /opt/hadoop/share/hadoop/kms/tomcat/webapps/kms/WEB-INF/lib/guava*"
 
 
+-------------------hadoop分发给云主机的模版机器-------------------
+--安装包分发
+ansible-playbook -i hadoop-template.host install_hadoop-bin.yml -t install
+
+--发布spark shuffle 包
+ansible-playbook -i hadoop-template.host install_yarn-spark-shuffle.yml -t install
+
+--配置分发
+ansible-playbook -i hadoop-template.host install_hadoop-bin.yml -t config
