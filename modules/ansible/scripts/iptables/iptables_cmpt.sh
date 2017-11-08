@@ -40,7 +40,7 @@ iptables -A INPUT -p tcp  -s 10.19.64.94/32 -j ACCEPT
 iptables -A INPUT -p tcp  -s 10.19.195.126/32 -j ACCEPT
 ##################DNS#################################
 iptables -A INPUT -p udp --dport 53 -j ACCEPT
-iptables -A INPUT -p udp --dport 8649 -j ACCEP
+iptables -A INPUT -p udp --dport 8649 -j ACCEPT
 #################Other service########################
 iptables -A INPUT -p tcp --dport 80 -j ACCEPT
 iptables -A INPUT -p tcp --dport 443 -j ACCEPT
