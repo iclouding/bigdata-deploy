@@ -62,3 +62,5 @@ ansible-playbook -i nginx.hosts install_ngx-extsvr-log-v1.1-https.yml
 --下发v2.0 https 配置文件并reload
 ansible-playbook -i nginx.hosts install_ngx-extsvr-log-v2.0.yml
 
+--安装升级版nginx[模版云主机]
+ansible-playbook -i nginx_template.hosts install_nginx_template.yml
