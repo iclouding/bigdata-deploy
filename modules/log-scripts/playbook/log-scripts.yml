@@ -16,18 +16,10 @@
       file: path={{ item.name }} state=directory owner={{ item.user }} group={{ item.groups }}
       tags: install
       with_items:
-        - { name: '/app/logcenter-upload', user: 'root', groups: 'root' }
         - { name: '/app/nginx-upload', user: 'root', groups: 'root' }
-        - { name: '/data/logs/logcenter-upload', user: 'root', groups: 'root' }
         - { name: '/data/logs/nginx-upload', user: 'root', groups: 'root' }
         - { name: '/data/local_backups/old_back', user: 'root', groups: 'root' }
 
-    - name: copy logcenter upload script  to remote host
-      tags: install
-      copy: src=/data/tools/ansible/modules/log-scripts/upload/logcenter-upload/{{ item }} dest=/app/logcenter-upload
-      with_items:
-        - logcenter2hdfs.py
-        - logcenter2hdfs_config.py
 
     - name: copy nginx upload script  to remote host
       tags: install
@@ -42,10 +34,6 @@
       file: src=/app/nginx-upload dest=/opt/nginx-upload state=link owner=root group=root
       tags: install
 
-    - name: create  a soft link to logcenter upload
-      file: src=/app/logcenter-upload dest=/opt/logcenter-upload state=link owner=root group=root
-      tags: install
-
 
     - name: create script with nginx each upload cron
       tags: cron
@@ -55,6 +43,3 @@
       tags: cron
       cron: name="nginx upload 2 hdfs " minute=20 hour=*  job="/usr/bin/python /opt/nginx-upload/nginx_upload.py"
 
-    - name: create script with logcenter upload cron
-      tags: cron
-      cron: name="logcenter upload 2 hdfs " state=absent
