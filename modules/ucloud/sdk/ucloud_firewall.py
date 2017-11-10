@@ -52,18 +52,17 @@ def read_file(filename):
 def main():
 
     filrewall_name = sys.argv[1]
-    filename = sys.argv[2]
-
-    if len(sys.argv) != 3:
+    rule_name=filrewall_name[5:]
+    if len(sys.argv) != 2:
         raise KeyError
 
-    data=read_file(filename).split('\n')
+    data=read_file(filrewall_name).split('\n')
     rule=list()
     for line in data:
         rule.append(line.strip())
 
     u=MyUcloud()
-    u.create_firewall(filrewall_name,rule)
+    u.create_firewall(rule_name,rule)
 
 
 if __name__ == '__main__':
