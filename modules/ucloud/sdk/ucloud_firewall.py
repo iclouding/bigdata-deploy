@@ -35,7 +35,7 @@ class MyUcloud():
         # data = list()
         response = self.ApiClient.get("/", Parameters)
         if response['RetCode'] == 0:
-            print "防火墙规则添加操作成功， 防火墙ID %s" % response['FWId']
+            print "防火墙规则添加操作成功， 防火墙ID {0}".format(response['FWId'])
         else:
             print "防火墙规则添加操作失败，返回值{0} ,信息 {1}".format(response['RetCode'], response['Message'])
 
