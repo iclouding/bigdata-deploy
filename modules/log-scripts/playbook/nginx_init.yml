@@ -1,0 +1,24 @@
+---
+- hosts: all
+  tasks:
+
+    - name: create directory
+      file: path={{ item.name }} state=directory owner={{ item.user }} group={{ item.groups }}   
+      with_items: 
+
+        - { name: '/data/logs', user: 'root', groups: 'root' }
+        - { name: '/data/tools', user: 'root', groups: 'root' }
+        - { name: '/data/scripts', user: 'root', groups: 'root' }
+        - { name: '/data/backups', user: 'root', groups: 'root' }
+        - { name: '/data/hdfs/name', user: 'hdfs', groups: 'hadoop' }
+        - { name: '/data/hdfs/journal', user: 'hdfs', groups: 'hadoop' }
+        - { name: '/data/yarn/timeline', user: 'yarn', groups: 'hadoop' }
+        - { name: '/data/bak', user: 'moretv', groups: 'moretv' }
+        - { name: '/data/local_backups/old_back', user: 'root', groups: 'rootll ' }
+        - { name: '/data/webapps', user: 'moretv', groups: 'moretv' }
+        - { name: '/data/logs/filebeat_v5', user: 'moretv', groups: 'moretv' }
+        - { name: '/data/logs/hadoop-hdfs', user: 'hdfs', groups: 'hadoop' }
+        - { name: '/data/logs/hadoop-yarn', user: 'yarn', groups: 'hadoop' }
+        - { name: '/data/logs/hive', user: 'hadoop', groups: 'hadoop' }
+        - { name: '/data/logs/nginx', user: 'nobody', groups: 'nobody' }
+        - { name: '/data/logs/nginx-upload', user: 'root', groups: 'root' }
