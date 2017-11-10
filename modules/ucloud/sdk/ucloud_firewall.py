@@ -59,7 +59,8 @@ def main():
     data=read_file(filrewall_name).split('\n')
     rule=list()
     for line in data:
-        rule.append(line.strip())
+        if line:
+            rule.append(line.strip())
 
     u=MyUcloud()
     u.create_firewall(rule_name,rule)
