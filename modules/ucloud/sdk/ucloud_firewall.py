@@ -34,8 +34,9 @@ class MyUcloud():
 
         # data = list()
         response = self.ApiClient.get("/", Parameters)
+        print response['RetCode']
 
-        return response
+        return True
 
 
 def write_file(filename, data):
