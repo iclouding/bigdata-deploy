@@ -34,7 +34,10 @@ class MyUcloud():
 
         # data = list()
         response = self.ApiClient.get("/", Parameters)
-        print response['RetCode']
+        if response['RetCode'] == 0:
+            print "防火墙规则添加操作成功， 防火墙ID %s" % response['FWId']
+        else:
+            print "防火墙规则添加操作失败，返回值{0} ,信息 {1}".format(response['RetCode'], response['Message'])
 
         return True
 
@@ -51,20 +54,19 @@ def read_file(filename):
 
 
 def main():
-
     filrewall_name = sys.argv[1]
-    rule_name=filrewall_name[5:]
+    rule_name = filrewall_name[5:]
     if len(sys.argv) != 2:
         raise KeyError
 
-    data=read_file(filrewall_name).split('\n')
-    rule=list()
+    data = read_file(filrewall_name).split('\n')
+    rule = list()
     for line in data:
         if line:
             rule.append(line.strip())
 
-    u=MyUcloud()
-    u.create_firewall(rule_name,rule)
+    u = MyUcloud()
+    u.create_firewall(rule_name, rule)
 
 
 if __name__ == '__main__':
