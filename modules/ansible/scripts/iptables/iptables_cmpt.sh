@@ -36,6 +36,7 @@ iptables -A INPUT -p tcp  -s 10.19.9.248/32 -j ACCEPT
 iptables -A INPUT -p tcp  -s 10.19.151.86/32 -j ACCEPT
 iptables -A INPUT -p tcp  -s 10.19.47.155/32 -j ACCEPT
 iptables -A INPUT -p tcp  -s 10.19.64.94/32 -j ACCEPT
+iptables -A INPUT -p tcp  -s 10.19.38.225/32 -j ACCEPT
 ##################For yuanchuili########################
 iptables -A INPUT -p tcp  -s 10.19.195.126/32 -j ACCEPT
 ##################DNS#################################
