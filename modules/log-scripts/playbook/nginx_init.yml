@@ -24,3 +24,6 @@
         - { name: '/data/logs/hive', user: 'hadoop', groups: 'hadoop' , mode: '0777' }
         - { name: '/data/logs/nginx', user: 'nobody', groups: 'nobody', mode: '0755' }
         - { name: '/data/logs/nginx-upload', user: 'root', groups: 'root' }
+
+    - name: chmod 777 to hive
+      shell: chmod 777 /data/logs/hive
