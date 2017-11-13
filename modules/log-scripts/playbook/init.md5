@@ -6,3 +6,4 @@
 4、将新主机的信息写入host模板，下发到大数据(cmpt)相关服务器
 5、将新主机IP写入iptables allow规则中，下发到cmpt服务器
 6、将upload 脚本现网使用的版本下发
+7、启动nginx服务（启动时因/data不存在启动失败）
