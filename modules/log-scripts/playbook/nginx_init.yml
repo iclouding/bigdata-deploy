@@ -6,19 +6,21 @@
       file: path={{ item.name }} state=directory owner={{ item.user }} group={{ item.groups }}   
       with_items: 
 
-        - { name: '/data/logs', user: 'root', groups: 'root' }
-        - { name: '/data/tools', user: 'root', groups: 'root' }
-        - { name: '/data/scripts', user: 'root', groups: 'root' }
-        - { name: '/data/backups', user: 'root', groups: 'root' }
-        - { name: '/data/hdfs/name', user: 'hdfs', groups: 'hadoop' }
-        - { name: '/data/hdfs/journal', user: 'hdfs', groups: 'hadoop' }
-        - { name: '/data/yarn/timeline', user: 'yarn', groups: 'hadoop' }
-        - { name: '/data/bak', user: 'moretv', groups: 'moretv' }
-        - { name: '/data/local_backups/old_back', user: 'root', groups: 'root' }
+        - { name: '/data', user: 'moretv', groups: 'moretv', mode: '0755' }
+        - { name: '/data/logs', user: 'moretv', groups: 'moretv', mode: '0755' }
+        - { name: '/data/tools', user: 'root', groups: 'root', mode: '0755' }
+        - { name: '/data/scripts', user: 'root', groups: 'root', mode: '0755' }
+        - { name: '/data/backups', user: 'root', groups: 'root', mode: '0755' }
+        - { name: '/data/hdfs/name', user: 'hdfs', groups: 'hadoop', mode: '0755' }
+        - { name: '/data/hdfs/journal', user: 'hdfs', groups: 'hadoop', mode: '0755' }
+        - { name: '/data/yarn/timeline', user: 'yarn', groups: 'hadoop', mode: '0755' }
+        - { name: '/data/bak', user: 'moretv', groups: 'moretv', mode: '0755' }
+        - { name: '/data/local_backups/old_back', user: 'root', groups: 'root', mode: '0755' }
         - { name: '/data/webapps', user: 'moretv', groups: 'moretv' }
-        - { name: '/data/logs/filebeat_v5', user: 'moretv', groups: 'moretv' }
-        - { name: '/data/logs/hadoop-hdfs', user: 'hdfs', groups: 'hadoop' }
-        - { name: '/data/logs/hadoop-yarn', user: 'yarn', groups: 'hadoop' }
-        - { name: '/data/logs/hive', user: 'hadoop', groups: 'hadoop' ,mode: '0777'}
-        - { name: '/data/logs/nginx', user: 'nobody', groups: 'nobody' }
+        - { name: '/data/logs', user: 'moretv', groups: 'moretv', mode: '0755'}
+        - { name: '/data/logs/filebeat_v5', user: 'moretv', groups: 'moretv', mode: '0755' }
+        - { name: '/data/logs/hadoop-hdfs', user: 'hadoop', groups: 'hadoop', mode: '0755' }
+        - { name: '/data/logs/hadoop-yarn', user: 'hadoop', groups: 'hadoop', mode: '0755' }
+        - { name: '/data/logs/hive', user: 'hadoop', groups: 'hadoop' , mode: '0777' }
+        - { name: '/data/logs/nginx', user: 'nobody', groups: 'nobody', mode: '0755' }
         - { name: '/data/logs/nginx-upload', user: 'root', groups: 'root' }
