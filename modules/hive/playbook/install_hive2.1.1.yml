@@ -8,17 +8,13 @@
         - apache-hive-2.1.1-bin.tar.gz
 
     - name: tar file to /app
-      shell: cd /tmp && tar zxvf  apache-hive-2.1.1-bin.tar.gz -C /app
+      shell: cd /tmp && tar zxvf  apache-hive-2.1.1-bin.tar.gz -C /app && chown -R hadoop:hadoop /app/apache-hive-2.1.1-bin
       tags: install
       args:
         creates: /app/apache-hive-2.1.1-bin/.install
 
     - name: create log directory
       file: path=/data/logs/hive state=directory owner=hadoop group=hadoop mode=0777
-      tags: install
-
-    - name: change owner
-      file: name=/app/apache-hive-2.1.1-bin owner=hadoop group=hadoop
       tags: install
 
     - name: touch install file
