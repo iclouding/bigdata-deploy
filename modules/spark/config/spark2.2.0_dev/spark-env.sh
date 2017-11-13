@@ -75,12 +75,12 @@ export SPARK_LOG_DIR=/data/logs/spark220
 export HADOOP_CONF_DIR=/opt/hadoop/etc/hadoop
 
 #these config need adjust by env
-export SPARK_WORKER_CORES=2
-export SPARK_WORKER_MEMORY=8g
+export SPARK_WORKER_CORES=1
+export SPARK_WORKER_MEMORY=1g
 
 export SPARK_DAEMON_MEMORY=1g
 export SPARK_DRIVER_MEMORY=1g
-export SPARK_DRIVER_CORES=2
+export SPARK_DRIVER_CORES=1
 
 if [ -n "$HADOOP_HOME" ]; then
   export SPARK_LIBRARY_PATH=$SPARK_LIBRARY_PATH:${HADOOP_HOME}/lib/native

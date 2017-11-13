@@ -76,7 +76,7 @@ export HADOOP_CONF_DIR=/opt/hadoop/etc/hadoop
 
 #these config need adjust by env
 export SPARK_WORKER_CORES=2
-export SPARK_WORKER_MEMORY=4g
+export SPARK_WORKER_MEMORY=1g
 
 export SPARK_DAEMON_MEMORY=1g
 export SPARK_DRIVER_MEMORY=1g
