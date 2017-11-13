@@ -25,6 +25,9 @@ bigdata-extsvr-db_whaley_tvservice
 bigdata-extsvr-ganglia01
 bigdata-test-log_collect01
 bigdata-test-log_collect02
+bigdata-extsvr-log01
+bigdata-extsvr-log02
+
 [test]
 10.255.129.1
 10.255.129.2
