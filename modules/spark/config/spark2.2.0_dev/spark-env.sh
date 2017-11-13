@@ -59,7 +59,7 @@ export SPARK_EXECUTOR_EXTRACLASSPATH=/opt/spark220/lib
 export SPARK_DRIVER_EXTRACLASSPATH=/opt/spark220/lib
 
 export SPARK_MASTER_OPTS="-Dspark.deploy.defaultCores=10"
-export SPARK_MASTER_IP=bigdata-cmpt-128-13
+export SPARK_MASTER_IP=bigdev-cmpt-2
 
 export SPARK_MASTER_PORT=7077
 export SPARK_WORKER_PORT=8099
@@ -75,12 +75,12 @@ export SPARK_LOG_DIR=/data/logs/spark220
 export HADOOP_CONF_DIR=/opt/hadoop/etc/hadoop
 
 #these config need adjust by env
-export SPARK_WORKER_CORES=16
-export SPARK_WORKER_MEMORY=90g
+export SPARK_WORKER_CORES=2
+export SPARK_WORKER_MEMORY=8g
 
-export SPARK_DAEMON_MEMORY=3g
-export SPARK_DRIVER_MEMORY=2g
-export SPARK_DRIVER_CORES=4
+export SPARK_DAEMON_MEMORY=1g
+export SPARK_DRIVER_MEMORY=1g
+export SPARK_DRIVER_CORES=2
 
 if [ -n "$HADOOP_HOME" ]; then
   export SPARK_LIBRARY_PATH=$SPARK_LIBRARY_PATH:${HADOOP_HOME}/lib/native

@@ -59,7 +59,7 @@ export SPARK_EXECUTOR_EXTRACLASSPATH=/opt/spark2/lib
 export SPARK_DRIVER_EXTRACLASSPATH=/opt/spark2/lib
 
 export SPARK_MASTER_OPTS="-Dspark.deploy.defaultCores=10"
-export SPARK_MASTER_IP=bigtest-cmpt-129-19
+export SPARK_MASTER_IP=bigdev-cmpt-2
 
 export SPARK_MASTER_PORT=7077
 export SPARK_WORKER_PORT=8099
@@ -75,8 +75,8 @@ export SPARK_LOG_DIR=/data/logs/spark2
 export HADOOP_CONF_DIR=/opt/hadoop/etc/hadoop
 
 #these config need adjust by env
-export SPARK_WORKER_CORES=16
-export SPARK_WORKER_MEMORY=90g
+export SPARK_WORKER_CORES=2
+export SPARK_WORKER_MEMORY=4g
 
 export SPARK_DAEMON_MEMORY=1g
 export SPARK_DRIVER_MEMORY=1g
