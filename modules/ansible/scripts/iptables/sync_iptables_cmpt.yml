@@ -6,6 +6,10 @@
       copy: src=/data/tools/ansible/modules/ansible/scripts/iptables/iptables_cmpt.sh dest=/data/tools/iptables.sh owner=root group=root mode=0755
       tags: iptables
 
+    - name: rsync hosts
+      copy: src=/data/tools/ansible/modules/ansible/config/system/hosts.sample dest=/etc/hosts owner=root group=root
+      tags: hosts
+
     - name : run iptables script
       command : sh /data/tools/iptables.sh
       tags: iptables
