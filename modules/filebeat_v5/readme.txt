@@ -121,3 +121,7 @@ ansible-playbook -i filebeat_template.host install_filebeat-bin.yml -t install
 
 --配置分发
 ansible-playbook -i filebeat_template.host install_filebeat-bin.yml -t config_for_nginx
+
+--cronjob分发
+ansible filebeats -i filebeat_template.host -m cron -a "name='filebeat nginx autostart job 1' minute=*/6  user='moretv' job='. /etc/profile;sh /opt/filebeat_v5/start_filebeat_nginx_medusa_3x.sh >/dev/null 2>&1'"
+ansible filebeats -i filebeat_template.host -m cron -a "name='filebeat nginx autostart job 2' minute=*/6  user='moretv' job='. /etc/profile;sh /opt/filebeat_v5/start_filebeat_nginx_whaleytv_main.sh >/dev/null 2>&1'"
