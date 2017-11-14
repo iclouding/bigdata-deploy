@@ -16,7 +16,7 @@ rule1_project = {"whaley": "helios", "medusa": "medusa", "eagle": "eagle", "vr":
 # rule_hostname = ("bigdata-extsvr-log3", "bigdata-extsvr-log7")
 rule_hostname = (
     "bigdata-extsvr-log1", "bigdata-extsvr-log2", "bigdata-extsvr-log3", "bigdata-extsvr-log4", "bigdata-extsvr-log5",
-    "bigdata-extsvr-log6", "bigdata-extsvr-log7")
+    "bigdata-extsvr-log6", "bigdata-extsvr-log7", "bigdata-extsvr-log02")
 rule_date_str1 = "yyyyMMdd"
 rule_date_str2 = "yyyy-MM-dd-HH"
 rule_date_str3 = "yyyyMMddHH"
