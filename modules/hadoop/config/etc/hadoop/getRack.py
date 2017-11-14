@@ -104,9 +104,9 @@ rack = {
         "10.255.128.53":"/rack5",
         "10.255.128.12":"/rack5",
         "10.255.128.24":"/rack5",
-        "10.255.128.36":"/rack3"
+        "10.255.128.36":"/rack5"
         }
 
 if __name__=="__main__":
         for ip in sys.argv:
-            print rack.get(ip,"/rack-default")
+            print rack.get(ip,"/rack1")
