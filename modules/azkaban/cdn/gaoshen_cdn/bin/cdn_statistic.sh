@@ -9,7 +9,7 @@ node=`hostname`
 echo `date` "task started at $node"
 
 cd `dirname $0`
-source ../bin/envFn.sh
+source envFn.sh
 
 export debug=1
 load_args $*

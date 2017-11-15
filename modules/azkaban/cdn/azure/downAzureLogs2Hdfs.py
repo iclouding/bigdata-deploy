@@ -141,10 +141,10 @@ def run_azkaban():
     cmd = "/bin/sh azkaban_run.sh %s %s" % (project, flow)
     (code, output) = commands.getstatusoutput(cmd)
     if code == 0:
-        logMsg("run_azkaban", "Starting azkaban workflow success", 1)
+        logMsg("run_azkaban", "Starting gaoshen_cdn workflow success", 1)
         return True
     else:
-        msg = "run azkaban Failed ,message was %s" % output
+        msg = "run gaoshen_cdn Failed ,message was %s" % output
         logMsg("run_azkaban", msg, 2)
         raise KeyError
 

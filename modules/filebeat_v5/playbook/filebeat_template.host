@@ -1,8 +1,8 @@
 [nodes]
-bigdata-extsvr-log01
+bigdata-extsvr-log02
 
 [filebeats]
-bigdata-extsvr-log01
+bigdata-extsvr-log02
 
 
 
