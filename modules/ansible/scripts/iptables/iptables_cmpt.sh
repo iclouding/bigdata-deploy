@@ -38,20 +38,18 @@ iptables -A INPUT -p tcp  -s 10.19.47.155/32 -j ACCEPT
 ##################new log server################################
 iptables -A INPUT -p tcp  -s 10.19.24.99/32 -j ACCEPT
 iptables -A INPUT -p tcp  -s 10.19.167.39/32 -j ACCEPT
-
 iptables -A INPUT -p tcp  -s 10.19.129.64/32 -j ACCEPT
-iptables -A INPUT -p tcp  -s 10.19.167.39/32 -j ACCEPT
-iptables -A INPUT -p tcp  -s 10.19.24.99/32 -j ACCEPT
-iptables -A INPUT -p tcp  -s 10.19.167.39/32 -j ACCEPT
-iptables -A INPUT -p tcp  -s 10.19.24.99/32 -j ACCEPT
-iptables -A INPUT -p tcp  -s 10.19.167.39/32 -j ACCEPT
-iptables -A INPUT -p tcp  -s 10.19.24.99/32 -j ACCEPT
-iptables -A INPUT -p tcp  -s 10.19.167.39/32 -j ACCEPT
-iptables -A INPUT -p tcp  -s 10.19.24.99/32 -j ACCEPT
-iptables -A INPUT -p tcp  -s 10.19.167.39/32 -j ACCEPT
-iptables -A INPUT -p tcp  -s 10.19.24.99/32 -j ACCEPT
-iptables -A INPUT -p tcp  -s 10.19.167.39/32 -j ACCEPT
-
+iptables -A INPUT -p tcp  -s 10.19.60.194/32 -j ACCEPT
+iptables -A INPUT -p tcp  -s 10.19.49.243/32 -j ACCEPT
+iptables -A INPUT -p tcp  -s 10.19.134.32/32 -j ACCEPT
+iptables -A INPUT -p tcp  -s 10.19.53.234/32 -j ACCEPT
+iptables -A INPUT -p tcp  -s 10.19.157.13/32 -j ACCEPT
+iptables -A INPUT -p tcp  -s 10.19.171.128/32 -j ACCEPT
+iptables -A INPUT -p tcp  -s 10.19.112.7/32 -j ACCEPT
+iptables -A INPUT -p tcp  -s 10.19.38.90/32 -j ACCEPT
+iptables -A INPUT -p tcp  -s 10.19.178.52/32 -j ACCEPT
+iptables -A INPUT -p tcp  -s 10.19.139.124/32 -j ACCEPT
+iptables -A INPUT -p tcp  -s 10.19.95.122/32 -j ACCEPT
 ##################For yuanchuili########################
 iptables -A INPUT -p tcp  -s 10.19.195.126/32 -j ACCEPT
 ##################DNS#################################
