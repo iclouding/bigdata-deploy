@@ -44,6 +44,8 @@ import redis_get_values
 import time
 import sys
 import getopt
+import redis
+
 
 
 class RedisCopy:
