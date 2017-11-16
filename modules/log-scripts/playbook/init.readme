@@ -12,3 +12,7 @@
 7、启动nginx服务（启动时因/data不存在启动失败）
 8、hdfs日志监控脚本添加新的host信息
     10.255.130.8 monitor_hdfs_log.py
+9、分发filebeat的cronjob
+cd /data/tools/ansible/modules/filebeat_v5/playbook
+ansible filebeats -i filebeat_template.host -m cron -a "name='filebeat nginx autostart job 1' minute=*/6  user='moretv' job='. /etc/profile;sh /opt/filebeat_v5/start_filebeat_nginx_medusa_3x.sh >/dev/null 2>&1'"
+ansible filebeats -i filebeat_template.host -m cron -a "name='filebeat nginx autostart job 2' minute=*/6  user='moretv' job='. /etc/profile;sh /opt/filebeat_v5/start_filebeat_nginx_whaleytv_main.sh >/dev/null 2>&1'"
