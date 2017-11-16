@@ -28,5 +28,8 @@
     - name: chmod 777 to hive
       shell: chmod 777 /data/logs/hive
 
+    - name: chown /opt/hive/
+      shell: chown -R hadoop. /opt/hive/
+
     - name: sync hive file
       copy: src=/data/tools/ansible/modules/log-scripts/host_init/hive dest=/opt/hive/bin/hive owner=hadoop group=hadoop mode=0755
