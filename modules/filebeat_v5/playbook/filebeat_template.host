@@ -1,8 +1,34 @@
 [nodes]
+bigdata-extsvr-log01
 bigdata-extsvr-log02
+bigdata-extsvr-log03
+bigdata-extsvr-log04
+bigdata-extsvr-log05
+bigdata-extsvr-log06
+bigdata-extsvr-log07
+bigdata-extsvr-log08
+bigdata-extsvr-log09
+bigdata-extsvr-log10
+bigdata-extsvr-log11
+bigdata-extsvr-log12
+bigdata-extsvr-log13
+bigdata-extsvr-log14
 
 [filebeats]
+bigdata-extsvr-log01
 bigdata-extsvr-log02
+bigdata-extsvr-log03
+bigdata-extsvr-log04
+bigdata-extsvr-log05
+bigdata-extsvr-log06
+bigdata-extsvr-log07
+bigdata-extsvr-log08
+bigdata-extsvr-log09
+bigdata-extsvr-log10
+bigdata-extsvr-log11
+bigdata-extsvr-log12
+bigdata-extsvr-log13
+bigdata-extsvr-log14
 
 
 
