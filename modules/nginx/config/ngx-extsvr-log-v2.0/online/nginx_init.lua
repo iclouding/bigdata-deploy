@@ -138,7 +138,7 @@ function doMsgSign()
         ngx.req.read_body();
         local req_body = ngx.req.get_body_data()
         if (req_body == nil) then
-            return -2
+            return -1
         end
 
         local md5 = ngx.md5(logSignKey .. logSignTs .. req_body)
