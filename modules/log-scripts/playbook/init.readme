@@ -9,7 +9,9 @@
     ansible-playbook -i all.host sync_hosts.yml -t hosts
 5、将新主机IP写入iptables allow规则中，下发到cmpt服务器
 6、将upload 脚本现网使用的版本下发
-7、启动nginx服务（启动时因/data不存在启动失败）
+7、更新nginx配置，启动nginx服务（开机启动时因/data不存在启动失败）
+    更新配置指令见modules/nginx/readme.txt,
+    指令块 --下发v2.0 https 配置文件并reload
 8、hdfs日志监控脚本添加新的host信息
     10.255.130.8 monitor_hdfs_log.py
 9、filebeat配置下发和cronjob下发参考
