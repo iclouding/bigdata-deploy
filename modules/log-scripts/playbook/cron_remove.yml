@@ -1,0 +1,12 @@
+---
+- hosts: all
+  tasks:
+
+    - name: remove script with nginx each upload cron
+      tags: cron
+      cron: name="nginx upload 2 hdfs each hour " state=absent
+
+    - name: remove script with nginx upload cron
+      tags: cron
+      cron: name="nginx upload 2 hdfs " state=absent
+
