@@ -26,58 +26,65 @@
     <defaultQueueSchedulingPolicy>drf</defaultQueueSchedulingPolicy>
     <queue name="default">
         <minResources>204800 mb, 50 vcores</minResources>
-        <maxResources>2097152 mb, 500 vcores</maxResources>
+        <maxResources>1024000 mb, 250 vcores</maxResources>
         <schedulingMode>fair</schedulingMode>
         <weight>0.2</weight>
         <minSharePreemptionTimeout>2</minSharePreemptionTimeout>
     </queue>
     <queue name="kylin">
         <minResources>204800 mb, 50 vcores</minResources>
-        <maxResources>1048576 mb, 200 vcores</maxResources>
+        <maxResources>1024000 mb, 250 vcores</maxResources>
         <schedulingMode>fair</schedulingMode>
         <weight>0.3</weight>
         <minSharePreemptionTimeout>2</minSharePreemptionTimeout>
     </queue>
     <queue name="long_running">
         <minResources>204800 mb, 50 vcores</minResources>
-        <maxResources>2097152 mb, 500 vcores</maxResources>
+        <maxResources>2048000 mb, 500 vcores</maxResources>
         <schedulingMode>fair</schedulingMode>
         <weight>0.4</weight>
         <minSharePreemptionTimeout>2</minSharePreemptionTimeout>
     </queue>
     <queue name="ai">
         <minResources>204800 mb, 50 vcores</minResources>
-        <maxResources>3145728 mb, 750 vcores</maxResources>
+        <maxResources>3072000 mb, 750 vcores</maxResources>
         <schedulingMode>fair</schedulingMode>
         <weight>0.3</weight>
         <minSharePreemptionTimeout>2</minSharePreemptionTimeout>
     </queue>
     <queue name="streaming">
         <minResources>204800 mb, 50 vcores</minResources>
-        <maxResources>2097152 mb, 500 vcores</maxResources>
+        <maxResources>2048000 mb, 500 vcores</maxResources>
         <schedulingMode>fair</schedulingMode>
         <weight>0.4</weight>
         <minSharePreemptionTimeout>2</minSharePreemptionTimeout>
     </queue>
     <queue name="bi">
         <minResources>204800 mb, 50 vcores</minResources>
-        <maxResources>3145728 mb, 750 vcores</maxResources>
+        <maxResources>2048000 mb, 500 vcores</maxResources>
         <schedulingMode>fair</schedulingMode>
         <weight>0.3</weight>
         <minSharePreemptionTimeout>2</minSharePreemptionTimeout>
     </queue>
     <queue name="parquet_convert">
         <minResources>204800 mb, 50 vcores</minResources>
-        <maxResources>2097152 mb, 500 vcores</maxResources>
+        <maxResources>2048000 mb, 500 vcores</maxResources>
         <schedulingMode>fair</schedulingMode>
         <weight>0.5</weight>
         <minSharePreemptionTimeout>2</minSharePreemptionTimeout>
     </queue>
     <queue name="open_resource">
         <minResources>204800 mb, 50 vcores</minResources>
-        <maxResources>2097152 mb, 500 vcores</maxResources>
+        <maxResources>1024000 mb, 250 vcores</maxResources>
         <schedulingMode>fair</schedulingMode>
         <weight>0.3</weight>
+        <minSharePreemptionTimeout>2</minSharePreemptionTimeout>
+    </queue>
+    <queue name="dw_etl">
+        <minResources>204800 mb, 50 vcores</minResources>
+        <maxResources>3072000 mb, 750 vcores</maxResources>
+        <schedulingMode>fair</schedulingMode>
+        <weight>0.5</weight>
         <minSharePreemptionTimeout>2</minSharePreemptionTimeout>
     </queue>
 </allocations>
