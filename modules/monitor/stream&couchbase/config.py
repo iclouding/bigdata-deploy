@@ -14,6 +14,5 @@ streaming = [{'hosts': 'bigdata-appsvr-130-3', 'type': 'yarn_list', 'keyword': '
              'alter_mail': True},
              {'hosts': 'bigdata-appsvr-130-3', 'type': 'ps_keyword', 'keyword': 'MoreTV_FrontPagePersonalOnline',
               'users': 'spark', 'commands': 'sh/opt/ai/kafkaIO/shell/MoreTV_InterestOptimizationOnline.sh',
-              'alter_mail': True},
-
+              'alter_mail': True}
             ]
