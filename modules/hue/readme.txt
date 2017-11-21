@@ -50,3 +50,7 @@ ansible all -i hue.host -m shell -a "ps -ef|grep hue|grep -v grep| awk '{print \
 #    并修改hue.ini文件中的[[database]]节，并重启supervisor进程
 #
 #################################################################################
+
+#为了可以在hue的notebook里使用sparksql，需要修改hue的源代码：
+/opt/hue/desktop/libs/notebook/src/notebook/connectors/hiveserver2.py
+将name='spark-sql'修改成name='sparksql',重启hue
