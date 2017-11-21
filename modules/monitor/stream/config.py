@@ -12,7 +12,13 @@ streaming = [{'hosts': 'bigdata-appsvr-130-3', 'type': 'yarn_list', 'keyword': '
              'users': 'spark',
              'commands': 'sh /opt/ai/interestOptimization-201707/release/bin/online-long-videos.sh',
              'alter_mail': True},
+             {'hosts': 'bigdata-appsvr-130-3', 'type': 'ps_keyword', 'keyword': 'MoreTV_FrontPagePersonal',
+              'users': 'spark', 'commands': 'sh /opt/ai/kafkaIO/shell/MoreTV_InterestOptimizationOffline.sh',
+              'alter_mail': True},
              {'hosts': 'bigdata-appsvr-130-3', 'type': 'ps_keyword', 'keyword': 'MoreTV_FrontPagePersonalOnline',
               'users': 'spark', 'commands': 'sh/opt/ai/kafkaIO/shell/MoreTV_InterestOptimizationOnline.sh',
+              'alter_mail': True},
+             {'hosts': 'bigdata-appsvr-130-3', 'type': 'ps_keyword', 'keyword': 'MoreTV_FrontPageOnlineSidGeneration',
+              'users': 'spark', 'commands': 'sh /opt/ai/kafkaIO/shell/MoreTV_InterestOnlineSidGeneration.sh',
               'alter_mail': True}
             ]
