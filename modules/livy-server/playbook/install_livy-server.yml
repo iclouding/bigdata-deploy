@@ -31,7 +31,7 @@
       copy: src=/data/tools/ansible/modules/livy-server/config/{{ item.src }} dest=/app/livy-server-0.3.0/{{ item.dest }} owner=hadoop group=hadoop mode=755
       tags: config
       with_items:
-        - {src: 'livy.conf' , dest: 'conf/log4j.properties'}
+        - {src: 'livy.conf' , dest: 'conf/livy.conf'}
         - {src: 'livy-env.sh' , dest: 'conf/livy-env.sh'}
         - {src: 'log4j.properties' , dest: 'conf/log4j.properties'}
         - {src: 'spark-blacklist.conf' , dest: 'conf/spark-blacklist.conf'}
