@@ -1,0 +1,22 @@
+---
+- hosts: all
+  tasks:
+
+    - name: create directory
+      file: path={{ item.name }} state=directory owner={{ item.user }} group={{ item.groups }}
+      tags: install
+      with_items:
+        - { name: '/data/scripts/monitor_stream', user: 'root', groups: 'root' }
+
+    - name: copy  script  to remote host
+      tags: install
+      copy: src=/data/tools/ansible/modules/monitor/stream/{{ item }} dest=/data/scripts/monitor_stream
+      with_items:
+        - monitor_stream_couchbase.py
+        - config.py
+
+    - name: create script  cron
+      tags: cron
+      cron: name="monitor stream  " minute=*/5  job="/usr/bin/python /data/scripts/monitor_stream/monitor_stream_couchbase.py"
+
+
