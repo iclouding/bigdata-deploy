@@ -52,7 +52,7 @@ def run_command_out(cmd):
         msg = "run cmd {0} Failed,output was {1} ".format(cmd, out)
         log_msg("run", msg, 2)
         return None
-        #raise Exception(msg, 2)
+        # raise Exception(msg, 2)
 
 
 class Checktask():
@@ -79,6 +79,7 @@ class Checktask():
             raise Exception(msg, 2)
 
     def check_yarn_list_workflow(self):
+        log_msg("check_yarn", "keyword %s,type %s" % (self.keyword, self.type), 1)
         if not self.check_yarn_service():
             start_service = "su - {0} -c '{1}'".format(self.users, self.commands)
             sub = "{0} {1} 服务不存在".format(socket.gethostname(), self.keyword)
@@ -92,11 +93,12 @@ class Checktask():
                 start_failed = "{0}服务运行脚本开启服务失败".format(self.keyword)
                 log_msg("start", start_failed, 2)
                 send_alter_mail(sub, start_failed)
+        log_msg("check_end", "check %s success!" % self.keyword, 1)
 
-                # run command
-                # check keyword
+        # run command
+        # check keyword
 
-                # run commands
+        # run commands
 
     def check_yarn_service(self):
         check_cmd = "su - {0} -c ' yarn application -list | grep {1}'".format(self.users, self.keyword)
@@ -113,6 +115,7 @@ class Checktask():
             return False
 
     def check_ps_keyword_workflow(self):
+        log_msg("check_ps", "keyword %s,type %s " % (self.keyword, self.type), 1)
         if not self.check_ps_keyword_service():
             start_service = "su - {0} -c '{1}'".format(self.users, self.commands)
             sub = "{0} {1} 服务不存在".format(socket.gethostname(), self.keyword)
@@ -126,6 +129,7 @@ class Checktask():
                 start_failed = "{0}服务运行脚本开启服务失败".format(self.keyword)
                 log_msg("start", start_failed, 2)
                 send_alter_mail(sub, start_failed)
+        log_msg("check_end", "check %s success!" % self.keyword, 1)
 
     def check_ps_keyword_service(self):
         check_cmd = "ps -ef|grep {0} |grep -v grep".format(self.keyword)
