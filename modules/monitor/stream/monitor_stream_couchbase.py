@@ -51,7 +51,8 @@ def run_command_out(cmd):
     else:
         msg = "run cmd {0} Failed,output was {1} ".format(cmd, out)
         log_msg("run", msg, 2)
-        raise Exception(msg, 2)
+        return None
+        #raise Exception(msg, 2)
 
 
 class Checktask():
@@ -108,6 +109,8 @@ class Checktask():
                 return True
             else:
                 return False
+        else:
+            return False
 
     def check_ps_keyword_workflow(self):
         if not self.check_ps_keyword_service():
