@@ -52,5 +52,5 @@
         - {name: 'spark-env.sh',                          dest: 'conf/'}
         - {name: 'spark-thrift-sparkconf.conf',           dest: 'conf/'}
         - {name: 'log4j.properties',                      dest: 'conf/'}
-        - {name: 'spark-sql_2.11-2.2.0.jar',              dest: 'jars/'}
+        - {name: 'lib/spark-sql_2.11-2.2.0.jar',              dest: 'jars/'}
         - {name: 'launch-thriftserver.sh',                dest: 'sbin/'}
