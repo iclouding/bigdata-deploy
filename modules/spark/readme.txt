@@ -96,5 +96,4 @@ ansible all -i spark.host -mshell -a"mkdir /opt/spark2/bk ; mv /opt/spark2/jars/
 ansible-playbook -i spark2.2.0.host install_spark-2.2.0.yml -t install
 
 --配置分发
-ansible-playbook -i spark2.2.0.host install_spark-2.2.0.yml -t config_jar
 ansible-playbook -i spark2.2.0.host install_spark-2.2.0.yml -t config
