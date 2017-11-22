@@ -42,19 +42,15 @@
       args:
         creates: /app/spark-2.2.0-bin-hadoop2.6.2/.install
 
-    - name: copy spark sql lib file to remote host
-      copy: src=/data/tools/ansible/modules/spark/config/spark2.2.0/lib/{{ item }} dest=/opt/spark220/jars/{{ item }} owner=spark group=hadoop mode=0644
-      tags: config_jar
-      with_items:
-        - spark-sql_2.11-2.2.0.jar
-
-    - name: copy spark config file to remote host
-      copy: src=/data/tools/ansible/modules/spark/config/spark2.2.0/{{ item }} dest=/opt/spark220/conf/{{ item }} owner=spark group=hadoop mode=0771
+    - name: copy config file
+      copy: src=/data/tools/ansible/modules/spark/config/spark2.2.0/{{ item.name }} dest=/opt/spark220/{{ item.dest }} owner=spark group=hadoop mode=0744
       tags: config
       with_items:
-        - slaves
-        - hive-site.xml
-        - spark-defaults.conf
-        - spark-env.sh
-        - spark-thrift-sparkconf.conf
-        - log4j.properties
+        - {name: 'slaves',                                dest: 'conf/'}
+        - {name: 'hive-site.xml',                         dest: 'conf/'}
+        - {name: 'spark-defaults.conf',                   dest: 'conf/'}
+        - {name: 'spark-env.sh',                          dest: 'conf/'}
+        - {name: 'spark-thrift-sparkconf.conf',           dest: 'conf/'}
+        - {name: 'log4j.properties',                      dest: 'conf/'}
+        - {name: 'lib/spark-sql_2.11-2.2.0.jar',          dest: 'jars/'}
+        - {name: 'launch-thriftserver.sh',                dest: 'sbin/'}

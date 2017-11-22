@@ -12,13 +12,6 @@ bigdata-extsvr-web_bi
 
 
 [ngx-extsvr-log]
-bigdata-extsvr-log1
-bigdata-extsvr-log2
-bigdata-extsvr-log3
-bigdata-extsvr-log4
-bigdata-extsvr-log5
-bigdata-extsvr-log6
-bigdata-extsvr-log7
 bigdata-extsvr-log01
 bigdata-extsvr-log02
 bigdata-extsvr-log03
@@ -33,4 +26,4 @@ bigdata-extsvr-log11
 bigdata-extsvr-log12
 bigdata-extsvr-log13
 bigdata-extsvr-log14
-
+bigdata-extsvr-log14

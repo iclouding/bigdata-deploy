@@ -8,3 +8,11 @@ bigdata-appsvr-130-6
 bigdata-appsvr-130-7
 bigdata-appsvr-130-8
 bigdata-appsvr-130-9
+bigdata-cmpt-128-1
+bigdata-cmpt-128-13
+bigdata-cmpt-128-25
+
+[thriftserver]
+bigdata-cmpt-128-1
+bigdata-cmpt-128-13
+bigdata-cmpt-128-25
