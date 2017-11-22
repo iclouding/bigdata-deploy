@@ -124,7 +124,7 @@ class Checktask():
             send_alter_mail(sub, found_no_service)
             run_command_out(start_service)
             time.sleep(60)
-            if not self.check_yarn_service():
+            if not self.check_ps_keyword_service():
                 sub = "{0} {1}服务重启未成功".format(socket.gethostname(), self.keyword)
                 start_failed = "{0}服务运行脚本开启服务失败".format(self.keyword)
                 log_msg("start", start_failed, 2)
