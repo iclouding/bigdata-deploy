@@ -102,7 +102,7 @@ class Checktask():
         check_cmd = "su - {0} -c ' yarn application -list | grep {1}'".format(self.users, self.keyword)
         output = run_command_out(check_cmd)
         if output:
-            check_item = output.split('\n')[-1]
+            check_item = output.split('\n')[-1].split()
             pattern = '^{0}$'.format(self.keyword)
             match = re.match(pattern, check_item[1])
             if match and check_item[5] == 'RUNNING':
