@@ -153,8 +153,10 @@ class myThread(threading.Thread):
 def main():
     check_data = config.streaming
     for item in check_data:
-        t = myThread(item)
-        t.start()
+        c=Checktask(item)
+        c.check_workflow()
+        # t = myThread(item)
+        # t.start()
 
 
 if __name__ == "__main__":
