@@ -132,7 +132,7 @@ class Checktask():
         log_msg("check_end", "check %s success!" % self.keyword, 1)
 
     def check_ps_keyword_service(self):
-        check_cmd = "ps -ef|grep {0} |grep -v grep".format(self.keyword)
+        check_cmd = "ps -ef|grep '{0}' |grep -v grep".format(self.keyword)
         output = run_command_out(check_cmd)
         if output:
             return True
