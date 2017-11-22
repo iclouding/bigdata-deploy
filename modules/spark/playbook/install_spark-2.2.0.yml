@@ -43,7 +43,7 @@
         creates: /app/spark-2.2.0-bin-hadoop2.6.2/.install
 
     - name: copy config file
-      copy: src=/data/tools/ansible/modules/spark/config/spark2.2.0/{{ item.name }} dest=/opt/spark220/{{ item.dest }} owner=spark group=hadoop mode=0644
+      copy: src=/data/tools/ansible/modules/spark/config/spark2.2.0/{{ item.name }} dest=/opt/spark220/{{ item.dest }} owner=spark group=hadoop mode=0744
       tags: config
       with_items:
         - {name: 'slaves',                                dest: 'conf/'}
@@ -52,5 +52,5 @@
         - {name: 'spark-env.sh',                          dest: 'conf/'}
         - {name: 'spark-thrift-sparkconf.conf',           dest: 'conf/'}
         - {name: 'log4j.properties',                      dest: 'conf/'}
-        - {name: 'lib/spark-sql_2.11-2.2.0.jar',              dest: 'jars/'}
+        - {name: 'lib/spark-sql_2.11-2.2.0.jar',          dest: 'jars/'}
         - {name: 'launch-thriftserver.sh',                dest: 'sbin/'}
