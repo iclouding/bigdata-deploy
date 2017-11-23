@@ -8,7 +8,7 @@ import re
 import sys
 import socket
 import requests
-import config
+import config_test as config
 import time
 import threading
 
@@ -116,7 +116,7 @@ class Checktask():
 
     def check_ps_keyword_workflow(self):
         log_msg("check_ps", "keyword %s,type %s " % (self.keyword, self.type), 1)
-        if not my_check_ps_keyword_service(self.keyword):
+        if not self.check_ps_keyword_service():
             start_service = "su - {0} -c '{1}'".format(self.users, self.commands)
             sub = "{0} {1} 服务不存在".format(socket.gethostname(), self.keyword)
             found_no_service = "{0} 服务并不存在，启动脚本开启服务".format(self.keyword)
@@ -124,7 +124,7 @@ class Checktask():
             send_alter_mail(sub, found_no_service)
             run_command_out(start_service)
             time.sleep(60)
-            if not my_check_ps_keyword_service(self.keyword):
+            if not self.check_ps_keyword_service():
                 sub = "{0} {1}服务重启未成功".format(socket.gethostname(), self.keyword)
                 start_failed = "{0}服务运行脚本开启服务失败".format(self.keyword)
                 log_msg("start", start_failed, 2)
@@ -140,15 +140,6 @@ class Checktask():
         else:
             return False
 
-
-def my_check_ps_keyword_service(keyword):
-    check_cmd = " ".join(["ps","-aux","|","grep","-i '{0}'","|","grep -v grep"]).format(keyword)
-    import pdb;pdb.set_trace()
-    output = run_command_out(check_cmd)
-    if output:
-        return True
-    else:
-        return False
 
 
 class myThread(threading.Thread):
@@ -166,6 +157,7 @@ def main():
     for item in check_data:
         c=Checktask(item)
         c.check_workflow()
+        del c
         # t = myThread(item)
         # t.start()
 
