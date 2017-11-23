@@ -10,7 +10,8 @@ echo `date` "task started at $node"
 
 
 cd `dirname $0`
-source envFn.sh
+pwd=`pwd`
+source $pwd/envFn.sh
 
 load_args $*
 

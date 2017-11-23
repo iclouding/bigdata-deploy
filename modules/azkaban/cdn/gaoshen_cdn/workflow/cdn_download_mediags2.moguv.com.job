@@ -1,5 +1,5 @@
 type=command
 host=mediags2.moguv.com
-command=sh ${working.dir}/../bin/cdn_download.sh --host=${host} --logTime=${startDate} --offset=1
 retries=${downloadRetries}
 retry.backoff=${downloadRetryBackOff}
+command=sh ${working.dir}/../bin/cdn_download.sh --host=${host} --logTime=${startDate} --offset=1
