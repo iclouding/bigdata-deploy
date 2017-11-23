@@ -78,9 +78,9 @@ ansible-playbook -i spark.host install_spark-2.1.0.yml -t config_launch
 
 
 --替换jersey相关jar包
+ansible all -i spark.host -mshell -a"mkdir /opt/spark2/bk ; mv /opt/spark2/jars/jersey-client-*.jar /opt/spark2/bk ;  mv /opt/spark2/jars/jersey-core-*.jar /opt/spark2/bk"
 ansible all -i spark.host -mcopy -a"src=/data/tools/ansible/modules/spark/package/jersey-client-1.9.jar dest=/opt/spark2/jars  owner=spark group=hadoop mode=755"
 ansible all -i spark.host -mcopy -a"src=/data/tools/ansible/modules/spark/package/jersey-core-1.9.jar dest=/opt/spark2/jars  owner=spark group=hadoop mode=755"
-ansible all -i spark.host -mshell -a"mkdir /opt/spark2/bk ; mv /opt/spark2/jars/jersey-client-*.jar /opt/spark2/bk ;  mv /opt/spark2/jars/jersey-core-*.jar /opt/spark2/bk"
 
 启动spark thrift server
  --root用户
@@ -97,17 +97,18 @@ ansible-playbook -i spark2.2.0.host install_spark-2.2.0.yml -t install
 --配置分发
 ansible-playbook -i spark2.2.0.host install_spark-2.2.0.yml -t config
 因为目前最新spark2.2.0仍然依赖hive1.2.1来做元数据管理，为了做如下jar包替换
+ansible all -i spark2.2.0.host -mshell -a"mkdir /opt/spark220/bk ; mv /opt/spark220/jars/jersey-client-*.jar /opt/spark220/bk ;  mv /opt/spark220/jars/jersey-core-*.jar /opt/spark220/bk"
 ansible all -i spark2.2.0.host -mcopy -a"src=/data/tools/ansible/modules/spark/package/jersey-client-1.9.jar dest=/opt/spark220/jars  owner=spark group=hadoop mode=755"
 ansible all -i spark2.2.0.host -mcopy -a"src=/data/tools/ansible/modules/spark/package/jersey-core-1.9.jar dest=/opt/spark220/jars  owner=spark group=hadoop mode=755"
-ansible all -i spark2.2.0.host -mshell -a"mkdir /opt/spark220/bk ; mv /opt/spark220/jars/jersey-client-*.jar /opt/spark220/bk ;  mv /opt/spark220/jars/jersey-core-*.jar /opt/spark220/bk"
+
 
 --spark thrift server 操作
 1.启动
   ansible thriftserver -i spark2.2.0.host -mshell -a"su - spark -c 'cd /opt/spark220 && ./sbin/launch-thriftserver.sh'"
 2.停止
-  ansible thriftserver -i spark.host -mshell -a"cd /opt/spark2 && ./sbin/stop-thriftserver.sh"
+  ansible thriftserver -i spark2.2.0.host -mshell -a"cd /opt/spark2 && ./sbin/stop-thriftserver.sh"
   如果通过上面命令，停止不了，通过下面命令强制杀掉进程
-  ansible thriftserver -i spark.host -mshell -a "ps -ef|grep HiveThriftServer2 |grep 20360 | grep -v 'grep' | awk '{print \$2}' |xargs kill -9  "
+  ansible thriftserver -i spark2.2.0.host -mshell -a "ps -ef|grep HiveThriftServer2 |grep 20360 | grep -v 'grep' | awk '{print \$2}' |xargs kill -9  "
 
 
 
