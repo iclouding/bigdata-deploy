@@ -14,13 +14,6 @@ bigdata-extsvr-db_whaley_ucenter
 bigdata-extsvr-web_bi
 bigdata-extsvr-db_bi1
 bigdata-extsvr-db_bi2
-bigdata-extsvr-log1
-bigdata-extsvr-log2
-bigdata-extsvr-log3
-bigdata-extsvr-log4
-bigdata-extsvr-log5
-bigdata-extsvr-log6
-bigdata-extsvr-log7
 bigdata-extsvr-db_whaley_tvservice
 bigdata-extsvr-ganglia01
 bigdata-test-log_collect01
