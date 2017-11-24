@@ -14,7 +14,6 @@
         - {name: 'nginx.conf', dest: 'nginx.conf'}
         - {name: 'online/nginx_comm_proxy.block', dest: 'online/'}
         - {name: 'online/nginx_comm_proxy_ws.block', dest: 'online/'}
-        - {name: 'online/nginx_comm_userblank.block', dest: 'online/'}
         - {name: 'online/nginx_appsvr_webproxy.conf', dest: 'online/'}
         - {name: 'online/nginx_monitor.conf', dest: 'online/'}
         - {name: 'tcp/nginx_appsvr_tcpproxy.conf', dest: 'tcp/'}
