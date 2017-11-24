@@ -29,3 +29,8 @@
 
 #配置文件下发
 ansible-playbook -i kafka.host install_kafka_3.yml -t config
+
+-----追加kafka启动命令到系统启动项
+ansible all -i kafka.host -mshell -a"echo '. /etc/profile;cd /opt/kafka2;./bin/kafka-server-start.sh  -daemon ./config/server.properties' >> /etc/rc.local"
+ansible all -i kafka.host -mshell -a"echo '. /etc/profile;cd /opt/kafka3;./bin/kafka-server-start.sh  -daemon ./config/server.properties' >> /etc/rc.local"
+ansible all -i kafka.host -mshell -a"echo '. /etc/profile;cd /opt/kafka4;./bin/kafka-server-start.sh  -daemon ./config/server.properties' >> /etc/rc.local"
