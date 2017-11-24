@@ -86,10 +86,12 @@
 10.19.61.75  bigdata-extsvr-log5
 10.19.9.248  bigdata-extsvr-log6
 10.19.151.86    bigdata-extsvr-log7
-10.255.130.6	esserver.whaleybigdata.com
-10.255.130.6	kylinserver.whaleybigdata.com
-10.255.130.6	mailserver.whaleybigdata.com
-10.255.130.6	prestoserver.whaleybigdata.com
+10.255.130.7	esserver.whaleybigdata.com
+10.255.130.7	kylinserver.whaleybigdata.com
+10.255.130.7	mailserver.whaleybigdata.com
+10.255.130.7	prestoserver.whaleybigdata.com
+10.255.130.7	hiveserver2.whaleybigdata.com
+10.255.130.7	sparkthriftserver.whaleybigdata.com
 10.255.129.6	test-esserver.whaleybigdata.com
 10.255.129.6	test-kylinserver.whaleybigdata.com
 10.255.129.6	test-mailserver.whaleybigdata.com
