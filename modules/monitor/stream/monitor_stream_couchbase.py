@@ -137,7 +137,7 @@ class Checktask():
         is_found = False
         for proc in psutil.process_iter():
             try:
-                if proc.pid() == pid:
+                if int(proc.pid) == int(pid):
                     is_found = True
             except psutil.NoSuchProcess:
                 pass
