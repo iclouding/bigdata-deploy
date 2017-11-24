@@ -92,10 +92,14 @@
 10.255.130.7	prestoserver.whaleybigdata.com
 10.255.130.7	hiveserver2.whaleybigdata.com
 10.255.130.7	sparkthriftserver.whaleybigdata.com
+10.255.130.7	phoenixserver.whaleybigdata.com
 10.255.129.6	test-esserver.whaleybigdata.com
 10.255.129.6	test-kylinserver.whaleybigdata.com
 10.255.129.6	test-mailserver.whaleybigdata.com
 10.255.129.6	test-prestoserver.whaleybigdata.com
+10.255.129.6    test-hiveserver2.whaleybigdata.com
+10.255.129.6    test-sparkthriftserver.whaleybigdata.com
+10.255.129.6    test-phoenixserver.whaleybigdata.com
 10.10.54.248    Platform-recommended-kafka04
 10.10.6.50  Platform-recommended-kafka05
 10.10.46.134    Platform-recommended-kafka06
