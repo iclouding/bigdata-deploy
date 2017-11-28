@@ -120,4 +120,23 @@
         <value>10000</value>
     </property>
 
+    <property>
+        <name>dfs.datanode.fsdataset.volume.choosing.policy</name>
+        <value>org.apache.hadoop.hdfs.server.datanode.fsdataset.AvailableSpaceVolumeChoosingPolicy</value>
+    </property>
+
+    <property>
+        <name>dfs.datanode.available-space-volume-choosing-policy.balanced-space-threshold</name>
+        <!-- 100G -->
+        <value>107374182400</value>
+    </property>
+
+
+    <property>
+         <name>dfs.datanode.du.reserved</name>
+        <!-- cluster variant -->
+        <value>1181116006400</value>
+        <description>Reserved space in bytes per volume. Always leave this much space free for non dfs use.    </description>
+    </property>
+
 </configuration>

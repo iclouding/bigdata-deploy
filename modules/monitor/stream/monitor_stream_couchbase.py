@@ -8,9 +8,10 @@ import re
 import sys
 import socket
 import requests
-import config_test as config
+import config
 import time
 import threading
+import psutil
 
 
 def log_msg(fun_name, err_msg, level):
@@ -71,7 +72,7 @@ class Checktask():
             return True
         if self.type == 'yarn_list':
             self.check_yarn_list_workflow()
-        elif self.type == 'ps_keyword':
+        elif self.type == 'pid':
             self.check_ps_keyword_workflow()
         else:
             msg = "检查类型不是预定义的值"
@@ -132,14 +133,21 @@ class Checktask():
         log_msg("check_end", "check %s success!" % self.keyword, 1)
 
     def check_ps_keyword_service(self):
-        check_cmd = " ".join(["ps","-aux","|","grep","-i '{0}'","|","grep -v grep"]).format(self.keyword)
-        import pdb;pdb.set_trace()
-        output = run_command_out(check_cmd)
-        if output:
-            return True
-        else:
-            return False
+        pid = self.read_pid()
+        is_found = False
+        for proc in psutil.process_iter():
+            try:
+                if int(proc.pid) == int(pid):
+                    is_found = True
+            except psutil.NoSuchProcess:
+                pass
+        return is_found
 
+    def read_pid(self):
+        filename = '/tmp/%s.pid' % self.keyword
+        with open(filename, 'r') as f:
+            data = f.readline().strip()
+        return data
 
 
 class myThread(threading.Thread):
@@ -155,7 +163,7 @@ class myThread(threading.Thread):
 def main():
     check_data = config.streaming
     for item in check_data:
-        c=Checktask(item)
+        c = Checktask(item)
         c.check_workflow()
         del c
         # t = myThread(item)

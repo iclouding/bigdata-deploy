@@ -42,6 +42,12 @@ ansible run-apps-machine -i forest.host -mshell -a"su - moretv -c  'cd /opt/fore
 ansible run-apps-machine -i forest.host -mshell -a"su - moretv -c  'cd /opt/forest-bi/Forest-1.0.0-SNAPSHOT-bin/bin;sh whaley_thorprobe_restart.sh'"
 --重启 电视猫点播直播播放质量
 ansible run-apps-machine -i forest.host -mshell -a"su - moretv -c  'cd /opt/forest-bi/Forest-1.0.0-SNAPSHOT-bin/bin;sh medua_playqos_restart.sh'"
+--重启 helios平展化进程(nginx)
+ansible run-apps-machine -i forest.host -mshell -a"su - moretv -c  'cd /opt/forest-bi/Forest-1.0.0-SNAPSHOT-bin/bin;sh nginx_helios_product_restart.sh'"
+--重启 medusa平展化进程(nginx)
+ansible run-apps-machine -i forest.host -mshell -a"su - moretv -c  'cd /opt/forest-bi/Forest-1.0.0-SNAPSHOT-bin/bin;sh nginx_medusa_product_restart.sh'"
+
+
 
 --检查 helios平展化进程(logcenter)
 ansible run-apps-machine -i forest.host -mshell -a"su - moretv -c  'ps -ef|grep cn.whaley.turbo.forest.main.HeliosLogProcessingNewApp2|grep -v grep'"
