@@ -106,7 +106,7 @@ ansible all -i spark2.2.0.host -mcopy -a"src=/data/tools/ansible/modules/spark/p
 1.启动
   ansible thriftserver -i spark2.2.0.host -mshell -a"su - spark -c 'cd /opt/spark220 && ./sbin/launch-thriftserver.sh'"
 2.停止
-  ansible thriftserver -i spark2.2.0.host -mshell -a"cd /opt/spark2 && ./sbin/stop-thriftserver.sh"
+  ansible thriftserver -i spark2.2.0.host -mshell -a"cd /opt/spark220 && ./sbin/stop-thriftserver.sh"
   如果通过上面命令，停止不了，通过下面命令强制杀掉进程
   ansible thriftserver -i spark2.2.0.host -mshell -a "ps -ef|grep HiveThriftServer2 |grep 20360 | grep -v 'grep' | awk '{print \$2}' |xargs kill -9  "
 
