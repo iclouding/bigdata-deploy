@@ -31,6 +31,10 @@
 ansible-playbook -i kafka.host install_kafka_3.yml -t config
 
 -----追加kafka启动命令到系统启动项
-ansible all -i kafka.host -mshell -a"echo '. /etc/profile;cd /opt/kafka2;./bin/kafka-server-start.sh  -daemon ./config/server.properties' >> /etc/rc.local"
-ansible all -i kafka.host -mshell -a"echo '. /etc/profile;cd /opt/kafka3;./bin/kafka-server-start.sh  -daemon ./config/server.properties' >> /etc/rc.local"
-ansible all -i kafka.host -mshell -a"echo '. /etc/profile;cd /opt/kafka4;./bin/kafka-server-start.sh  -daemon ./config/server.properties' >> /etc/rc.local"
+ansible all -i kafka.host -mshell -a"echo 'su - moretv -c \". /etc/profile;cd /opt/kafka2;./bin/kafka-server-start.sh  -daemon ./config/server.properties\"' >> /etc/rc.local"
+ansible all -i kafka.host -mshell -a"echo 'su - moretv -c \". /etc/profile;cd /opt/kafka3;./bin/kafka-server-start.sh  -daemon ./config/server.properties\"' >> /etc/rc.local"
+ansible all -i kafka.host -mshell -a"echo 'su - moretv -c \". /etc/profile;cd /opt/kafka4;./bin/kafka-server-start.sh  -daemon ./config/server.properties\"' >> /etc/rc.local"
+
+-----删除/etc/rc.local中关键字的行
+ansible all -i kafka.host -mshell -a" sed -i -e '/kafka-server-start/d' /etc/rc.local "
+
