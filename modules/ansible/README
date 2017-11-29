@@ -11,3 +11,6 @@ ansible all -i hbase.host -m cron -a "name='check hbase regionserver ' minute=*/
 
 ansible-playbook -i spark.host install_spark.yml
 #执行写好的部署脚本，服务器列表在spark.host 中，执行命令在install_spark.yml中
+
+#刷新hosts文件
+ansible-playbook -i all.host sync_hosts.yml -t hosts
