@@ -8,7 +8,7 @@ import re
 import sys
 
 
-SEND_TO = "peng.tao@whlaey.cn"
+SEND_TO = "peng.tao@whaley.cn,lian.kai@whaley.cn"
 
 
 def log_msg(fun_name, err_msg, level):
