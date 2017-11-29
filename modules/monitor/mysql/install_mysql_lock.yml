@@ -27,6 +27,6 @@
 
     - name: create script with nginx each upload cron
       tags: cron
-      cron: name="check mysql lock  " minute=*/2  job="/usr/bin/python /data/scripts/check_mysql_lock.py"
+      cron: name="check mysql lock  " minute=*/10  job="/usr/bin/python /data/scripts/check_mysql_lock.py"
 
 
