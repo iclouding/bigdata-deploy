@@ -44,7 +44,7 @@ def check_output(data):
     is_found = False
     for line in data.split('\n'):
         if len(line.split("|")) == 10:
-            if re.search('lock', line.split("|")[7]) and int(line.split("|")[6]) > 600:
+            if re.search('lock', line.split("|")[7]) and int(line.split("|")[6]) > 3600:
                 is_found = True
                 sub = "%s 出现mysql锁表，请人工介入" % socket.gethostname()
                 body = "锁表相关信息如下：\n %s" % line
