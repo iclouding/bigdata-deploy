@@ -1,0 +1,19 @@
+---
+- hosts: all
+  tasks:
+
+    - name: create directory
+      file: path={{ item.name }} state=directory owner={{ item.user }} group={{ item.groups }}
+      tags: install
+      with_items:
+        - { name: '/data/scripts', user: 'root', groups: 'root' }
+
+    - name: copy  script  to remote host
+      tags: install
+      copy: src=/data/tools/ansible/modules/monitor/nginx/{{ item }} dest=/data/scripts
+      with_items:
+        - monitor_log_size.py
+
+    - name: create monitor logs files size  cron
+      tags: cron
+      cron: name="nginx check logs size " minute=*/15  job="/usr/bin/python /data/scripts/monitor_log_size.py"

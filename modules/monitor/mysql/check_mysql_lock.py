@@ -7,8 +7,7 @@ import socket
 import re
 import sys
 
-
-SEND_TO = "peng.tao@whlaey.cn"
+SEND_TO = "peng.tao@whaley.cn,lian.kai@whaley.cn"
 
 
 def log_msg(fun_name, err_msg, level):
@@ -45,7 +44,7 @@ def check_output(data):
     is_found = False
     for line in data.split('\n'):
         if len(line.split("|")) == 10:
-            if re.search('lock', line.split("|")[7]):
+            if re.search('lock', line.split("|")[7]) and int(line.split("|")[6]) > 600:
                 is_found = True
                 sub = "%s 出现mysql锁表，请人工介入" % socket.gethostname()
                 body = "锁表相关信息如下：\n %s" % line
@@ -58,7 +57,7 @@ def check_output(data):
 
 
 def main():
-    #check_cmd = "mysqladmin -uroot -p'aspect' processlist"
+    # check_cmd = "mysqladmin -uroot -p'aspect' processlist"
     check_cmd = "mysqladmin -uroot -p'moretvsmarTV@608_810' processlist"
     status, output = commands.getstatusoutput(check_cmd)
     if status == 0:
