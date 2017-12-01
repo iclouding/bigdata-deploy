@@ -1,0 +1,24 @@
+---
+- hosts: all
+  tasks:
+
+
+    - name: copy node  to remote host
+      tags: sync
+      copy: src=/data/tools/ansible/modules/deployment/modules/prometheus/config/{{ item }} dest=/tmp
+      with_items:
+        - node_exporter.tar.gz
+        - node_exporter.service
+
+    - name: unzip tar file
+      shell: tar zxvf /tmp/node_exporter.tar.gz && cd /tmp/node_exporter-0.15.1.linux-amd64 && cp node_exporter /usr/local/. && cp /tmp/node_exporter.service /etc/systemd/system
+      tags: sync
+
+
+    - name: restart node_exporter
+      shell: systemctl daemon-reload &&  systemctl restart node_exporter
+      tags: install
+
+
+
+
