@@ -43,6 +43,29 @@ scrape_configs:
         labels:
           group: "cmpt"
 
+
+  - job_name: 'mysql'
+    scrape_interval: 30s
+    static_configs:
+      - targets: ['bigdata-extsvr-db_bi1:9104']
+        labels:
+          group: "db"
+    params:
+      collect[]:
+        - perf_schema.tableiowaits
+        - perf_schema.indexiowaits
+        - perf_schema.tablelocks
+
+#  - job_name: 'mysql'
+#    scrape_interval: 60s
+#    static_configs:
+#      - targets: ['bigdata-extsvr-db_bi1:9104']
+#        labels:
+#          group: "db"
+#    params:
+#      collect[]:
+#        - slave_status
+
 #    file_sd_configs:
 #      - files:
 #        - /usr/local/prometheus/conf/bigdata.json
