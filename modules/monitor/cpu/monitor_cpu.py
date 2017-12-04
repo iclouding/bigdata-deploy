@@ -78,5 +78,5 @@ def main():
                 send_alter_mail(sub=sub, body=content)
                 write_process_info()
 
-    if __name__ == "__main__":
-        main()
+if __name__ == "__main__":
+    main()
