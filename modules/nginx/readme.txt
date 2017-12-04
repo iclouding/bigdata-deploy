@@ -9,12 +9,6 @@ ansible-playbook -i nginx.hosts install_ngx-appsvr-webproxy.yml
 --对外服务集群web方向代理服务
 ansible-playbook -i nginx.hosts install_ngx-extsvr-webproxy.yml
 
---对外服务集群日志接口服务
-ansible-playbook -i nginx.hosts install_ngx-extsvr-log.yml
-
---对外服务集群日志接口服务(log-v2.0)
-ansible-playbook -i nginx-extsvr-v2.0.hosts install_ngx-extsvr-log-v2.0.yml
-
 --[测试环境]对外服务集群日志接口服务(log-v2.0)
 ansible-playbook -i nginx-extsvr-v2.0-test.hosts install_ngx-extsvr-log-v2.0-test.yml
 
@@ -53,16 +47,11 @@ Total of 6010 requests completed
  net.ipv4.tcp_max_syn_backlog = 819200
  sytctl -p
 
---下发v1.1配置文件并reload
-ansible-playbook -i nginx.hosts install_ngx-extsvr-log-v1.1.yml
 
---下发v1.1 https 配置文件并reload
-ansible-playbook -i nginx.hosts install_ngx-extsvr-log-v1.1-https.yml
-
---下发v2.0 https 配置文件并reload
+--下发数据收集集群v2.0 https 配置文件并reload（最新版本）
 ansible-playbook -i nginx.hosts install_ngx-extsvr-log-v2.0.yml
 
-----------------------------------nginx升级[云主机的模版机器初始化nginx]----------------------------------
+--------------------nginx升级[云主机的模版机器初始化nginx]--------------------------
 --安装升级版nginx[模版云主机]
 ansible-playbook -i nginx_template.hosts install_nginx_template.yml
 --下发配置文件并reloadnginx
