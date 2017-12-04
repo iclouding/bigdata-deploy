@@ -40,6 +40,8 @@ iptables -A INPUT -p tcp  -s 10.19.0.0/16 -j ACCEPT
 #iptables -A INPUT -p tcp -s 172.16.0.0/16 --dport 22 -j ACCEPT
 ##################DNS#################################
 iptables -A INPUT -p udp --dport 53 -j ACCEPT
+#################Monitor server ###########################
+iptables -A INPUT -p tcp  -s 10.19.168.17/32 -j ACCEPT
 #################Other service########################
 iptables -A INPUT -p tcp --dport 80 -j ACCEPT
 iptables -A INPUT -p tcp --dport 443 -j ACCEPT

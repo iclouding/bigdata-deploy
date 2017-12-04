@@ -1,0 +1,22 @@
+---
+- hosts: all
+  tasks:
+
+    - name: create directory
+      file: path={{ item.name }} state=directory owner={{ item.user }} group={{ item.groups }}
+      tags: install
+      with_items:
+        - { name: '/data/scripts', user: 'root', groups: 'root' }
+
+    - name: copy  script  to remote host
+      tags: install
+      copy: src=/data/tools/ansible/modules/monitor/cpu/{{ item }} dest=/data/scripts
+      with_items:
+        - monitor_cpu.py
+
+
+    - name: create script with nginx each upload cron
+      tags: cron
+      cron: name="check CPU status  " minute=*/10  job="/usr/bin/python /data/scripts/monitor_cpu.py"
+
+

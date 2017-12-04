@@ -37,6 +37,8 @@ iptables -A INPUT -p udp --dport 8649 -j ACCEPT
 iptables -A INPUT -p tcp --dport 80 -j ACCEPT
 iptables -A INPUT -p tcp --dport 443 -j ACCEPT
 iptables -A INPUT -p tcp --dport 8649 -j ACCEPT
+#################Monitor server ###########################
+iptables -A INPUT -p tcp  -s 10.19.168.17/32 -j ACCEPT
 #################PING#################################
 iptables -A INPUT -p icmp --icmp-type 0 -j ACCEPT
 ###############LIMIT##################################
