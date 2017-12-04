@@ -55,8 +55,36 @@
         <value>true</value>
     </property>
     -->
+
     <property>
         <name>phoenix.query.dateFormatTimeZone</name>
         <value>LOCAL</value>
     </property>
+
+<!-- turn parameter for phoenix query-->
+    <property>
+        <name>hbase.rpc.timeout</name>
+        <value>1200000</value>
+        <description>from default 60000 to 1200000 </description>
+    </property>
+    <property>
+        <name>hbase.client.scanner.timeout.period</name>
+        <value>120000</value>
+        <description>from default 60000 to 120000.
+            https://community.hortonworks.com/content/supportkb/49037/phoenix-sqlline-query-on-larger-data-set-fails-wit.html
+            proposal to 1200000</description>
+    </property>
+    <property>
+        <name>hbase.client.scanner.caching</name>
+        <value>2147483647</value>
+        <description>not change,use the hbase-default.xml value
+            https://community.hortonworks.com/content/supportkb/49037/phoenix-sqlline-query-on-larger-data-set-fails-wit.html
+            proposal to 1000</description>
+    </property>
+    <property>
+        <name>phoenix.query.timeoutMs</name>
+        <value>1800000</value>
+        <description>default value 600000.Client-side property specifying the number of milliseconds after which a query will timeout on the client. Default is 10 min.</description>
+    </property>
+
 </configuration>
