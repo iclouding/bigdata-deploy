@@ -49,15 +49,18 @@ ansible regionserver -i hbase.host -m cron -a "name='check hbase regionserver ' 
 ansible hmaster -i hbase.host -m cron -a "name='check hbase master ' state=absent minute=*/6  user='hadoop' job='sh /opt/hbase/conf/monitor_hbase.sh org.apache.hadoop.hbase.master.HMaster master >/dev/null 2>&1'  "
 ansible hbase-master-backup -i hbase.host -m cron -a "name='check hbase master ' state=absent minute=*/6  user='hadoop' job='sh /opt/hbase/conf/monitor_hbase.sh org.apache.hadoop.hbase.master.HMaster master >/dev/null 2>&1'  "
 
-
----------[单纯的配置升级:1.不需要使用graceful参数来迁移rs上的数据.
-1.--graceful参数表示迁移rs上的数据[可以用来进行版本的热升级,单纯的配置改动后生效,不需要指定此参数。]
-2.--rs-only参数表示只是重启rs
-3.--master-only参数表示只是重启master]
-2.在hbase-master机器，bigdata-cmpt-128-1，发布滚动重启命令
-nohup sh /opt/hbase/bin/rolling-restart.sh --rs-only  --graceful > rolling.log 2>&1 &
-3.手动启动负载均衡,在hbase-master机器，sh /opt/hbase/bin/hbase shell
-运行： balance_switch true
+-------------
+2.开始滚动重启
+在hbase-master机器，bigdata-cmpt-128-1，发布滚动重启命令
+nohup sh /opt/hbase/bin/rolling-restart.sh > rolling.log 2>&1 &
+如果在rolling.log日志里发现"Waiting for /hbase/region-in-transition to empty 3"日志，参考[note1]解决
+a.--graceful参数表示迁移rs上的数据[可以用来进行版本的热升级,单纯的配置改动后生效,不需要指定此参数。]
+b.--rs-only参数表示只是重启rs
+c.--master-only参数表示只是重启master
+d.一般不需要手动启动负载均衡
+  手动启动负载均衡,在hbase-master机器
+  sh /opt/hbase/bin/hbase shell
+  运行： balance_switch true
 -------------
 
 4.启动hbase cronjob
@@ -66,3 +69,12 @@ ansible hmaster -i hbase.host -m cron -a "name='check hbase master ' minute=*/6 
 ansible hbase-master-backup -i hbase.host -m cron -a "name='check hbase master ' minute=*/6  user='hadoop' job='sh /opt/hbase/conf/monitor_hbase.sh org.apache.hadoop.hbase.master.HMaster master >/dev/null 2>&1'  "
 ansible regionserver -i hbase.host -m cron -a "name='check hbase regionserver ' minute=*/6  user='hadoop' job='. /etc/profile;sh /opt/hbase/conf/monitor_hbase.sh org.apache.hadoop.hbase.regionserver.HRegionServer regionserver >/dev/null 2>&1'  "
 ------------------------------滚动重启所有hbase------------------------------end
+
+
+[note1]
+以moretv用户执行命令
+/opt/zookeeper1/bin/zkCli.sh  -server bigdata-cmpt-128-1:2181
+ls /hbase/region-in-transition
+[17514a4bfce382917e93eb7d1582c891, 11aaf64c957167f2535a9e1c288c3cc6, d050d80d3698f26b0f79921a5c908d5a]
+当里面没有数值，依次删除文件
+delete /hbase/region-in-transition/11aaf64c957167f2535a9e1c288c3cc6
