@@ -42,16 +42,27 @@ ansible-playbook -i hbase.host install_hbase-bin.yml -t config]
 2. /opt/hbase/bin/hbase-daemon.sh start regionserver
 
 
------------滚动重启所有hbase regionserver步骤[慎用,下面操作是关闭所有region server
-]-----------
-1.停止hbase regionserver cronjob监控,防止hbase滚动重启过程中，监控拉起hbase regionserver
+------------------------------滚动重启所有hbase------------------------------
+1.停止hbase regionserver cronjob监控[防止hbase滚动重启过程中，监控拉起hbase相关服务]
 在ansible机器上,hbase/playbook目录，执行
-  ansible regionserver -i hbase.host -m cron -a "name='check hbase regionserver ' minute=#*/6  user='hadoop' job='. /etc/profile;sh /opt/hbase/conf/monitor_hbase.sh org.apache.hadoop.hbase.regionserver.HRegionServer regionserver >/dev/null 2>&1'  "
+ansible regionserver -i hbase.host -m cron -a "name='check hbase regionserver ' state=absent minute=*/6  user='hadoop' job='. /etc/profile;sh /opt/hbase/conf/monitor_hbase.sh org.apache.hadoop.hbase.regionserver.HRegionServer regionserver >/dev/null 2>&1'  "
+ansible hmaster -i hbase.host -m cron -a "name='check hbase master ' state=absent minute=*/6  user='hadoop' job='sh /opt/hbase/conf/monitor_hbase.sh org.apache.hadoop.hbase.master.HMaster master >/dev/null 2>&1'  "
+ansible hbase-master-backup -i hbase.host -m cron -a "name='check hbase master ' state=absent minute=*/6  user='hadoop' job='sh /opt/hbase/conf/monitor_hbase.sh org.apache.hadoop.hbase.master.HMaster master >/dev/null 2>&1'  "
 
+
+---------[单纯的配置升级:1.不需要使用graceful参数来迁移rs上的数据.
+1.--graceful参数表示迁移rs上的数据[可以用来进行版本的热升级,单纯的配置改动后生效,不需要指定此参数。]
+2.--rs-only参数表示只是重启rs
+3.--master-only参数表示只是重启master]
 2.在hbase-master机器，bigdata-cmpt-128-1，发布滚动重启命令
 nohup sh /opt/hbase/bin/rolling-restart.sh --rs-only  --graceful > rolling.log 2>&1 &
 3.手动启动负载均衡,在hbase-master机器，sh /opt/hbase/bin/hbase shell
 运行： balance_switch true
-4.启动hbase regionserver cronjob
+-------------
+
+4.启动hbase cronjob
 在ansible机器上,hbase/playbook目录，执行
-  ansible regionserver -i hbase.host -m cron -a "name='check hbase regionserver ' minute=*/6  user='hadoop' job='. /etc/profile;sh /opt/hbase/conf/monitor_hbase.sh org.apache.hadoop.hbase.regionserver.HRegionServer regionserver >/dev/null 2>&1'  "
+ansible hmaster -i hbase.host -m cron -a "name='check hbase master ' minute=*/6  user='hadoop' job='sh /opt/hbase/conf/monitor_hbase.sh org.apache.hadoop.hbase.master.HMaster master >/dev/null 2>&1'  "
+ansible hbase-master-backup -i hbase.host -m cron -a "name='check hbase master ' minute=*/6  user='hadoop' job='sh /opt/hbase/conf/monitor_hbase.sh org.apache.hadoop.hbase.master.HMaster master >/dev/null 2>&1'  "
+ansible regionserver -i hbase.host -m cron -a "name='check hbase regionserver ' minute=*/6  user='hadoop' job='. /etc/profile;sh /opt/hbase/conf/monitor_hbase.sh org.apache.hadoop.hbase.regionserver.HRegionServer regionserver >/dev/null 2>&1'  "
+------------------------------滚动重启所有hbase------------------------------end
