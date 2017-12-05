@@ -31,15 +31,21 @@ ansible all -i hbase.host -mcopy -a"src=/data/tools/ansible/modules/hbase/config
 ansible all -i hbase.host -mcopy -a"src=/data/tools/ansible/modules/hbase/config/etc/hbase/hbase-site.xml dest=/opt/hbase/conf  owner=hadoop group=hadoop mode=755"
 ansible hbase-thriftserver -i hbase.host -m shell -a "ps -ef|grep -i hbase|grep -i thriftserver|grep -v grep| awk '{print \$2}'|xargs kill -9 ; su - hadoop -c '/opt/hbase/bin/hbase-daemon.sh start thrift' "
 
------------关闭单台habse regionserver-----------
-登陆到需要关闭regionserver的机器上,sh /opt/hbase/bin/graceful_stop.sh hostname
-hostname替换为机器名称，例如bigdata-cmpt-128-19
+-----------重启单台habse regionserver-----------
+登录到regionserver机器
+/opt/hbase/bin/hbase-daemon.sh restart regionserver
 
 -----------加入单台habse regionserver-----------
 1. $HBASE_HOME/conf/regionservers 加入新的regionserver
 [使用ansible分发，理论上只需要更新Master node到regionservers文件，现在全部更新文件
 ansible-playbook -i hbase.host install_hbase-bin.yml -t config]
 2. /opt/hbase/bin/hbase-daemon.sh start regionserver
+
+
+
+-----------下线单台habse regionserver[慎重]-----------
+登陆到需要下线的regionserver,sh /opt/hbase/bin/graceful_stop.sh hostname
+hostname替换为机器名称，例如bigdata-cmpt-128-19
 
 
 ------------------------------滚动重启所有hbase------------------------------
