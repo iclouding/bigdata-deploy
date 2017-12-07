@@ -111,8 +111,8 @@ class ftpBase():
     # 上传目录
     def uploadDir(self, local_dir='./', remote_dir='./'):
         if not os.path.isdir(local_dir):
-            logMsg('updir', '%s not exists' % self.local_dir, 2)
-            raise ValueError('%s not exists' % self.local_dir)
+            logMsg('updir', '%s not exists' % local_dir, 2)
+            raise ValueError('%s not exists' % local_dir)
 
         # 创建目录
         all_dirs = remote_dir.split(',')
