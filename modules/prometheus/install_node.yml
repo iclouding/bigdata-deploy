@@ -11,7 +11,7 @@
         - node_exporter.service
 
     - name: unzip tar file
-      shell: tar zxvf /tmp/node_exporter.tar.gz 
+      shell: cd /tmp && tar zxvf node_exporter.tar.gz 
       tags: sync
 
     - name: unzip tar file01
