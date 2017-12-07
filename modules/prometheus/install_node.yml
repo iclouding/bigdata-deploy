@@ -5,7 +5,7 @@
 
     - name: copy node  to remote host
       tags: sync
-      copy: src=/data/tools/ansible/modules/deployment/modules/prometheus/config/{{ item }} dest=/tmp
+      copy: src=/data/tools/ansible/modules/prometheus/config/{{ item }} dest=/tmp
       with_items:
         - node_exporter.tar.gz
         - node_exporter.service
