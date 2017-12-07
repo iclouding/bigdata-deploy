@@ -11,9 +11,12 @@
         - node_exporter.service
 
     - name: unzip tar file
-      shell: tar zxvf /tmp/node_exporter.tar.gz && cd /tmp/node_exporter-0.15.1.linux-amd64 && cp node_exporter /usr/local/. && cp /tmp/node_exporter.service /etc/systemd/system
+      shell: tar zxvf /tmp/node_exporter.tar.gz 
       tags: sync
 
+  - name: unzip tar file01
+      shell: cd /tmp/node_exporter-0.15.1.linux-amd64 && cp node_exporter /usr/local/. && cp /tmp/node_exporter.service /etc/systemd/system
+      tags: sync
 
     - name: restart node_exporter
       shell: systemctl daemon-reload &&  systemctl restart node_exporter
