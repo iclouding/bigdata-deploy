@@ -14,7 +14,7 @@
       shell: tar zxvf /tmp/node_exporter.tar.gz 
       tags: sync
 
-  - name: unzip tar file01
+    - name: unzip tar file01
       shell: cd /tmp/node_exporter-0.15.1.linux-amd64 && cp node_exporter /usr/local/. && cp /tmp/node_exporter.service /etc/systemd/system
       tags: sync
 
