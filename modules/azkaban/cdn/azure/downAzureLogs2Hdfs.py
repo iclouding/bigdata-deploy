@@ -54,7 +54,8 @@ class Myazure():
         print '%s:Downloading:' % filename
         downFilename = '%s/%s' % (currDir, filename)
 
-        self.blockblobservice.get_blob_to_path(blobname, filename, downFilename)
+        self.blockblobservice.get_blob_to_path(
+            blobname, filename, downFilename)
         write_files(checkFilename, filename)
         # logMsg("downFiles", "Download files %s  to %s success" % (filename, downFilename), 1)
 
@@ -150,7 +151,8 @@ def run_azkaban():
 
 
 def main():
-    domainName = ['media-wr.moguv.com', 'media2-wr.moguv.com', 'media-wr.mairx.com']
+    domainName = ['media-wr.moguv.com', 'media2-wr.moguv.com',
+                  'media-wr.mairx.com', 'p2p-wr.mairx.com']
     mydownAzureLogs(domainName)
     upLogs2Hdfs()
     run_azkaban()
@@ -158,4 +160,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
