@@ -242,7 +242,7 @@ def makeTarFiles(suffix):
     # 将该目录打包
 
     cmd = "cd %s&& tar zcvf %s/%s.tar.gz %s" % (
-        localpath, basepath, suffix, local_files)
+        basepath, basepath, suffix, suffix)
     k, v = run_cmd(cmd)
     if k == 1:
         return True
