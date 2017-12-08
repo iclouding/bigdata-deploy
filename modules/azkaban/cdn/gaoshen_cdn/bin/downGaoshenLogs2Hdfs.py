@@ -26,20 +26,20 @@ def log_msg(fun_name, err_msg, level):
 
 class MyGaoshen():
     def __init__(self, domain, work_day, output):
-        self.domain = domain
-        self.work_day = work_day
         self.output = output
         self.dw = {}
-        if self.domain == "mediags.moguv.com":
+        if domain == "mediags.moguv.com":
             self.dw['user_id'] = u'253'.replace('\'', '')
         else:
             self.dw['user_id'] = u'185'.replace('\'', '')
+        self.dw['vhost'] = domain
+        self.dw['day'] = work_day
         self.dw['dtype'] = u'vod'.replace('\'', '')
         self.dw['logtype'] = u'access'.replace('\'', '')
         now_date = datetime.datetime.now().strftime("%Y%m%d")
         self.key = 'gaosheng_' + now_date
 
-    def down(sele):
+    def down(self):
         cmd = self.get_cdn_url()
         status, out = commands.getstatusoutput(cmd)
         if status == 0:
@@ -58,27 +58,26 @@ class MyGaoshen():
         md5 = hashlib.md5(md5str.encode('utf-8')).hexdigest()
         # print 'after:', md5
         get_url = "http://portal.gosun.com/api/downloads_log?user_id=%s&vhost=%s&day=%s&logtype=%s&dtype=%s&sign=%s" % (
-            self.dw['user_id'], self.dw['domain'], self.dw['day'], self.dw['logtype'], self.dw['dtype'], md5)
+            self.dw['user_id'], self.dw['vhost'], self.dw['day'], self.dw['logtype'], self.dw['dtype'], md5)
         # print get_url
-        files = "%s_%s.gz" % (self.domain, self.work_day)
-        cmd = "wget  -c '%s' -O %s/%s" % (get_url, self.output, files)
+        files = "%s_%s.gz" % (self.dw['vhost'], self.dw['day'])
+        outfile_path = "%s/%s/%s" % (self.output,
+                                     self.dw['day'], self.dw['vhost'])
+        os.system('mkdir -p %s' % outfile_path)
+        cmd = "wget  -c '%s' -O %s/%s" % (get_url, outfile_path, files)
         return cmd
 
 
-
-def upLogs2Hdfs():
+def upLogs2Hdfs(out_path):
     yesterday = (datetime.date.today() -
                  datetime.timedelta(1)).strftime("%Y%m%d")
     yesterday_format2 = yesterday.strftime('%Y%m%d')
-    baseLocal = '/data/down_gaoshen/'
+    baseLocal = out_path
     hdfsDir = "/log/cdn/%s" % yesterday_format2
     currLocal = "%s/%s" % (baseLocal, yesterday_format2)
     cmd = "su - spark -c 'hadoop fs -put -f %s /log/cdn'" % currLocal
     (returncode, out) = commands.getstatusoutput(cmd)
     if returncode == 0:
-        rm_cmd = "su - spark -c 'hadoop fs -rm %s/*/*.list'" % hdfsDir
-        commands.getoutput(rm_cmd)
-        log_msg("rmHdfs", "run cmd %s" % rm_cmd, 1)
         log_msg("up2Hdfs", "Up2Hdfs success", 1)
         return True
     else:
@@ -89,7 +88,7 @@ def upLogs2Hdfs():
 
 def run_azkaban():
     project = 'ods_etl_cdn_log'
-    flow = 'microsoft_cdn_end'
+    flow = 'cdn_end'
     cmd = "/bin/sh azkaban_run.sh %s %s" % (project, flow)
     (code, output) = commands.getstatusoutput(cmd)
     if code == 0:
@@ -102,8 +101,8 @@ def run_azkaban():
 
 
 def main():
-    domain_name = ['media-wr.moguv.com', 'media2-wr.moguv.com',
-                  'media-wr.mairx.com', 'p2p-wr.mairx.com']
+    domain_name = ['media-gs.mairx.com', 'mediags.moguv.com',
+                   'mediags.moretv.com.cn', 'mediags2.moguv.com', 'p2p-gs.mairx.com']
     out_path = "/data/down_gaoshen/"
     if len(sys.argv) == 1:
         work_day = (datetime.date.today() -
@@ -114,11 +113,11 @@ def main():
         raise Exception("输入格式错误，请检查参数!", 2)
 
     for domain_one in domain_name:
-        g=MyGaoshen(domain_one,work_day,out_path)
+        g = MyGaoshen(domain_one, work_day, out_path)
         g.down()
 
-    upLogs2Hdfs()
-    run_azkaban()
+    # upLogs2Hdfs(out_path)
+    # run_azkaban()
 
 
 if __name__ == "__main__":
