@@ -10,7 +10,7 @@ import socket
 部署在10.19.23.227，用于每天凌晨2点定时打包，上传压缩包到VR的FTP服务器
 '''
 
-config = {'ftp_user': 'metisftp', 'ftp_pswd': 'gZy4humhqb5wosUc', 'ftp_host': '10.19.13.214',
+config = {'ftp_user': 'metisftp', 'ftp_pswd': 'gZy4humhqb5wosUc', 'ftp_host': '10.19.168.100',
           'base_path': '/tmp/vr_ftp', 'localpath': '/data/logs/nginx', 'ftppath': 'BIData_test',
           'local_filesname': 'boikgpokn78sb95kbqei6cc98dc5mlsr.log-'}
 

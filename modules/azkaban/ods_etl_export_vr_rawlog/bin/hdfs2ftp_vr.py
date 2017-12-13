@@ -6,7 +6,7 @@ from ftplib import FTP, error_perm
 import time
 import sys
 
-config = {'ftp_user': 'metisftp', 'ftp_pswd': 'gZy4humhqb5wosUc', 'ftp_host': '10.19.13.214',
+config = {'ftp_user': 'metisftp', 'ftp_pswd': 'gZy4humhqb5wosUc', 'ftp_host': '10.19.168.100',
     'localpath': '/tmp/hdfs2ftp', 'hdfspath': '/data_warehouse/ods_origin.db/log_raw/', 'ftppath': 'BIData'}
 
 
