@@ -6,7 +6,7 @@ import sys
 import commands
 from datetime import timedelta, datetime
 import os
-import datetime
+from datetime import timedelta, datetime
 import hashlib
 
 
@@ -36,7 +36,7 @@ class MyGaoshen():
         self.dw['day'] = work_day
         self.dw['dtype'] = u'vod'.replace('\'', '')
         self.dw['logtype'] = u'access'.replace('\'', '')
-        now_date = datetime.datetime.now().strftime("%Y%m%d")
+        now_date = datetime.now().strftime("%Y%m%d")
         self.key = 'gaosheng_' + now_date
 
     def down(self):
@@ -69,8 +69,7 @@ class MyGaoshen():
 
 
 def upLogs2Hdfs(out_path):
-    yesterday = (datetime.date.today() -
-                 datetime.timedelta(1)).strftime("%Y%m%d")
+    yesterday = datetime.today() + timedelta(-1)
     yesterday_format2 = yesterday.strftime('%Y%m%d')
     baseLocal = out_path
     hdfsDir = "/log/cdn/%s" % yesterday_format2
@@ -105,10 +104,9 @@ def main():
                    'mediags.moretv.com.cn', 'mediags2.moguv.com', 'p2p-gs.mairx.com']
     out_path = "/data/down_gaoshen/"
     if len(sys.argv) == 1:
-        work_day = (datetime.date.today() -
-                    datetime.timedelta(1)).strftime("%Y%m%d")
+        work_day = (datetime.today() -timedelta(1)).strftime("%Y%m%d")
     elif len(sys.argv == 2):
-        work_day = sys.argv[1]
+        work_day = sys.argv[1] 
     else:
         raise Exception("输入格式错误，请检查参数!", 2)
 
