@@ -1,4 +1,9 @@
 # -*- coding: utf-8 -*-
+"""[summary]
+VR bi数据同步脚本，通过azkaban每日进行调度，将昨天的数据从hdfs打包上传到VR指定的服务器
+[description]
+"""
+
 import os
 import re
 import shutil

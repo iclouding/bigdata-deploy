@@ -116,8 +116,8 @@ def main():
         g = MyGaoshen(domain_one, work_day, out_path)
         g.down()
 
-    # upLogs2Hdfs(out_path)
-    # run_azkaban()
+    upLogs2Hdfs(out_path)
+    run_azkaban()
 
 
 if __name__ == "__main__":
