@@ -11,3 +11,5 @@
      - {name: 'kafka_topic_distribute_jianianhua.conf',                   dest: '/opt/logstash_v5/config'}
      - {name: 'kafka_topic_distribute_ad_turnon_medusa_product.conf',     dest: '/opt/logstash_v5/config'}
      - {name: 'kafka_topic_distribute_ad_vod_whaley_product.conf',        dest: '/opt/logstash_v5/config'}
+     - {name: 'kafka_topic_distribute_medusa_player_sdk_parse_startplay.conf',        dest: '/opt/logstash_v5/config'}
+     - {name: 'kafka_topic_distribute_helios_player_sdk_parse_startplay.conf',        dest: '/opt/logstash_v5/config'}
