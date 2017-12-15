@@ -330,7 +330,7 @@
     </property>
 
     <!-- 利用cgroup来限制yarn容器对单节点cpu的使用量-->
-    <property>
+<!--    <property>
         <name>yarn.nodemanager.container-executor.class</name>
         <value>org.apache.hadoop.yarn.server.nodemanager.LinuxContainerExecutor</value>
     </property>
@@ -371,7 +371,7 @@
         <description>非安全模式将会以这里设置的用户运行container,比如配置hadoop用户则以hadoop运行container</description>
         <name>yarn.nodemanager.linux-container-executor.nonsecure-mode.local-user</name>
         <value>yarn</value>
-    </property>
+    </property>-->
 
 
 
