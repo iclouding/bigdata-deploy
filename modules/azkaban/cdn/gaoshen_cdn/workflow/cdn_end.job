@@ -1,3 +1,3 @@
 type=command
-dependencies=cdn_statistic_mediags.moguv.com,cdn_statistic_mediags.moretv.com.cn,cdn_statistic_mediags2.moguv.com,cdn_statistic_media-gs.mairx.com
+dependencies=cdn_statistic_mediags.moguv.com,cdn_statistic_mediags.moretv.com.cn,cdn_statistic_mediags2.moguv.com,cdn_statistic_media-gs.mairx.com,cdn_statistic_p2p-gs.mairx.com
 command=curl http://10.19.15.127:5000/send-gaoshen-mail/
