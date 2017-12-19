@@ -6,7 +6,7 @@ bigdev-cmpt-11
 bigdev-cmpt-12
 
 安装
-ansible-playbook -i zk_dev3.host install_zookeeper_master_dev3.yml -t install
+ansible-playbook -i zk_dev3.host install_zookeeper_master_dev3.yml
 
 启动服务
 ansible all -i zk_dev3.host -mshell -a"su - moretv -c 'cd /opt/zookeeper/ && nohup ./bin/zkServer.sh start &'"
