@@ -67,6 +67,10 @@ location '/log/cdn/${logTime}/${host}';
 "
 else
   table_name="ods.v_log_cdn_mediags"
+  hive -e "
+alter table ods.t_log_cdn_mediags add if not exists partition(key_time='$logTime',key_host='$host')
+location '/log/cdn/${logTime}/${host}';
+"
 fi
 
 set -x

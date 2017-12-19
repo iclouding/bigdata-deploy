@@ -1,0 +1,378 @@
+<?xml version="1.0"?>
+<?xml-stylesheet type="text/xsl" href="configuration.xsl"?>
+
+<!-- Put site-specific property overrides in this file. -->
+
+<configuration>
+
+    <property>
+        <name>yarn.resourcemanager.ha.enabled</name>
+        <value>true</value>
+    </property>
+    <property>
+        <name>yarn.resourcemanager.cluster-id</name>
+        <value>yarn-cluster</value>
+    </property>
+    <property>
+        <name>yarn.resourcemanager.ha.rm-ids</name>
+        <value>rm1,rm2</value>
+    </property>
+    <property>
+        <name>yarn.resourcemanager.ha.automatic-failover.enabled</name>
+        <value>true</value>
+    </property>
+    <!-- 使嵌入式自动故障转移。HA环境启动，与 ZKRMStateStore 配合 处理fencing -->
+    <property>
+        <name>yarn.resourcemanager.ha.automatic-failover.embedded</name>
+        <value>true</value>
+    </property>
+    <property>
+        <name>yarn.resourcemanager.connect.retry-interval.ms</name>
+        <value>2000</value>
+    </property>
+
+    <!-- Client访问RM的RPC地址 (applications manager interface) -->
+    <property>
+        <name>yarn.resourcemanager.address.rm1</name>
+        <value>bigtest-cmpt-129-19:8032</value>
+    </property>
+    <property>
+        <name>yarn.resourcemanager.address.rm2</name>
+        <value>bigtest-cmpt-129-20:8032</value>
+    </property>
+    <!-- AM访问RM的RPC地址(scheduler interface) -->
+    <property>
+        <name>yarn.resourcemanager.scheduler.address.rm1</name>
+        <value>bigtest-cmpt-129-19:8030</value>
+    </property>
+    <property>
+        <name>yarn.resourcemanager.scheduler.address.rm2</name>
+        <value>bigtest-cmpt-129-20:8030</value>
+    </property>
+    <!-- RM admin interface -->
+    <property>
+        <name>yarn.resourcemanager.admin.address.rm1</name>
+        <value>bigtest-cmpt-129-19:8033</value>
+    </property>
+    <property>
+        <name>yarn.resourcemanager.admin.address.rm2</name>
+        <value>bigtest-cmpt-129-20:8033</value>
+    </property>
+    <!--NM访问RM的RPC端口 -->
+    <property>
+        <name>yarn.resourcemanager.resource-tracker.address.rm1</name>
+        <value>bigtest-cmpt-129-19:8031</value>
+    </property>
+    <property>
+        <name>yarn.resourcemanager.resource-tracker.address.rm2</name>
+        <value>bigtest-cmpt-129-20:8031</value>
+    </property>
+    <!-- yarn.resourcemanager.hostname -->
+    <property>
+        <name>yarn.resourcemanager.hostname.rm1</name>
+        <value>bigtest-cmpt-129-19</value>
+    </property>
+    <property>
+        <name>yarn.resourcemanager.hostname.rm2</name>
+        <value>bigtest-cmpt-129-20</value>
+    </property>
+    <!-- RM web application 地址 -->
+    <property>
+        <name>yarn.resourcemanager.webapp.address.rm1</name>
+        <value>bigtest-cmpt-129-19:8088</value>
+    </property>
+    <property>
+        <name>yarn.resourcemanager.webapp.address.rm2</name>
+        <value>bigtest-cmpt-129-20:8088</value>
+    </property>
+
+    <property>
+        <name>yarn.resourcemanager.max-completed-applications</name>
+        <value>4000</value>
+    </property>
+
+    <property>
+        <name>yarn.resourcemanager.recovery.enabled</name>
+        <value>true</value>
+    </property>
+    <property>
+        <name>yarn.resourcemanager.store.class</name>
+        <value>org.apache.hadoop.yarn.server.resourcemanager.recovery.ZKRMStateStore</value>
+    </property>
+    <property>
+        <name>yarn.resourcemanager.zk-address</name>
+        <value>bigtest-cmpt-129-18:2181,bigtest-cmpt-129-19:2181,bigtest-cmpt-129-20:2181</value>
+    </property>
+    <property>
+        <name>yarn.resourcemanager.zk.state-store.address</name>
+        <value>bigtest-cmpt-129-18:2181,bigtest-cmpt-129-19:2181,bigtest-cmpt-129-20:2181</value>
+    </property>
+
+    <property>
+        <name>yarn.resourcemanager.scheduler.class</name>
+        <value>org.apache.hadoop.yarn.server.resourcemanager.scheduler.fair.FairScheduler</value>
+    </property>
+
+
+    <property>
+        <name>yarn.nodemanager.aux-services</name>
+        <value>mapreduce_shuffle,spark_shuffle</value>
+    </property>
+    <property>
+        <name>yarn.nodemanager.aux-services.spark_shuffle.class</name>
+        <value>org.apache.spark.network.yarn.YarnShuffleService</value>
+    </property>
+    <property>
+        <description>default: ${hadoop.tmp.dir}/nm-local-dir</description>
+        <name>yarn.nodemanager.local-dirs</name>
+        <value>/data1/yarn/nm-local-dir,/data2/yarn/nm-local-dir,/data3/yarn/nm-local-dir,/data4/yarn/nm-local-dir,/data5/yarn/nm-local-dir,/data6/yarn/nm-local-dir,/data7/yarn/nm-local-dir,/data8/yarn/nm-local-dir,/data9/yarn/nm-local-dir,/data10/yarn/nm-local-dir,/data11/yarn/nm-local-dir,/data12/yarn/nm-local-dir</value>
+    </property>
+    <property>
+        <description>default: ${yarn.log.dir}/userlogs</description>
+        <name>yarn.nodemanager.log-dirs</name>
+        <value>/data/logs/hadoop-yarn</value>
+    </property>
+
+    <property>
+        <description>1T</description>
+        <name>yarn.nodemanager.localizer.cache.target-size-mb</name>
+        <value>1048576</value>
+    </property>
+    <property>
+        <name>yarn.nodemanager.localizer.cache.cleanup.interval-ms</name>
+        <value>1800000</value>
+    </property>
+
+    <property>
+        <name>yarn.nodemanager.resource.memory-mb</name>
+        <value>143360</value>
+        <description>140GB</description>
+    </property>
+    <property>
+        <name>yarn.nodemanager.resource.cpu-vcores</name>
+        <value>30</value>
+        <description>total core 40</description>
+    </property>
+
+    <property>
+        <name>yarn.scheduler.minimum-allocation-mb</name>
+        <value>1024</value>
+    </property>
+    <property>
+        <name>yarn.scheduler.maximum-allocation-mb</name>
+        <value>16384</value>
+    </property>
+    <property>
+        <name>yarn.scheduler.minimum-allocation-vcores</name>
+        <value>1</value>
+    </property>
+    <property>
+        <name>yarn.scheduler.maximum-allocation-vcores</name>
+        <value>8</value>
+    </property>
+
+    <property>
+        <name>yarn.nodemanager.vmem-check-enabled</name>
+        <value>false</value>
+    </property>
+
+    <property>
+        <name>yarn.scheduler.fair.allocation.file</name>
+        <value>${yarn.home.dir}/etc/hadoop/fair-scheduler.xml</value>
+    </property>
+    <property>
+        <name>yarn.scheduler.fair.preemption</name>
+        <value>true</value>
+    </property>
+    <property>
+        <name>yarn.scheduler.fair.user-as-default-queue</name>
+        <value>false</value>
+    </property>
+    <property>
+        <name>yarn.scheduler.fair.allow-undeclared-pools</name>
+        <value>false</value>
+    </property>
+
+    <property>
+        <name>yarn.log-aggregation-enable</name>
+        <value>true</value>
+    </property>
+    <property>
+        <name>yarn.log-aggregation.retain-seconds</name>
+        <value>259200</value>
+    </property>
+    <property>
+        <name>yarn.log-aggregation.retain-check-interval-seconds</name>
+        <value>25920</value>
+    </property>
+    <property>
+        <name>yarn.log.server.url</name>
+        <value>http://bigtest-cmpt-129-19:19888/jobhistory/logs</value>
+    </property>
+
+    <property>
+        <name>yarn.timeline-service.hostname</name>
+        <value>bigtest-cmpt-129-20</value>
+    </property>
+    <property>
+        <description>Address for the Timeline server to start the RPC server.</description>
+        <name>yarn.timeline-service.address</name>
+        <value>${yarn.timeline-service.hostname}:10200</value>
+    </property>
+
+    <property>
+        <description>The http address of the Timeline service web application.</description>
+        <name>yarn.timeline-service.webapp.address</name>
+        <value>${yarn.timeline-service.hostname}:8188</value>
+    </property>
+
+    <property>
+        <description>The https address of the Timeline service web application.</description>
+        <name>yarn.timeline-service.webapp.https.address</name>
+        <value>${yarn.timeline-service.hostname}:8190</value>
+    </property>
+
+    <property>
+        <description>Handler thread count to serve the client RPC requests.</description>
+        <name>yarn.timeline-service.handler-thread-count</name>
+        <value>10</value>
+    </property>
+
+    <property>
+        <description>Enables cross-origin support (CORS) for web services where
+            cross-origin web response headers are needed. For example, javascript making
+            a web services request to the timeline server.
+        </description>
+        <name>yarn.timeline-service.http-cross-origin.enabled</name>
+        <value>true</value>
+    </property>
+
+    <property>
+        <description>Comma separated list of origins that are allowed for web
+            services needing cross-origin (CORS) support. Wildcards (*) and patterns
+            allowed
+        </description>
+        <name>yarn.timeline-service.http-cross-origin.allowed-origins</name>
+        <value>*</value>
+    </property>
+
+    <property>
+        <description>Comma separated list of methods that are allowed for web
+            services needing cross-origin (CORS) support.
+        </description>
+        <name>yarn.timeline-service.http-cross-origin.allowed-methods</name>
+        <value>GET,POST,HEAD</value>
+    </property>
+
+    <property>
+        <description>Comma separated list of headers that are allowed for web
+            services needing cross-origin (CORS) support.
+        </description>
+        <name>yarn.timeline-service.http-cross-origin.allowed-headers</name>
+        <value>X-Requested-With,Content-Type,Accept,Origin</value>
+    </property>
+
+    <property>
+        <description>The number of seconds a pre-flighted request can be cached
+            for web services needing cross-origin (CORS) support.
+        </description>
+        <name>yarn.timeline-service.http-cross-origin.max-age</name>
+        <value>1800</value>
+    </property>
+    <property>
+        <description>Indicate to ResourceManager as well as clients whether
+            history-service is enabled or not. If enabled, ResourceManager starts
+            recording historical data that Timelien service can consume. Similarly,
+            clients can redirect to the history service when applications
+            finish if this is enabled.
+        </description>
+        <name>yarn.timeline-service.generic-application-history.enabled</name>
+        <value>true</value>
+    </property>
+
+    <property>
+        <description>Store class name for history store, defaulting to file system
+            store
+        </description>
+        <name>yarn.timeline-service.generic-application-history.store-class</name>
+        <value>org.apache.hadoop.yarn.server.applicationhistoryservice.FileSystemApplicationHistoryStore</value>
+    </property>
+    <property>
+        <description>Indicate to clients whether Timeline service is enabled or not.
+            If enabled, the TimelineClient library used by end-users will post entities
+            and events to the Timeline server.
+        </description>
+        <name>yarn.timeline-service.enabled</name>
+        <value>true</value>
+    </property>
+
+    <property>
+        <description>Store class name for timeline store.</description>
+        <name>yarn.timeline-service.store-class</name>
+        <value>org.apache.hadoop.yarn.server.timeline.LeveldbTimelineStore</value>
+    </property>
+
+    <property>
+        <name>yarn.timeline-service.leveldb-timeline-store.path</name>
+        <value>/data/yarn/timeline</value>
+    </property>
+
+    <property>
+        <description>Enable age off of timeline store data.</description>
+        <name>yarn.timeline-service.ttl-enable</name>
+        <value>true</value>
+    </property>
+
+    <property>
+        <description>Time to live for timeline store data in milliseconds.</description>
+        <name>yarn.timeline-service.ttl-ms</name>
+        <value>6048000000</value>
+    </property>
+
+    <!-- 利用cgroup来限制yarn容器对单节点cpu的使用量-->
+    <!--<property>
+        <name>yarn.nodemanager.container-executor.class</name>
+        <value>org.apache.hadoop.yarn.server.nodemanager.LinuxContainerExecutor</value>
+    </property>
+    <property>
+        <name>yarn.nodemanager.linux-container-executor.resources-handler.class</name>
+        <value>org.apache.hadoop.yarn.server.nodemanager.util.CgroupsLCEResourcesHandler</value>
+    </property>
+    <property>
+        <description>yarn使用的cgroup组,默认为/hadoop-yarn</description>
+        <name>yarn.nodemanager.linux-container-executor.cgroups.hierarchy</name>
+        <value>/hadoop-yarn</value>
+    </property>
+    <property>
+        <description>是否自动挂载cgroup</description>
+        <name>yarn.nodemanager.linux-container-executor.cgroups.mount</name>
+        <value>true</value>
+    </property>
+    <property>
+        <description>cgroup挂载目录, /sys/fs/cgroup 或者是 /cgroup,目录和系统有关</description>
+        <name>yarn.nodemanager.linux-container-executor.cgroups.mount-path</name>
+        <value>/sys/fs/cgroup</value>
+    </property>
+    <property>
+        <name>yarn.nodemanager.linux-container-executor.group</name>
+        <value>hadoop</value>
+    </property>
+    <property>
+        <description>配置nodemanager使用多少物理cpu资源,比如24核服务器配置90的话,最近使用21.6核</description>
+        <name>yarn.nodemanager.resource.percentage-physical-cpu-limit</name>
+        <value>10</value>
+    </property>
+    <property>
+        <description>是控制是否严格限制cpu,即按任务申请的core限制,还是非严格限制,即按core的比率限制</description>
+        <name>yarn.nodemanager.linux-container-executor.cgroups.strict-resource-usage</name>
+        <value>true</value>
+    </property>
+    <property>
+        <description>非安全模式将会以这里设置的用户运行container,比如配置hadoop用户则以hadoop运行container</description>
+        <name>yarn.nodemanager.linux-container-executor.nonsecure-mode.local-user</name>
+        <value>yarn</value>
+    </property>-->
+
+
+
+</configuration>

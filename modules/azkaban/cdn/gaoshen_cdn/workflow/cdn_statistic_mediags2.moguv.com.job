@@ -1,5 +1,5 @@
 type=command
-dependencies=cdn_download_mediags2.moguv.com
+#dependencies=cdn_download_mediags2.moguv.com
 host=mediags2.moguv.com
 command=sh ${working.dir}/../bin/cdn_statistic.sh --host=${host} --logTime=${startDate} --offset=1 --jdbcUrl=${jdbcUrl} --jdbcUser=${jdbcUser} --jdbcPassword=${jdbcPassword}
 retries=${statisticRetries}
