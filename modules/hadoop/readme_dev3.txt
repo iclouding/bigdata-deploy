@@ -1,5 +1,33 @@
 研发环境安装hadoop2.9.0，用来测试cgroup的可用性
 
+
+--------------linux cgroup--------------：
+1.安装cgroup
+cd /data/tools/ansible/modules/hadoop/playbook
+ansible all -i dev3.host -mshell -a"yum install -y libcgroup-tools"
+
+2.启动cgroup
+ansible all -i dev3.host -mshell -a"systemctl start cgconfig.service"
+
+3.查看cgroup服务是否启动成功
+ansible all -i dev3.host -mshell -a"systemctl status cgconfig.service"
+
+4.创建hadoop-yarn命名的cgroup
+ansible all -i dev3.host -mshell -a"cd /sys/fs/cgroup/cpu;mkdir -p hadoop-yarn"
+
+
+ansible all -i dev3.host -mshell -a"ls -al /sys/fs/cgroup/cpu"
+
+5.改变权限
+ansible all -i dev3.host -mshell -a"cd /sys/fs/cgroup/cpu,cpuacct;chmod 777 -R hadoop-yarn"
+ansible all -i dev3.host -mshell -a"cd /opt;chown root:hadoop hadoop"
+ansible all -i dev3.host -mshell -a"cd /opt/hadoop;chown root:hadoop etc"
+ansible all -i dev3.host -mshell -a"cd /opt/hadoop/etc;chown root:hadoop hadoop"
+ansible all -i dev3.host -mshell -a"cd /opt/hadoop/bin;chown root:hadoop container-executor"
+ansible all -i dev3.host -mshell -a"cd /opt/hadoop;chmod 6050 bin/container-executor"
+ansible all -i dev3.host -mshell -a"cd /sys/fs/cgroup/;chmod 777 cpu,cpuacct"
+
+
 --------------软件准备--------------：
 上传到ftp
 ncftpput -ubigdata -p'whaley!90365' 10.255.130.6 bigdata/ /home/spark/tmp/hadoop-2.9.0.tar.gz
@@ -27,6 +55,7 @@ ansible-playbook -i dev3.host install_yarn-spark-shuffle.yml -t install
 
 --配置分发
 ansible-playbook -i dev3.host install_hadoop-bin_dev3.yml -t config
+ansible-playbook -i dev3.host install_hadoop-bin_dev3.yml -t config2
 
 --启动journalnode
 ansible hadoop-cmd-node -i dev3.host -mshell -a"su - hdfs -c  'cd /opt/hadoop/sbin; ./start-journalnode.sh'"
