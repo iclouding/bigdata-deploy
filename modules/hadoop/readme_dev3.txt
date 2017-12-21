@@ -20,13 +20,13 @@ modules/zookeeper/readme_dev3.txt
 
 --------------安装hadoop--------------:
 --安装包分发
-ansible-playbook -i dev3.host install_hadoop-bin.yml -t install
+ansible-playbook -i dev3.host install_hadoop-bin_dev3.yml -t install
 
 --发布spark shuffle 包
 ansible-playbook -i dev3.host install_yarn-spark-shuffle.yml -t install
 
 --配置分发
-ansible-playbook -i dev3.host install_hadoop-bin.yml -t config
+ansible-playbook -i dev3.host install_hadoop-bin_dev3.yml -t config
 
 --启动journalnode
 ansible hadoop-cmd-node -i dev3.host -mshell -a"su - hdfs -c  'cd /opt/hadoop/sbin; ./start-journalnode.sh'"

@@ -3,7 +3,7 @@
   tasks:
     - name: make dir
       file: path={{ item.name }} state=directory owner={{ item.user }} group={{ item.groups }}
-      tags: install_dir
+      tags: install
       with_items:
         - { name: '/data/hdfs/name', user: 'hdfs', groups: 'hadoop' }
         - { name: '/data/logs/hadoop-hdfs', user: 'hdfs', groups: 'hadoop' }
@@ -56,9 +56,11 @@
 - hosts: all
   tasks:
 
-    - name: copy hadoop tar file to remote host 
-      copy: src=/data/tools/ansible/modules/hadoop/package/hadoop-2.9.0.tar.gz dest=/tmp/hadoop-2.9.0.tar.gz owner=hadoop group=hadoop mode=0771
+    - name: download hadoop tar file
+      shell: ncftpget -z -ubigdata -p'whaley!90365' 10.255.130.6 /tmp bigdata/{{ item }}
       tags: install
+      with_items:
+        - hadoop-2.9.0.tar.gz
 
     - name: decompress hadoop-2.9.0.tar.gz
       shell: cd /tmp && tar xvf  hadoop-2.9.0.tar.gz -C /app && chown -R hadoop:hadoop /app/hadoop-2.9.0
@@ -77,7 +79,7 @@
         creates: /app/hadoop-2.9.0/.install
 
     - name: copy hadoop config file to remote host
-      copy: src=/data/tools/ansible/modules/hadoop/config_dev/etc/hadoop/{{ item.name }} dest={{ item.dest }} owner=hadoop group=hadoop mode=755
+      copy: src=/data/tools/ansible/modules/hadoop/config_dev3/etc/hadoop/{{ item.name }} dest={{ item.dest }} owner=hadoop group=hadoop mode=755
       tags: config
       with_items:
         - {name: 'capacity-scheduler.xml', dest: '/opt/hadoop/etc/hadoop'}
