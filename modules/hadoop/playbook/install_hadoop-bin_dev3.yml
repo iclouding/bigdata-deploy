@@ -99,12 +99,4 @@
         - {name: 'slaves-journalnode', dest: '/opt/hadoop/etc/hadoop'}
         - {name: 'yarn-env.sh', dest: '/opt/hadoop/etc/hadoop'}
         - {name: 'yarn-site.xml', dest: '/opt/hadoop/etc/hadoop'}
-
-- hosts: all
-  tasks:
-
-    - name: copy hadoop config file to remote host
-      copy: src=/data/tools/ansible/modules/hadoop/config_test_cgroup/etc/hadoop/{{ item.name }} dest={{ item.dest }} owner={{ item.owner }} group={{ item.group }} mode={{ item.mode }}
-      tags: config2
-      with_items:
-        - {name: 'container-executor.cfg', dest: '/opt/hadoop/etc/hadoop',owner: 'root',  group: 'hadoop',mode: '755'}
+        - {name: 'excludes', dest: '/opt/hadoop/etc/hadoop'}

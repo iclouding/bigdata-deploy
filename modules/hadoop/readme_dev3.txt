@@ -19,13 +19,20 @@ ansible all -i dev3.host -mshell -a"cd /sys/fs/cgroup/cpu;mkdir -p hadoop-yarn"
 ansible all -i dev3.host -mshell -a"ls -al /sys/fs/cgroup/cpu"
 
 5.改变权限
-ansible all -i dev3.host -mshell -a"cd /sys/fs/cgroup/cpu,cpuacct;chmod 777 -R hadoop-yarn"
-ansible all -i dev3.host -mshell -a"cd /opt;chown root:hadoop hadoop"
-ansible all -i dev3.host -mshell -a"cd /opt/hadoop;chown root:hadoop etc"
-ansible all -i dev3.host -mshell -a"cd /opt/hadoop/etc;chown root:hadoop hadoop"
-ansible all -i dev3.host -mshell -a"cd /opt/hadoop/bin;chown root:hadoop container-executor"
-ansible all -i dev3.host -mshell -a"cd /opt/hadoop;chmod 6050 bin/container-executor"
-ansible all -i dev3.host -mshell -a"cd /sys/fs/cgroup/;chmod 777 cpu,cpuacct"
+系统还要求etc/hadoop/container-executor.cfg 的所有父目录(一直到/ 目录) owner 都为 root
+  ansible all -i dev3.host -mshell -a"cd /opt;chown root:hadoop hadoop"
+  ansible all -i dev3.host -mshell -a"cd /opt/hadoop;chown root:hadoop etc"
+  ansible all -i dev3.host -mshell -a"cd /opt/hadoop/etc;chown root:hadoop hadoop"
+  ansible all -i dev3.host -mshell -a"cd /opt/hadoop/etc/hadoop;chmod 777 container-executor.cfg"
+
+container-executor权限有特殊要求
+  ansible all -i dev3.host -mshell -a"cd /opt/hadoop/bin;chown root:hadoop container-executor"
+  ansible all -i dev3.host -mshell -a"cd /opt/hadoop;chmod 6050 bin/container-executor"
+
+cgroup权限的更改
+  ansible all -i dev3.host -mshell -a"cd /sys/fs/cgroup/;chmod 777 cpu,cpuacct"
+  ansible all -i dev3.host -mshell -a"cd /sys/fs/cgroup/cpu,cpuacct;chmod 777 -R hadoop-yarn"
+
 
 
 --------------软件准备--------------：
@@ -55,10 +62,9 @@ ansible-playbook -i dev3.host install_yarn-spark-shuffle.yml -t install
 
 --配置分发
 ansible-playbook -i dev3.host install_hadoop-bin_dev3.yml -t config
-ansible-playbook -i dev3.host install_hadoop-bin_dev3.yml -t config2
 
 --启动journalnode
-ansible hadoop-cmd-node -i dev3.host -mshell -a"su - hdfs -c  'cd /opt/hadoop/sbin; ./start-journalnode.sh'"
+ansible journalnode -i dev3.host -mshell -a"su - hdfs -c  'cd /opt/hadoop/;sbin/hadoop-daemon.sh start journalnode'"
 
 --格式化hdfs文件系统目录(一定要先启动journalnode)
 #以下脚本只可一次执行成功，重复执行需手工到主机上执行，因为重复执行会要多次确认，脚本中的一次echo Y会导致脚本一直等待
