@@ -1,0 +1,99 @@
+---
+- hosts: all
+  tasks:
+    - name: make dir
+      file: path={{ item.name }} state=directory owner={{ item.user }} group={{ item.groups }}
+      tags: install_dir
+      with_items:
+        - { name: '/data/hdfs/name', user: 'hdfs', groups: 'hadoop' }
+        - { name: '/data/logs/hadoop-hdfs', user: 'hdfs', groups: 'hadoop' }
+        - { name: '/data/hdfs/journal', user: 'hdfs', groups: 'hadoop' }
+        - { name: '/data/logs/hadoop-yarn', user: 'yarn', groups: 'hadoop' }
+        - { name: '/data/yarn/timeline', user: 'yarn', groups: 'hadoop' }
+        - { name: '/data1/yarn/nm-local-dir', user: 'yarn', groups: 'hadoop' }
+        - { name: '/data1/yarn/nm-local-dir', user: 'yarn', groups: 'hadoop' }
+        - { name: '/data2/yarn/nm-local-dir', user: 'yarn', groups: 'hadoop' }
+        - { name: '/data3/yarn/nm-local-dir', user: 'yarn', groups: 'hadoop' }
+        - { name: '/data4/yarn/nm-local-dir', user: 'yarn', groups: 'hadoop' }
+        - { name: '/data5/yarn/nm-local-dir', user: 'yarn', groups: 'hadoop' }
+        - { name: '/data6/yarn/nm-local-dir', user: 'yarn', groups: 'hadoop' }
+        - { name: '/data7/yarn/nm-local-dir', user: 'yarn', groups: 'hadoop' }
+        - { name: '/data8/yarn/nm-local-dir', user: 'yarn', groups: 'hadoop' }
+        - { name: '/data9/yarn/nm-local-dir', user: 'yarn', groups: 'hadoop' }
+        - { name: '/data10/yarn/nm-local-dir', user: 'yarn', groups: 'hadoop' }
+        - { name: '/data11/yarn/nm-local-dir', user: 'yarn', groups: 'hadoop' }
+        - { name: '/data12/yarn/nm-local-dir', user: 'yarn', groups: 'hadoop' }
+        - { name: '/data1/yarn/nm-local-dir', user: 'yarn', groups: 'hadoop' }
+        - { name: '/data1/yarn/mr-local-dir', user: 'yarn', groups: 'hadoop' }
+        - { name: '/data2/yarn/mr-local-dir', user: 'yarn', groups: 'hadoop' }
+        - { name: '/data3/yarn/mr-local-dir', user: 'yarn', groups: 'hadoop' }
+        - { name: '/data4/yarn/mr-local-dir', user: 'yarn', groups: 'hadoop' }
+        - { name: '/data5/yarn/mr-local-dir', user: 'yarn', groups: 'hadoop' }
+        - { name: '/data6/yarn/mr-local-dir', user: 'yarn', groups: 'hadoop' }
+        - { name: '/data7/yarn/mr-local-dir', user: 'yarn', groups: 'hadoop' }
+        - { name: '/data8/yarn/mr-local-dir', user: 'yarn', groups: 'hadoop' }
+        - { name: '/data9/yarn/mr-local-dir', user: 'yarn', groups: 'hadoop' }
+        - { name: '/data10/yarn/mr-local-dir', user: 'yarn', groups: 'hadoop' }
+        - { name: '/data11/yarn/mr-local-dir', user: 'yarn', groups: 'hadoop' }
+        - { name: '/data12/yarn/mr-local-dir', user: 'yarn', groups: 'hadoop' }
+        - { name: '/data/hdfs/name', user: 'hdfs', groups: 'hadoop' }
+        - { name: '/data/hdfs/journal', user: 'hdfs', groups: 'hadoop' }
+        - { name: '/data1/hdfs/data', user: 'hdfs', groups: 'hadoop' }
+        - { name: '/data2/hdfs/data', user: 'hdfs', groups: 'hadoop' }
+        - { name: '/data3/hdfs/data', user: 'hdfs', groups: 'hadoop' }
+        - { name: '/data4/hdfs/data', user: 'hdfs', groups: 'hadoop' }
+        - { name: '/data5/hdfs/data', user: 'hdfs', groups: 'hadoop' }
+        - { name: '/data6/hdfs/data', user: 'hdfs', groups: 'hadoop' }
+        - { name: '/data7/hdfs/data', user: 'hdfs', groups: 'hadoop' }
+        - { name: '/data8/hdfs/data', user: 'hdfs', groups: 'hadoop' }
+        - { name: '/data9/hdfs/data', user: 'hdfs', groups: 'hadoop' }
+        - { name: '/data10/hdfs/data', user: 'hdfs', groups: 'hadoop' }
+        - { name: '/data11/hdfs/data', user: 'hdfs', groups: 'hadoop' }
+        - { name: '/data12/hdfs/data', user: 'hdfs', groups: 'hadoop' }
+
+
+
+- hosts: all
+  tasks:
+
+    - name: copy hadoop tar file to remote host 
+      copy: src=/data/tools/ansible/modules/hadoop/package/hadoop-2.9.0.tar.gz dest=/tmp/hadoop-2.9.0.tar.gz owner=hadoop group=hadoop mode=0771
+      tags: install
+
+    - name: decompress hadoop-2.9.0.tar.gz
+      shell: cd /tmp && tar xvf  hadoop-2.9.0.tar.gz -C /app && chown -R hadoop:hadoop /app/hadoop-2.9.0
+      tags: install
+      args:
+        creates: /app/hadoop-2.9.0/.install
+
+    - name: create soft link
+      file: src=/app/hadoop-2.9.0 dest=/opt/hadoop state=link owner=hadoop group=hadoop
+      tags: install
+
+    - name: touch install file
+      shell: touch /app/hadoop-2.9.0/.install
+      tags: install
+      args:
+        creates: /app/hadoop-2.9.0/.install
+
+    - name: copy hadoop config file to remote host
+      copy: src=/data/tools/ansible/modules/hadoop/config_dev/etc/hadoop/{{ item.name }} dest={{ item.dest }} owner=hadoop group=hadoop mode=755
+      tags: config
+      with_items:
+        - {name: 'capacity-scheduler.xml', dest: '/opt/hadoop/etc/hadoop'}
+        - {name: 'fair-scheduler.xml', dest: '/opt/hadoop/etc/hadoop'}
+        - {name: 'configuration.xsl', dest: '/opt/hadoop/etc/hadoop'}
+        - {name: 'container-executor.cfg', dest: '/opt/hadoop/etc/hadoop'}
+        - {name: 'core-site.xml', dest: '/opt/hadoop/etc/hadoop'}
+        - {name: 'getRack.py', dest: '/opt/hadoop/etc/hadoop'}
+        - {name: 'hadoop-env.sh', dest: '/opt/hadoop/etc/hadoop'}
+        - {name: 'hadoop-metrics.properties', dest: '/opt/hadoop/etc/hadoop'}
+        - {name: 'hadoop-metrics2.properties', dest: '/opt/hadoop/etc/hadoop'}
+        - {name: 'hdfs-site.xml', dest: '/opt/hadoop/etc/hadoop'}
+        - {name: 'log4j.properties', dest: '/opt/hadoop/etc/hadoop'}
+        - {name: 'mapred-env.sh', dest: '/opt/hadoop/etc/hadoop'}
+        - {name: 'mapred-site.xml', dest: '/opt/hadoop/etc/hadoop'}
+        - {name: 'slaves', dest: '/opt/hadoop/etc/hadoop'}
+        - {name: 'slaves-journalnode', dest: '/opt/hadoop/etc/hadoop'}
+        - {name: 'yarn-env.sh', dest: '/opt/hadoop/etc/hadoop'}
+        - {name: 'yarn-site.xml', dest: '/opt/hadoop/etc/hadoop'}
