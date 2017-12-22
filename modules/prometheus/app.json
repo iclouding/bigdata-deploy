@@ -1,0 +1,83 @@
+[
+  {
+    "targets": [
+      "10.255.130.1:9100"
+    ],
+    "labels": {
+      "hostname": "bigdata-appsvr-130-1",
+      "group": "app"
+    }
+  },
+  {
+    "targets": [
+      "10.255.130.2:9100"
+    ],
+    "labels": {
+      "hostname": "bigdata-appsvr-130-2",
+      "group": "app"
+    }
+  },
+  {
+    "targets": [
+      "10.255.130.3:9100"
+    ],
+    "labels": {
+      "hostname": "bigdata-appsvr-130-3",
+      "group": "app"
+    }
+  },
+  {
+    "targets": [
+      "10.255.130.4:9100"
+    ],
+    "labels": {
+      "hostname": "bigdata-appsvr-130-4",
+      "group": "app"
+    }
+  },
+  {
+    "targets": [
+      "10.255.130.5:9100"
+    ],
+    "labels": {
+      "hostname": "bigdata-appsvr-130-5",
+      "group": "app"
+    }
+  },
+  {
+    "targets": [
+      "10.255.130.6:9100"
+    ],
+    "labels": {
+      "hostname": "bigdata-appsvr-130-6",
+      "group": "app"
+    }
+  },
+  {
+    "targets": [
+      "10.255.130.7:9100"
+    ],
+    "labels": {
+      "hostname": "bigdata-appsvr-130-7",
+      "group": "app"
+    }
+  },
+  {
+    "targets": [
+      "10.255.130.8:9100"
+    ],
+    "labels": {
+      "hostname": "bigdata-appsvr-130-8",
+      "group": "app"
+    }
+  },
+  {
+    "targets": [
+      "10.255.130.9:9100"
+    ],
+    "labels": {
+      "hostname": "bigdata-appsvr-130-9",
+      "group": "app"
+    }
+  }
+]
