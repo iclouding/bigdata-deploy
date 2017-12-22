@@ -23,8 +23,10 @@ ansible all -i dev3.host -mshell -a"ls -al /sys/fs/cgroup/cpu"
   ansible all -i dev3.host -mshell -a"cd /opt;chown root:hadoop hadoop"
   ansible all -i dev3.host -mshell -a"cd /opt/hadoop;chown root:hadoop etc"
   ansible all -i dev3.host -mshell -a"cd /opt/hadoop/etc;chown root:hadoop hadoop"
-  ansible all -i dev3.host -mshell -a"cd /opt/hadoop/etc/hadoop;chown root:hadoop container-executor.cfg"
-  ansible all -i dev3.host -mshell -a"cd /opt/hadoop/etc/hadoop;chmod 755 container-executor.cfg"
+
+  #move to install_hadoop-bin_dev3.yml config2
+  #ansible all -i dev3.host -mshell -a"cd /opt/hadoop/etc/hadoop;chown root:hadoop container-executor.cfg"
+  #ansible all -i dev3.host -mshell -a"cd /opt/hadoop/etc/hadoop;chmod 755 container-executor.cfg"
 
 container-executor权限有特殊要求
   ansible all -i dev3.host -mshell -a"cd /opt/hadoop/bin;chown root:hadoop container-executor"
