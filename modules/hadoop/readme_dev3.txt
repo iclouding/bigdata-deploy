@@ -53,6 +53,12 @@ bigdev-cmpt-15 [nodeManager]
 --------------安装zookeeper--------------:
 modules/zookeeper/readme_dev3.txt
 
+--------------免登录--------------:
+ansible-playbook -i dev3.host install_hadoop-bin_dev3.yml -t install
+
+
+
+
 --------------安装hadoop--------------:
 --安装包分发
 ansible-playbook -i dev3.host install_hadoop-bin_dev3.yml -t install
@@ -66,13 +72,24 @@ ansible-playbook -i dev3.host install_hadoop-bin_dev3.yml -t config
 --启动journalnode
 ansible journalnode -i dev3.host -mshell -a"su - hdfs -c  'cd /opt/hadoop/;sbin/hadoop-daemon.sh start journalnode'"
 
+--tmp operation:
+ansible journalnode -i dev3.host -mshell -a"su - hdfs -c  'rm -rf /data/hdfs/journal/hans'"
+ansible namenode    -i dev3.host -mshell -a"su - hdfs -c  'rm -rf /data/hdfs/name/*'"
+ansible journalnode -i dev3.host -mshell -a"su - hdfs -c  'cd /opt/hadoop/;sbin/hadoop-daemon.sh stop journalnode'"
+
 --格式化hdfs文件系统目录(一定要先启动journalnode)
-#以下脚本只可一次执行成功，重复执行需手工到主机上执行，因为重复执行会要多次确认，脚本中的一次echo Y会导致脚本一直等待
-#如果导致多次执行，很可能需要手工修正journalnode中的namespace和clusterID
-ansible namenode -i dev3.host -mshell -a"su - hdfs -c  'echo Y | hadoop namenode -format'"
+hadoop namenode -format  [在namenode active节点执行]
+
+hdfs  user
+/opt/hadoop/sbin/hadoop-daemon.sh start namenode    [namenode active role]
+hdfs namenode -bootstrapStandby  [namenode standby role,for sync info from active role]
+/opt/hadoop/sbin/hadoop-daemon.sh start namenode  [namenode standby role]
+hdfs zkfc -formatZK [namenode active role]
+/opt/hadoop/sbin/start-dfs.sh [namenode active role]
 
 --初始化zkfc根节点
-ansible namenode -i dev3.host -mshell -a"su - hdfs -c  'echo Y | hdfs zkfc -formatZK'"
+hdfs zkfc -formatZK
+#ansible namenode -i dev3.host -mshell -a"su - hdfs -c  'echo Y | hdfs zkfc -formatZK'"
 
 --启动zkfc
 ansible namenode -i dev3.host -mshell -a"su - hdfs -c  'cd /opt/hadoop/sbin; ./hadoop-daemon.sh start zkfc'"
