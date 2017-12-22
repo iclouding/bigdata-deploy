@@ -54,7 +54,7 @@ bigdev-cmpt-15 [nodeManager]
 modules/zookeeper/readme_dev3.txt
 
 --------------免登录--------------:
-ansible-playbook -i dev3.host install_hadoop-bin_dev3.yml -t install
+ansible-playbook -i dev3.host install_hadoop-bin_dev3.yml -t freessh
 
 
 
@@ -94,27 +94,29 @@ hdfs zkfc -formatZK
 --启动zkfc
 ansible namenode -i dev3.host -mshell -a"su - hdfs -c  'cd /opt/hadoop/sbin; ./hadoop-daemon.sh start zkfc'"
 
---启动hdfs
+--启动hdfs[包含启动datanode,namenode,JournalNode,DFSZKFailoverController]
 ansible hadoop-cmd-node -i dev3.host -mshell -a"su - hdfs -c  'cd /opt/hadoop/sbin; ./start-dfs.sh'"
 
 --启动datanode
-ansible hadoop-cmd-node -i dev3.host -mshell -a"su - hdfs -c  'cd /opt/hadoop/sbin; ./hadoop-daemons.sh start datanode'"
+ansible hadoop-cmd-node -i dev3.host -mshell -a"su - hdfs -c  'cd /opt/hadoop/sbin; ./hadoop-daemon.sh start datanode'"
+
+单台启动
+cd /opt/hadoop/sbin; ./hadoop-daemons.sh start datanode
 
 --初始化hdfs目录
-ansible hadoop-cmd-node -i dev3.host -mshell -a"su - hdfs -c  'hadoop fs -mkdir -p /tmp/logs/spark && hadoop fs -chmod -R 777 /tmp/logs/spark'"
-ansible hadoop-cmd-node -i dev3.host -mshell -a"su - hdfs -c  'hadoop fs -chown -R spark:hadoop /tmp/logs/spark'
+ansible hadoop-cmd-node -i dev3.host -mshell -a"su - hdfs -c 'hadoop fs -mkdir -p /tmp/logs/spark && hadoop fs -chmod -R 777 /tmp/logs/spark'"
+ansible hadoop-cmd-node -i dev3.host -mshell -a"su - hdfs -c 'hadoop fs -chown -R spark:hadoop /tmp/logs/spark'"
 ansible hadoop-cmd-node -i dev3.host -mshell -a"su - hdfs -c 'hadoop fs -setfacl -m group:hadoop:rwx /tmp'"
+ansible hadoop-cmd-node -i dev3.host -mshell -a"su - hdfs -c 'hadoop fs -mkdir -p /user && hadoop fs -chmod -R 777 /user'"
 ansible hadoop-cmd-node -i dev3.host -mshell -a"su - hdfs -c 'hadoop fs -setfacl -m group:hadoop:rwx /user'"
 ansible hadoop-cmd-node -i dev3.host -mshell -a"su - hdfs -c 'hadoop fs -setfacl -m group::r-x /'"
-ansible hadoop-cmd-node -i dev3.host -mshell -a"su - hdfs -c 'hadoop fs -setfacl -m other::r-x /'"
+#ansible hadoop-cmd-node -i dev3.host -mshell -a"su - hdfs -c 'hadoop fs -setfacl -m other::r-x /'"
 
 --启动resourcemanager
-JMX_OPTS="-Dcom.sun.management.jmxremote -Dcom.sun.management.jmxremote.port=7778 -Dcom.sun.management.jmxremote.ssl=false -Dcom.sun.management.jmxremote.authenticate=false"
-ansible resourcemanager -i dev3.host -mshell -a"su - yarn -c  'export JMX_OPTS=$JMX_OPTS ; cd /opt/hadoop/sbin; ./yarn-daemon.sh start resourcemanager'"
+ansible resourcemanager -i dev3.host -mshell -a"su - yarn -c  'cd /opt/hadoop/sbin; ./yarn-daemon.sh start resourcemanager'"
 
 --启动nodemanager
-JMX_OPTS="-Dcom.sun.management.jmxremote -Dcom.sun.management.jmxremote.port=7777 -Dcom.sun.management.jmxremote.ssl=false -Dcom.sun.management.jmxremote.authenticate=false"
-ansible hadoop-cmd-node -i dev3.host -mshell -a"su - yarn -c  'export JMX_OPTS=$JMX_OPTS ; cd /opt/hadoop/sbin; ./yarn-daemons.sh start nodemanager'"
+ansible nodemanager -i dev3.host -mshell -a"su - yarn -c  'cd /opt/hadoop/sbin; ./yarn-daemon.sh start nodemanager'"
 
 --启动historyserver
 ansible jobhistoryserver -i dev3.host -mshell -a"su - yarn -c  'cd /opt/hadoop/sbin; ./mr-jobhistory-daemon.sh start historyserver'"
