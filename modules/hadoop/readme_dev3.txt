@@ -119,6 +119,7 @@ ansible hadoop-cmd-node -i dev3.host -mshell -a"su - hdfs -c 'hadoop fs -setfacl
 ansible resourcemanager -i dev3.host -mshell -a"su - yarn -c  'cd /opt/hadoop/sbin; ./yarn-daemon.sh start resourcemanager'"
 
 --启动nodemanager
+ansible nodemanager -i dev3.host -mshell -a"su - yarn -c  'cd /opt/hadoop/sbin; ./yarn-daemon.sh stop nodemanager'"
 ansible nodemanager -i dev3.host -mshell -a"su - yarn -c  'cd /opt/hadoop/sbin; ./yarn-daemon.sh start nodemanager'"
 
 --启动historyserver
