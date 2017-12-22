@@ -5,7 +5,10 @@ import requests
 import pdb
 import json
 import socket
-
+"""
+本工具用于监控storm状态，部署在管理机每2小时执行一次
+如发现异常，邮件通知相关人
+"""
 send_to = 'peng.tao@whaley.cn,xu.tong@whaley.cn,lian.kai@whaley.cn'
 
 
