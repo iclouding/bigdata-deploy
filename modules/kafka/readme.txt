@@ -42,3 +42,7 @@ ansible all -i kafka.host -mshell -a" sed -i -e '/kafka-server-start/d' /etc/rc.
 
 cd /opt/kafka3;./bin/kafka-server-stop.sh
 cd /opt/kafka3;./bin/kafka-server-start.sh  -daemon ./config/server.properties
+
+
+ansible all -i kafka.host -mshell -a"su - moretv -c 'cd /opt/kafka2/ &&  ./bin/kafka-server-stop.sh '"
+ansible all -i kafka.host -mshell -a"su - moretv -c 'cd /opt/kafka2/ &&  ./bin/kafka-server-start.sh -daemon ./config/server.properties '"

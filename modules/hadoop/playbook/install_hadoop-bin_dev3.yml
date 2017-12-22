@@ -85,7 +85,6 @@
         - {name: 'capacity-scheduler.xml', dest: '/opt/hadoop/etc/hadoop'}
         - {name: 'fair-scheduler.xml', dest: '/opt/hadoop/etc/hadoop'}
         - {name: 'configuration.xsl', dest: '/opt/hadoop/etc/hadoop'}
-        - {name: 'container-executor.cfg', dest: '/opt/hadoop/etc/hadoop'}
         - {name: 'core-site.xml', dest: '/opt/hadoop/etc/hadoop'}
         - {name: 'getRack.py', dest: '/opt/hadoop/etc/hadoop'}
         - {name: 'hadoop-env.sh', dest: '/opt/hadoop/etc/hadoop'}
@@ -101,9 +100,17 @@
         - {name: 'yarn-site.xml', dest: '/opt/hadoop/etc/hadoop'}
         - {name: 'excludes', dest: '/opt/hadoop/etc/hadoop'}
 
+
 - hosts: all
   tasks:
+    - name: container-executor.cfg config and change owner
+      copy: src=/data/tools/ansible/modules/hadoop/config_dev3/etc/hadoop/{{ item.name }} dest={{ item.dest }} owner={{ item.owner }} group={{ item.group }} mode={{ item.mode }}
+      tags: config2
+      with_items:
+        - {name: 'container-executor.cfg', dest: '/opt/hadoop/etc/hadoop',owner: 'root',group: 'hadoop',  mode: '755'}
 
+- hosts: all
+  tasks:
     - name: for freessh
       copy: src=/data/tools/ansible/modules/hadoop/config_dev3/etc/hadoop/{{ item.name }} dest={{ item.dest }} owner={{ item.owner }} group={{ item.group }} mode={{ item.mode }}
       tags: freessh
