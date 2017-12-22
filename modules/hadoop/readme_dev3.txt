@@ -23,7 +23,8 @@ ansible all -i dev3.host -mshell -a"ls -al /sys/fs/cgroup/cpu"
   ansible all -i dev3.host -mshell -a"cd /opt;chown root:hadoop hadoop"
   ansible all -i dev3.host -mshell -a"cd /opt/hadoop;chown root:hadoop etc"
   ansible all -i dev3.host -mshell -a"cd /opt/hadoop/etc;chown root:hadoop hadoop"
-  ansible all -i dev3.host -mshell -a"cd /opt/hadoop/etc/hadoop;chmod 777 container-executor.cfg"
+  ansible all -i dev3.host -mshell -a"cd /opt/hadoop/etc/hadoop;chown root:hadoop container-executor.cfg"
+  ansible all -i dev3.host -mshell -a"cd /opt/hadoop/etc/hadoop;chmod 755 container-executor.cfg"
 
 container-executor权限有特殊要求
   ansible all -i dev3.host -mshell -a"cd /opt/hadoop/bin;chown root:hadoop container-executor"
@@ -122,7 +123,7 @@ ansible nodemanager -i dev3.host -mshell -a"su - yarn -c  'cd /opt/hadoop/sbin; 
 ansible jobhistoryserver -i dev3.host -mshell -a"su - yarn -c  'cd /opt/hadoop/sbin; ./mr-jobhistory-daemon.sh start historyserver'"
 
 --启动timelineserver
-ansible timelineserver -i dev3.host -mshell -a"su - yarn -c  'export jmxPort=7779; cd /opt/hadoop/sbin; ./yarn-daemon.sh start timelineserver'"
+ansible timelineserver -i dev3.host -mshell -a"su - yarn -c  'cd /opt/hadoop/sbin; ./yarn-daemon.sh start timelineserver'"
 
 
 --------------rolling update--------------:
