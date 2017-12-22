@@ -6,6 +6,7 @@ import pdb
 import json
 import socket
 
+
 send_to = 'peng.tao@whaley.cn,xu.tong@whaley.cn,lian.kai@whaley.cn'
 
 
@@ -66,6 +67,8 @@ def check_supervisor(url_supervisor):
         data = json.loads(r.content)
         for item in data['supervisors']:
             active_host.append(item['host'])
+    else:
+        logging.error("connect {0} Failed {1} error code {2}".format(url_supervisor, r.content, r.status_code))
 
     ret_list = list(set(all_host) ^ set(active_host))
     if ret_list:
@@ -74,7 +77,7 @@ def check_supervisor(url_supervisor):
         sub = "Storm supervisor monitor error"
         send_alter_mail(sub=sub, body=msg)
     else:
-        logging.error("connect {0} Failed {1} error code {2}".format(url_supervisor, r.content, r.status_code))
+        logging.info("check url_supervisor success!")
 
 
 def main():
@@ -85,4 +88,10 @@ def main():
 
 
 if __name__ == "__main__":
+    """
+    本工具用于监控storm状态，部署在管理机每2小时执行一次
+    如发现异常，邮件通知相关人
+    """
+
+    log_init()
     main()
