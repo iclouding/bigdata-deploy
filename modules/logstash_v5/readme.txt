@@ -90,6 +90,7 @@ sh /opt/kafka3/bin/kafka-console-consumer.sh --topic   medusa-playqos-output-pro
 sh /opt/kafka3/bin/kafka-console-consumer.sh --topic   medusa-processed-log  -bootstrap-server bigdata-appsvr-130-1:9094 | head
 sh /opt/kafka3/bin/kafka-console-consumer.sh --topic   medusa-pre-log  -bootstrap-server bigdata-appsvr-130-1:9094 | head
 
+ansible logstashs -i logstash.host -mshell -a"su - moretv -c  'cd /opt/logstash_v5/bin;sh start_logstash.sh kafka_topic_distribute_helios_player_sdk_startplay.conf'"
 
 
 --- 下面的服务是用来做剧集下线使用【62错误码】
