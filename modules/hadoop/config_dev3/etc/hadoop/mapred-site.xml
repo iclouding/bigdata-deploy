@@ -1,0 +1,93 @@
+<?xml version="1.0"?>
+<?xml-stylesheet type="text/xsl" href="configuration.xsl"?>
+
+<!-- Put site-specific property overrides in this file. -->
+
+<configuration>
+    <property>
+        <name>mapreduce.jobhistory.address</name>
+        <value>bigdev-cmpt-11:10020</value>
+    </property>
+    <property>
+        <name>mapreduce.jobhistory.admin.address</name>
+        <value>bigdev-cmpt-11:10033</value>
+    </property>
+    <property>
+        <name>mapreduce.jobhistory.webapp.address</name>
+        <value>bigdev-cmpt-11:19888</value>
+    </property>
+    <property>
+        <name>mapreduce.framework.name</name>
+        <value>yarn</value>
+    </property>
+    <property>
+        <name>mapreduce.cluster.local.dir</name>
+        <value>/data1/yarn/mr-local-dir,/data2/yarn/mr-local-dir,/data3/yarn/mr-local-dir,/data4/yarn/mr-local-dir,/data5/yarn/mr-local-dir,/data6/yarn/mr-local-dir,/data7/yarn/mr-local-dir,/data8/yarn/mr-local-dir,/data9/yarn/mr-local-dir,/data10/yarn/mr-local-dir,/data11/yarn/mr-local-dir,/data12/yarn/mr-local-dir</value>
+    </property>
+    <property>
+        <name>yarn.app.mapreduce.am.staging-dir</name>
+        <value>/tmp/hadoop/mr-staging</value>
+    </property>
+    <property>
+        <name>mapreduce.map.java.opts</name>
+        <value>-Xmx1024m</value>
+    </property>
+    <property>
+        <name>mapreduce.reduce.java.opts</name>
+        <value>-Xmx1024m</value>
+    </property>
+    <property>
+        <name>mapreduce.task.timeout</name>
+        <value>2400000</value>
+    </property>
+    <property>
+        <name>mapreduce.map.speculative</name>
+        <value>false</value>
+    </property>
+    <property>
+        <name>mapreduce.reduce.speculative</name>
+        <value>false</value>
+    </property>
+
+    <property>
+        <name>mapreduce.tasktracker.map.tasks.maximum</name>
+        <value>8</value>
+    </property>
+    <property>
+        <name>mapreduce.tasktracker.reduce.tasks.maximum</name>
+        <value>8</value>
+    </property>
+    <property>
+        <name>mapreduce.task.io.sort.mb</name>
+        <value>128</value>
+    </property>
+    <property>
+        <name>mapreduce.task.io.sort.factor</name>
+        <value>100</value>
+    </property>
+    <property>
+        <name>mapreduce.jobtracker.handler.count</name>
+        <value>40</value>
+    </property>
+    <property>
+        <name>mapreduce.reduce.shuffle.parallelcopies</name>
+        <value>50</value>
+    </property>
+    <property>
+        <name>mapreduce.job.reduces</name>
+        <value>10</value>
+    </property>
+    <property>
+        <name>mapreduce.tasktracker.http.threads</name>
+        <value>40</value>
+    </property>
+    <property>
+        <name>mapreduce.job.reduce.slowstart.completedmaps</name>
+        <value>0.6</value>
+    </property>
+    <property>
+        <name>mapreduce.job.jvm.numtasks</name>
+        <value>2</value>
+    </property>
+
+</configuration>
