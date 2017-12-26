@@ -1,5 +1,0 @@
-type=command
-host=media-gs.mairx.com
-retries=${downloadRetries}
-retry.backoff=${downloadRetryBackOff}
-command=sh ${working.dir}/../bin/cdn_download.sh --host=${host} --logTime=${startDate} --offset=1

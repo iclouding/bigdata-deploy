@@ -1,0 +1,12 @@
+---
+
+- hosts: all
+  tasks:
+
+    - name: copy hadoop config file to remote host
+      copy: src=/data/tools/ansible/modules/hadoop/config_test_cgroup/etc/hadoop/{{ item.name }} dest={{ item.dest }} owner={{ item.owner }} group={{ item.group }} mode={{ item.mode }}
+      tags: config
+      with_items:
+        - {name: 'fair-scheduler.xml',     dest: '/opt/hadoop/etc/hadoop',owner: 'hadoop',group: 'hadoop',mode: '755'}
+        - {name: 'yarn-site.xml',          dest: '/opt/hadoop/etc/hadoop',owner: 'hadoop',group: 'hadoop',mode: '755'}
+        - {name: 'container-executor.cfg', dest: '/opt/hadoop/etc/hadoop',owner: 'root',  group: 'hadoop',mode: '755'}

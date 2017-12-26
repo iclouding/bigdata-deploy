@@ -1,5 +1,5 @@
 type=command
-dependencies=cdn_download_media-gs.mairx.com
+#dependencies=cdn_download_media-gs.mairx.com
 host=media-gs.mairx.com
 command=sh ${working.dir}/../bin/cdn_statistic.sh --host=${host} --logTime=${startDate} --offset=1 --jdbcUrl=${jdbcUrl} --jdbcUser=${jdbcUser} --jdbcPassword=${jdbcPassword}
 retries=${statisticRetries}

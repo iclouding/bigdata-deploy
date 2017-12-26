@@ -58,21 +58,28 @@ fi
 microsoft_host='media-wr'
 microsoft_host2='media2-wr'
 table_name=""
+status_col=""
 if [[ $host == *$microsoft_host* ]] || [[ $host == *$microsoft_host2* ]]
 then
   table_name="ods.v_log_microsoft_cdn_mediags"
+  status_col="sc_status"
   hive -e "
 alter table ods.t_log_microsoft_cdn_mediags add if not exists partition(key_time='${logTime}',key_host='${host}')
 location '/log/cdn/${logTime}/${host}';
 "
 else
   table_name="ods.v_log_cdn_mediags"
+  status_col="status"
+  hive -e "
+alter table ods.t_log_cdn_mediags add if not exists partition(key_time='$logTime',key_host='$host')
+location '/log/cdn/${logTime}/${host}';
+"
 fi
 
 set -x
 hive -e "
-set tez.am.resource.memory.mb=6144;
-set hive.tez.container.size=6144;
+set tez.am.resource.memory.mb=8192;
+set hive.tez.container.size=8192;
 set fs.hdfs.impl.disable.cache=true;
 
 create table if not exists ods.tmp_cdn_mediags(sid string,total_bytes bigint)
@@ -81,7 +88,7 @@ partitioned by(key_host string,key_time string);
 insert overwrite table ods.tmp_cdn_mediags partition(key_host='$host',key_time='$logTime')
     select a.sid,sum(cast(a.bytes_sent as bigint)) as total_bytes
     from ${table_name} a
-    where nvl(a.bytes_sent,'')!='' and key_time='$logTime' and a.key_host='$host'
+    where a.key_time='$logTime' and a.key_host='$host' and a.$status_col!='403' and nvl(a.bytes_sent,'')!=''
     group by a.key_host,a.key_time,a.sid
     order by total_bytes desc
     limit 200
@@ -94,8 +101,8 @@ if [ "$ret" != "0" ]; then
 fi
 
 hive -e "
-set tez.am.resource.memory.mb=6144;
-set hive.tez.container.size=6144;
+set tez.am.resource.memory.mb=8192;
+set hive.tez.container.size=8192;
 set fs.hdfs.impl.disable.cache=false;
 
 insert overwrite directory '$hdfsDir'

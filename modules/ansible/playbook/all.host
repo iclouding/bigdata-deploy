@@ -18,6 +18,7 @@ bigdata-extsvr-db_whaley_tvservice
 bigdata-extsvr-ganglia01
 bigdata-test-log_collect01
 bigdata-test-log_collect02
+bigdata-extsvr-monitor01
 
 bigdata-extsvr-log01
 bigdata-extsvr-log02
@@ -55,6 +56,7 @@ bigdata-extsvr-log14
 10.255.129.206
 10.255.129.16
 10.255.129.17
+
 [dev]
 10.255.129.101
 10.255.129.102
@@ -69,5 +71,7 @@ bigdata-extsvr-log14
 10.255.129.111
 10.255.129.112
 10.255.129.113
+10.255.129.114
+10.255.129.115
 [test_ext]
 10.19.47.155

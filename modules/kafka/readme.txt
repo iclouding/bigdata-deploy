@@ -10,11 +10,11 @@
    第一步：进入所有部署机器执行以下命令
         su - moretv
         cd /opt/kafka
-        nohup ./bin/kafka-server-start.sh config/server.properties &
+       ./bin/kafka-server-start.sh -daemon ./config/server.properties
 
         或者执行命令
-       开启： ansible all -i kafka.host -mshell -a"su - moretv -c 'cd /opt/kafka1/ &&  nohup ./bin/kafka-server-start.sh config/server.properties > /opt/kafka1/nohup.out 2>&1 & '"
-       关闭： ansible all -i kafka.host -mshell -a"su - moretv -c 'cd /opt/kafka1/ &&  nohup ./bin/kafka-server-stop.sh config/server.properties '"
+       开启： ansible all -i kafka.host -mshell -a"su - moretv -c 'cd /opt/kafka1/ &&  ./bin/kafka-server-start.sh -daemon ./config/server.properties '"
+       关闭： ansible all -i kafka.host -mshell -a"su - moretv -c 'cd /opt/kafka1/ &&  ./bin/kafka-server-stop.sh ./config/server.properties '"
    第二步：验证
         建立topic，测试
 
@@ -23,9 +23,11 @@
     第二部：执行sh文件
 
 
------
+-----启动、停止单台kafka
 守护进程启动kafka server
-./bin/kafka-server-start.sh  -daemon ./config/server.properties
+cd /opt/kafka3;./bin/kafka-server-start.sh  -daemon ./config/server.properties
+停止kafka server
+cd /opt/kafka3;./bin/kafka-server-stop.sh
 
 #配置文件下发
 ansible-playbook -i kafka.host install_kafka_3.yml -t config
@@ -38,3 +40,9 @@ ansible all -i kafka.host -mshell -a"echo 'su - moretv -c \". /etc/profile;cd /o
 -----删除/etc/rc.local中关键字的行
 ansible all -i kafka.host -mshell -a" sed -i -e '/kafka-server-start/d' /etc/rc.local "
 
+cd /opt/kafka3;./bin/kafka-server-stop.sh
+cd /opt/kafka3;./bin/kafka-server-start.sh  -daemon ./config/server.properties
+
+
+ansible all -i kafka.host -mshell -a"su - moretv -c 'cd /opt/kafka2/ &&  ./bin/kafka-server-stop.sh '"
+ansible all -i kafka.host -mshell -a"su - moretv -c 'cd /opt/kafka2/ &&  ./bin/kafka-server-start.sh -daemon ./config/server.properties '"
