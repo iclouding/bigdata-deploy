@@ -13,7 +13,7 @@ streaming = [{'hosts': 'bigdata-appsvr-130-3', 'type': 'yarn_list', 'keyword': '
              'users': 'spark',
              'commands': 'sh /opt/ai/interestOptimization-201707/release/bin/online-long-videos.sh',
              'alter_mail': 'peng.tao@whaley.cn,fang.dong@whaley.cn,lian.kai@whaley.cn'},
-            {'hosts': 'bigdata-appsvr-130-3', 'type': 'yarn_list', 'keyword': 'BehaviorRecommendUpdate',
+            {'hosts': 'bigdata-appsvr-130-3', 'type': 'yarn_list', 'keyword': 'cn.whaley.ai.recommend.streaming.qiquRecommendation.streaming.BehaviorRecommendUpdate',
              'users': 'spark', 'commands': 'sh /opt/ai/qiquRecommendation/release/bin/behaviorRecommendUpdate.sh','alter_mail': 'peng.tao@whaley.cn,yan.junting@whaley.cn,lian.kai@whaley.cn'},
              {'hosts': 'bigdata-appsvr-130-3', 'type': 'pid', 'keyword': 'MoreTV_FrontPagePersonal',
               'users': 'spark', 'commands': 'sh /opt/ai/kafkaIO/shell/MoreTV_InterestOptimizationOffline.sh',
@@ -26,8 +26,8 @@ streaming = [{'hosts': 'bigdata-appsvr-130-3', 'type': 'yarn_list', 'keyword': '
               'alter_mail': 'peng.tao@whaley.cn,fang.dong@whaley.cn,lian.kai@whaley.cn'},
               {'hosts': 'bigdata-appsvr-130-4', 'type': 'pid', 'keyword': 'QiquRecommendStream',
               'users': 'spark', 'commands': 'sh /opt/ai/qiqu_recommend/shell/QiquRecommendStream.sh',
-              'alter_mail': 'peng.tao@whaley.cn,liu.wenhai@whaley.cn,lian.kai@whaley.cn'},
+              'alter_mail': 'peng.tao@whaley.cn,yan.junting@whaley.cn,liu.wenhai@whaley.cn,lian.kai@whaley.cn'},
               {'hosts': 'bigdata-appsvr-130-4', 'type': 'pid', 'keyword': 'Kafka2CouchBase4QiquRecommendOnline',
               'users': 'spark', 'commands': 'sh /opt/ai/qiqu_recommend/shell/Kafka2CouchBase4QiquRecommendOnline.sh',
-              'alter_mail': 'peng.tao@whaley.cn,liu.wenhai@whaley.cn,lian.kai@whaley.cn'}
+              'alter_mail': 'peng.tao@whaley.cn,yan.junting@whaley.cn,liu.wenhai@whaley.cn,lian.kai@whaley.cn'}
             ]
