@@ -12,6 +12,7 @@ import config
 import time
 import threading
 import psutil
+import os
 
 
 def log_msg(fun_name, err_msg, level):
@@ -28,12 +29,12 @@ def log_msg(fun_name, err_msg, level):
     logger.removeHandler(hdlr)
 
 
-def send_alter_mail(sub, body):
+def send_alter_mail(sub, body,sendto):
     mail_content = dict()
-    mysub = "Nginx_upload %s " % socket.gethostname()
+    mysub = " %s " % socket.gethostname()
     mail_content["sub"] = mysub + sub
     mail_content["content"] = body
-    mail_content["sendto"] = config.sendto
+    mail_content["sendto"] = sendto
     mail_url = 'http://10.19.15.127:5006/mail/api/v1.0/send'
 
     heads = {'content-type': 'application/json'}
@@ -86,14 +87,14 @@ class Checktask():
             sub = "{0} {1} 服务不存在".format(socket.gethostname(), self.keyword)
             found_no_service = "{0} 服务并不存在，启动脚本开启服务".format(self.keyword)
             log_msg("check", found_no_service, 2)
-            send_alter_mail(sub, found_no_service)
+            send_alter_mail(sub, found_no_service,self.alter_mail)
             run_command_out(start_service)
             time.sleep(60)
             if not self.check_yarn_service():
                 sub = "{0} {1}服务重启未成功".format(socket.gethostname(), self.keyword)
                 start_failed = "{0}服务运行脚本开启服务失败".format(self.keyword)
                 log_msg("start", start_failed, 2)
-                send_alter_mail(sub, start_failed)
+                send_alter_mail(sub, start_failed,self.alter_mail)
         log_msg("check_end", "check %s success!" % self.keyword, 1)
 
         # run command
@@ -122,14 +123,15 @@ class Checktask():
             sub = "{0} {1} 服务不存在".format(socket.gethostname(), self.keyword)
             found_no_service = "{0} 服务并不存在，启动脚本开启服务".format(self.keyword)
             log_msg("check", found_no_service, 2)
-            send_alter_mail(sub, found_no_service)
-            run_command_out(start_service)
+            send_alter_mail(sub, found_no_service,self.alter_mail)
+            os.system(start_service)
+            #run_command_out(start_service)
             time.sleep(60)
             if not self.check_ps_keyword_service():
                 sub = "{0} {1}服务重启未成功".format(socket.gethostname(), self.keyword)
                 start_failed = "{0}服务运行脚本开启服务失败".format(self.keyword)
                 log_msg("start", start_failed, 2)
-                send_alter_mail(sub, start_failed)
+                send_alter_mail(sub, start_failed,self.alter_mail)
         log_msg("check_end", "check %s success!" % self.keyword, 1)
 
     def check_ps_keyword_service(self):
