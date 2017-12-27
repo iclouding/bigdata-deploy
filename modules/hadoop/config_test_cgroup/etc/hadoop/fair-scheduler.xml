@@ -25,8 +25,15 @@
     <defaultMinSharePreemptionTimeout>5</defaultMinSharePreemptionTimeout>
     <defaultQueueSchedulingPolicy>drf</defaultQueueSchedulingPolicy>
     <queue name="default">
-        <minResources>204800 mb, 50 vcores</minResources>
-        <maxResources>900000 mb, 192 vcores</maxResources>
+        <minResources>102400 mb, 25 vcores</minResources>
+        <maxResources>450000 mb, 96 vcores</maxResources>
+        <schedulingMode>fair</schedulingMode>
+        <weight>0.2</weight>
+        <minSharePreemptionTimeout>2</minSharePreemptionTimeout>
+    </queue>
+    <queue name="bi">
+        <minResources>102400 mb, 25 vcores</minResources>
+        <maxResources>450000 mb, 96 vcores</maxResources>
         <schedulingMode>fair</schedulingMode>
         <weight>0.2</weight>
         <minSharePreemptionTimeout>2</minSharePreemptionTimeout>
