@@ -49,7 +49,7 @@ ansible all -i dev_rolling.host -mshell -a"systemctl status cgconfig.service"
 4.创建hadoop-yarn命名的cgroup
 ansible all -i dev_rolling.host -mshell -a"cd /sys/fs/cgroup/cpu;mkdir -p hadoop-yarn"
 查看目录创建是否成功
-ansible all -i dev_rolling.host -mshell -a"ls -al /sys/fs/cgroup/cpu"
+ansible all -i dev_rolling.host -mshell -a"ls -al /sys/fs/cgroup/cpu/"
 
 5.改变权限
 系统还要求etc/hadoop/container-executor.cfg 的所有父目录(一直到/ 目录) owner 都为 root
