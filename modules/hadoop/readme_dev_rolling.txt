@@ -30,40 +30,40 @@ bigdev-cmpt-9    [nodeManager,datanode]
 
 --------------安装hadoop--------------:
 --安装包分发
-ansible-playbook -i dev.host install_hadoop-bin_dev_rolling.yml -t install
+ansible-playbook -i dev_rolling.host install_hadoop-bin_dev_rolling.yml -t install
 
 --配置分发
-ansible-playbook -i dev.host install_hadoop-bin_dev_rolling.yml -t config
+ansible-playbook -i dev_rolling.host install_hadoop-bin_dev_rolling.yml -t config
 
 --------------linux cgroup--------------:
 1.安装cgroup
 cd /data/tools/ansible/modules/hadoop/playbook
-ansible all -i dev.host -mshell -a"yum install -y libcgroup-tools"
+ansible all -i dev_rolling.host -mshell -a"yum install -y libcgroup-tools"
 
 2.启动cgroup
-ansible all -i dev.host -mshell -a"systemctl start cgconfig.service"
+ansible all -i dev_rolling.host -mshell -a"systemctl start cgconfig.service"
 
 3.查看cgroup服务是否启动成功
-ansible all -i dev.host -mshell -a"systemctl status cgconfig.service"
+ansible all -i dev_rolling.host -mshell -a"systemctl status cgconfig.service"
 
 4.创建hadoop-yarn命名的cgroup
-ansible all -i dev.host -mshell -a"cd /sys/fs/cgroup/cpu;mkdir -p hadoop-yarn"
+ansible all -i dev_rolling.host -mshell -a"cd /sys/fs/cgroup/cpu;mkdir -p hadoop-yarn"
 查看目录创建是否成功
-ansible all -i dev.host -mshell -a"ls -al /sys/fs/cgroup/cpu"
+ansible all -i dev_rolling.host -mshell -a"ls -al /sys/fs/cgroup/cpu"
 
 5.改变权限
 系统还要求etc/hadoop/container-executor.cfg 的所有父目录(一直到/ 目录) owner 都为 root
-  ansible all -i dev.host -mshell -a"cd /app;chown root:hadoop hadoop-2.9.0"
-  ansible all -i dev.host -mshell -a"cd /app/hadoop-2.9.0;chown root:hadoop etc"
-  ansible all -i dev.host -mshell -a"cd /app/hadoop-2.9.0/etc;chown root:hadoop hadoop"
+  ansible all -i dev_rolling.host -mshell -a"cd /app;chown root:hadoop hadoop-2.9.0"
+  ansible all -i dev_rolling.host -mshell -a"cd /app/hadoop-2.9.0;chown root:hadoop etc"
+  ansible all -i dev_rolling.host -mshell -a"cd /app/hadoop-2.9.0/etc;chown root:hadoop hadoop"
 
 container-executor权限有特殊要求
-  ansible all -i dev.host -mshell -a"cd /app/hadoop-2.9.0/bin;chown root:hadoop container-executor"
-  ansible all -i dev.host -mshell -a"cd /app/hadoop-2.9.0;chmod 6050 bin/container-executor"
+  ansible all -i dev_rolling.host -mshell -a"cd /app/hadoop-2.9.0/bin;chown root:hadoop container-executor"
+  ansible all -i dev_rolling.host -mshell -a"cd /app/hadoop-2.9.0;chmod 6050 bin/container-executor"
 
 cgroup权限的更改
-  ansible all -i dev.host -mshell -a"cd /sys/fs/cgroup/;chmod 777 cpu,cpuacct"
-  ansible all -i dev.host -mshell -a"cd /sys/fs/cgroup/cpu,cpuacct;chmod 777 -R hadoop-yarn"
+  ansible all -i dev_rolling.host -mshell -a"cd /sys/fs/cgroup/;chmod 777 cpu,cpuacct"
+  ansible all -i dev_rolling.host -mshell -a"cd /sys/fs/cgroup/cpu,cpuacct;chmod 777 -R hadoop-yarn"
 
 
 --------------rolling update--------------:
@@ -72,12 +72,20 @@ cgroup权限的更改
     1.运行“hdfs dfsadmin -rollingUpgrade prepare”为回滚创建一个fsimage。[在NN1机器上运行]
     2.运行“hdfs dfsadmin -rollingUpgrade query”来检查回滚映像的状态。等待并重新运行该命令，直到显示“继续滚动升级”消息。
 2.升级活动和备用NNs
-    1.关机并升级NN2。【在NN2机器上,hdfs用户，/opt/hadoop/bin/hadoop-daemon.sh stop namenode】
-    2.使用“-rollingUpgrade started”选项启动NN2作为备用。 【hdfs namenode -rollingUpgrade started】
+    1.关机并升级NN2。
+        关机:a.验证nn2是否是standby nn
+            b. ansible nn2 -i dev_rolling.host -mshell -a"su - hdfs -c '/opt/hadoop/bin/hadoop-daemon.sh stop namenode'"
+        升级standby NN
+        ansible nn2 -i dev_rolling.host -mshell -a"rm -f /opt/hadoop;ln -s /app/hadoop-2.9.0 /opt/hadoop;chown -h hadoop:hadoop /opt/hadoop"
+    2.使用“-rollingUpgrade started”选项启动NN2作为备用。
+       ansible nn2 -i dev_rolling.host -mshell -a"su - hdfs -c 'hdfs namenode -rollingUpgrade started'"
     3.从NN1故障转移到NN2，以便NN2变为活动状态，NN1变为备用namenode状态。
-        【在活跃nn上执行，hdfs  haadmin -failover  nn1  nn2】
-    4.关机并升级NN1。【在NN1机器上,hdfs用户，/opt/hadoop/bin/hadoop-daemon.sh stop namenode】
-    5.使用“-rollingUpgrade started”选项启动NN1作为备用namenode。【hdfs namenode -rollingUpgrade started】
+         ansible nn1 -i dev_rolling.host -mshell -a"su - hdfs -c 'hdfs  haadmin -failover  nn1  nn2'"
+    4.关机并升级NN1。
+      ansible nn1 -i dev_rolling.host -mshell -a"su - hdfs -c '/opt/hadoop/bin/hadoop-daemon.sh stop namenode'"
+      ansible nn1 -i dev_rolling.host -mshell -a"rm -f /opt/hadoop;ln -s /app/hadoop-2.9.0 /opt/hadoop;chown -h hadoop:hadoop /opt/hadoop"
+    5.使用“-rollingUpgrade started”选项启动NN1作为备用namenode。
+      ansible nn1 -i dev_rolling.host -mshell -a"su - hdfs -c 'hdfs namenode -rollingUpgrade started'"
 3.升级DNs
     1.选择一小部分数据节点（例如特定机架下的所有数据节点）。
          1.运行“hdfs dfsadmin -shutdownDatanode <DATANODE_HOST：IPC_PORT> upgrade”来关闭所选数据节点之一。
@@ -89,6 +97,8 @@ cgroup权限的更改
    2.重复上述步骤，直到集群中的所有数据节点都被升级。
 4.完成滚动升级
    1.运行“hdfs dfsadmin -rollingUpgrade finalize”来完成滚动升级。
+     ansible nn2 -i dev_rolling.host -mshell -a"su - hdfs -c 'hdfs dfsadmin -rollingUpgrade finalize'"
+
 
 
 
