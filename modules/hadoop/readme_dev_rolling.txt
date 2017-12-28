@@ -70,30 +70,73 @@ cgroup权限的更改
 假设有两个名称节点NN1和NN2，其中NN1和NN2分别处于活动和待机状态。以下是升级HA集群的步骤：
 1.准备滚动升级
     1.运行“hdfs dfsadmin -rollingUpgrade prepare”为回滚创建一个fsimage。[在NN1机器上运行]
+       ansible nn1 -i dev_rolling.host -mshell -a"su - hdfs -c 'hdfs dfsadmin -rollingUpgrade prepare' "
     2.运行“hdfs dfsadmin -rollingUpgrade query”来检查回滚映像的状态。等待并重新运行该命令，直到显示“继续滚动升级”消息。
+       ansible nn1 -i dev_rolling.host -mshell -a"su - hdfs -c 'hdfs dfsadmin -rollingUpgrade query' "
+
 2.升级活动和备用NNs
     1.关机并升级NN2。
         关机:a.验证nn2是否是standby nn
-            b. ansible nn2 -i dev_rolling.host -mshell -a"su - hdfs -c '/opt/hadoop/bin/hadoop-daemon.sh stop namenode'"
+            b. ansible nn2 -i dev_rolling.host -mshell -a"su - hdfs -c '/opt/hadoop/sbin/hadoop-daemon.sh stop namenode'"
         升级standby NN
         ansible nn2 -i dev_rolling.host -mshell -a"rm -f /opt/hadoop;ln -s /app/hadoop-2.9.0 /opt/hadoop;chown -h hadoop:hadoop /opt/hadoop"
     2.使用“-rollingUpgrade started”选项启动NN2作为备用。
        ansible nn2 -i dev_rolling.host -mshell -a"su - hdfs -c 'hdfs namenode -rollingUpgrade started'"
-    3.从NN1故障转移到NN2，以便NN2变为活动状态，NN1变为备用namenode状态。
-         ansible nn1 -i dev_rolling.host -mshell -a"su - hdfs -c 'hdfs  haadmin -failover  nn1  nn2'"
+    3.从NN1故障转移到NN2，以便NN2变为活动状态，NN1变为备用namenode状态。[注意：当前10.255.129.101为standby,所以failover后的参数需要调整]
+         ansible nn1 -i dev_rolling.host -mshell -a"su - hdfs -c 'hdfs  haadmin -failover  nn2  nn1'"
     4.关机并升级NN1。
-      ansible nn1 -i dev_rolling.host -mshell -a"su - hdfs -c '/opt/hadoop/bin/hadoop-daemon.sh stop namenode'"
+      ansible nn1 -i dev_rolling.host -mshell -a"su - hdfs -c '/opt/hadoop/sbin/hadoop-daemon.sh stop namenode'"
       ansible nn1 -i dev_rolling.host -mshell -a"rm -f /opt/hadoop;ln -s /app/hadoop-2.9.0 /opt/hadoop;chown -h hadoop:hadoop /opt/hadoop"
     5.使用“-rollingUpgrade started”选项启动NN1作为备用namenode。
       ansible nn1 -i dev_rolling.host -mshell -a"su - hdfs -c 'hdfs namenode -rollingUpgrade started'"
+      改用在nn1机器上，cd /data/logs/hadoop-hdfs;nohup hdfs namenode -rollingUpgrade started >1.log 2>&1 &
+      可以查看日志，后来发现nn2机器上也有rollingUpgrade在启动，（之前在管理机器ctrl+c强制退出了）ps -ef|grep rollingUpgrade
 3.升级DNs
     1.选择一小部分数据节点（例如特定机架下的所有数据节点）。
          1.运行“hdfs dfsadmin -shutdownDatanode <DATANODE_HOST：IPC_PORT> upgrade”来关闭所选数据节点之一。
-           在nn1节点,hdfs dfsadmin -shutdownDatanode 10.255.129.104:50020 upgrade
+           在nn2节点【这个时候已经成为了active】,hdfs dfsadmin -shutdownDatanode 10.255.129.104:50020 upgrade
+           ansible nn2 -i dev_rolling.host -mshell -a"su - hdfs -c 'hdfs dfsadmin -shutdownDatanode 10.255.129.104:50020 upgrade'"
          2.运行“hdfs dfsadmin -getDatanodeInfo <DATANODE_HOST：IPC_PORT>”检查并等待datanode关闭。
-           在nn1节点,hdfs dfsadmin -getDatanodeInfo 10.255.129.104:50020
-         3.升级并重新启动数据节点。[在升级的datanode节点, sh /opt/hadoop/sbin/hadoop-daemon.sh start datanode ]
+           在nn2节点,hdfs dfsadmin -getDatanodeInfo 10.255.129.104:50020
+           ansible nn2 -i dev_rolling.host -mshell -a"su - hdfs -c 'hdfs dfsadmin -getDatanodeInfo 10.255.129.104:50020 '"
+           返回结果是java.net.ConnectException，表示datanode已经关闭
+         3.升级并重新启动数据节点
+         roll_tmp_datanode.host 临时文件内容为：
+         [all]
+         10.255.129.104
+         升级的datanode节点:
+         ansible all -i roll_tmp_datanode.host -mshell -a"rm -f /opt/hadoop;ln -s /app/hadoop-2.9.0 /opt/hadoop;chown -h hadoop:hadoop /opt/hadoop"
+         启动datanode节点:
+         ansible all -i roll_tmp_datanode.host -mshell -a"su - hdfs -c '/opt/hadoop/sbin/hadoop-daemon.sh start datanode'"
          4.对子集中所有选定的datanode并行执行上述步骤。
+            第一轮：
+                    roll_tmp_datanode.host 临时文件内容为：
+                    [all]
+                    10.255.129.105
+                    10.255.129.106
+                   关闭所选数据节点:
+                     ansible all -i roll_tmp_datanode.host -mshell -a"su - hdfs -c 'hdfs dfsadmin -shutdownDatanode localhost:50020 upgrade'"
+                   检查并等待datanode关闭:
+                     ansible all -i roll_tmp_datanode.host -mshell -a"su - hdfs -c 'hdfs dfsadmin -getDatanodeInfo localhost:50020'"
+                   升级的datanode节点:
+                     ansible all -i roll_tmp_datanode.host -mshell -a"rm -f /opt/hadoop;ln -s /app/hadoop-2.9.0 /opt/hadoop;chown -h hadoop:hadoop /opt/hadoop"
+                   启动datanode节点:
+                     ansible all -i roll_tmp_datanode.host -mshell -a"su - hdfs -c '/opt/hadoop/sbin/hadoop-daemon.sh start datanode'"
+            第二轮：
+                    roll_tmp_datanode.host 临时文件内容为：[每个机架的机器作为一个子集，进行关闭，防止同事关闭datanode数量超过3时，client不能读取部分块数据]
+                    [all]
+                    10.255.129.107
+                    10.255.129.108
+                    10.255.129.109
+                   关闭所选数据节点:
+                     ansible all -i roll_tmp_datanode.host -mshell -a"su - hdfs -c 'hdfs dfsadmin -shutdownDatanode localhost:50020 upgrade'"
+                   检查并等待datanode关闭:
+                     ansible all -i roll_tmp_datanode.host -mshell -a"su - hdfs -c 'hdfs dfsadmin -getDatanodeInfo localhost:50020'"
+                   升级的datanode节点:
+                     ansible all -i roll_tmp_datanode.host -mshell -a"rm -f /opt/hadoop;ln -s /app/hadoop-2.9.0 /opt/hadoop;chown -h hadoop:hadoop /opt/hadoop"
+                   启动datanode节点:
+                     ansible all -i roll_tmp_datanode.host -mshell -a"su - hdfs -c '/opt/hadoop/sbin/hadoop-daemon.sh start datanode'"
+
    2.重复上述步骤，直到集群中的所有数据节点都被升级。
 4.完成滚动升级
    1.运行“hdfs dfsadmin -rollingUpgrade finalize”来完成滚动升级。
