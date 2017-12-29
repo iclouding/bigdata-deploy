@@ -33,7 +33,9 @@ ansible hbase-thriftserver -i hbase_test.host -m shell -a "ps -ef|grep -i hbase|
 
 -----------关闭单台habse regionserver-----------
 登陆到需要关闭regionserver的机器上,sh /opt/hbase/bin/graceful_stop.sh hostname
-hostname替换为机器名称，例如bigdata-cmpt-128-19
+hostname替换为机器名称，例如bigdata-cmpt-128-18
+nohup sh /opt/hbase/bin/graceful_stop.sh bigdata-cmpt-128-18 > graceful_stop.log 2>&1
+bigdata-cmpt-128-18机器上的region会向其他regionserver迁移，迁移完成后自动关闭。
 
 -----------加入单台habse regionserver-----------
 1. $HBASE_HOME/conf/regionservers 加入新的regionserver
