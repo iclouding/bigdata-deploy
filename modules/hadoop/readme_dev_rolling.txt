@@ -143,6 +143,11 @@ cgroup权限的更改
      ansible nn2 -i dev_rolling.host -mshell -a"su - hdfs -c 'hdfs dfsadmin -rollingUpgrade finalize'"
 
 
-
-
+--------------其他--------------:
+1.rollingUpgrade进程存在问题：
+通过hdfs namenode -rollingUpgrade started命令启动namenode后，
+namenode的进程变成org.apache.hadoop.hdfs.server.namenode.NameNode -rollingUpgrade started
+并且通过ansible远程执行这个命令，ctrl+c防止终端，虽然在管理机报错，但是没有关系，namenode进程本身已经启动。
+如果想要关闭此种类型的namenode进程，需要在/data/logs/hadoop-hdfs位置，hadoop-hdfs-namenode.pid文件中写入当前namenode的进程号，
+然后通过在namenode节点，使用/opt/hadoop/sbin/hadoop-daemon.sh stop namenode来关闭namenode.
 

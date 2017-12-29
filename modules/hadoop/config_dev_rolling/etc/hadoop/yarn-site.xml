@@ -134,9 +134,9 @@
     </property>
 
     <property>
-        <description>1T</description>
+        <description>1g</description>
         <name>yarn.nodemanager.localizer.cache.target-size-mb</name>
-        <value>1048576</value>
+        <value>1024</value>
     </property>
     <property>
         <name>yarn.nodemanager.localizer.cache.cleanup.interval-ms</name>
@@ -145,13 +145,13 @@
 
     <property>
         <name>yarn.nodemanager.resource.memory-mb</name>
-        <value>143360</value>
-        <description>140GB</description>
+        <value>8192</value>
+        <description>8GB</description>
     </property>
     <property>
         <name>yarn.nodemanager.resource.cpu-vcores</name>
-        <value>30</value>
-        <description>total core 40</description>
+        <value>3</value>
+        <description>total core 4</description>
     </property>
 
     <property>
@@ -160,7 +160,7 @@
     </property>
     <property>
         <name>yarn.scheduler.maximum-allocation-mb</name>
-        <value>16384</value>
+        <value>4000</value>
     </property>
     <property>
         <name>yarn.scheduler.minimum-allocation-vcores</name>
@@ -168,7 +168,7 @@
     </property>
     <property>
         <name>yarn.scheduler.maximum-allocation-vcores</name>
-        <value>8</value>
+        <value>4</value>
     </property>
 
     <property>
@@ -321,6 +321,49 @@
         <value>6048000000</value>
     </property>
 
+    <!-- 利用cgroup来限制yarn容器对单节点cpu的使用量-->
+    <property>
+        <name>yarn.nodemanager.container-executor.class</name>
+        <value>org.apache.hadoop.yarn.server.nodemanager.LinuxContainerExecutor</value>
+    </property>
+    <property>
+        <name>yarn.nodemanager.linux-container-executor.resources-handler.class</name>
+        <value>org.apache.hadoop.yarn.server.nodemanager.util.CgroupsLCEResourcesHandler</value>
+    </property>
+    <property>
+        <description>yarn使用的cgroup组,默认为/hadoop-yarn</description>
+        <name>yarn.nodemanager.linux-container-executor.cgroups.hierarchy</name>
+        <value>/hadoop-yarn</value>
+    </property>
+    <property>
+        <description>是否自动挂载cgroup</description>
+        <name>yarn.nodemanager.linux-container-executor.cgroups.mount</name>
+        <value>true</value>
+    </property>
+    <property>
+        <description>cgroup挂载目录, /sys/fs/cgroup 或者是 /cgroup,目录和系统有关</description>
+        <name>yarn.nodemanager.linux-container-executor.cgroups.mount-path</name>
+        <value>/sys/fs/cgroup</value>
+    </property>
+    <property>
+        <name>yarn.nodemanager.linux-container-executor.group</name>
+        <value>hadoop</value>
+    </property>
+    <property>
+        <description>配置nodemanager使用多少物理cpu资源,比如24核服务器配置90的话,最近使用21.6核</description>
+        <name>yarn.nodemanager.resource.percentage-physical-cpu-limit</name>
+        <value>80</value>
+    </property>
+    <property>
+        <description>是控制是否严格限制cpu,即按任务申请的core限制,还是非严格限制,即按core的比率限制</description>
+        <name>yarn.nodemanager.linux-container-executor.cgroups.strict-resource-usage</name>
+        <value>true</value>
+    </property>
+    <property>
+        <description>非安全模式将会以这里设置的用户运行container,比如配置hadoop用户则以hadoop运行container</description>
+        <name>yarn.nodemanager.linux-container-executor.nonsecure-mode.local-user</name>
+        <value>yarn</value>
+    </property>
 
 
 </configuration>
