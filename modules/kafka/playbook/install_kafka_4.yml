@@ -13,12 +13,16 @@
       args:
         creates: /app/kafka4_2.11-0.10.1.0/.install
 
-    - name: /app/kafka4_2.11-0.8.2.2  owner to kafka4
+    - name: /app/kafka4_2.11-0.10.1.0  owner to kafka4
       file: name=/app/kafka4_2.11-0.10.1.0  owner=moretv group=moretv
       tags: install
 
     - name: /app/kafka4_2.11-0.10.1.0  owner to kafka4
       shell: chown -R moretv. /app/kafka4_2.11-0.10.1.0
+      tags: install
+
+    - name: /app/kafka4_2.11-0.10.1.0  owner to kafka4
+      shell: chmod 771 -R  /app/kafka4_2.11-0.10.1.0/bin/*
       tags: install
 
     - name: create a soft link to kafka4
