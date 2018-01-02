@@ -3,32 +3,42 @@
   tasks:
     - name: copy kafka tar file to remote host
       shell: ncftpget -z -ubigdata -p'whaley!90365' 10.255.130.6 /tmp bigdata/{{ item }}
+      tags: install
       with_items:
         - kafka3_2.10-0.10.1.0.tar.gz
 
     - name: tar kafka tar to /app
       shell: cd /tmp && tar zxvf  kafka3_2.10-0.10.1.0.tar.gz -C /app
+      tags: install
       args:
         creates: /app/kafka3_2.10-0.10.1.0/.install
 
     - name: /app/kafka3_2.10-0.8.2.2  owner to kafka3
       file: name=/app/kafka3_2.10-0.10.1.0  owner=moretv group=moretv
+      tags: install
 
     - name: /app/kafka3_2.10-0.8.2.2  owner to kafka3
       shell: chown -R moretv. /app/kafka3_2.10-0.10.1.0
 
     - name: create kafka need directory
       file: path={{ item }}  state=directory  owner=moretv group=moretv
+      tags: install
       with_items:
         - /data/logs/kafka3
 
-    - name: create Create a soft link to kafka3
+    - name: touch install file
+      shell: touch /app/kafka3_2.10-0.10.1.0/.install
+      tags: install
+      args:
+        creates: /app/kafka3_2.10-0.10.1.0/.install
+
+    - name: create a soft link to kafka3
       file: src=/app/kafka3_2.10-0.10.1.0 dest=/opt/kafka3 state=link owner=moretv group=moretv
+      tags: install
 
     - name: copy kafka config file to remote host
       copy: src=/data/tools/ansible/modules/kafka/config/kafka3.properties dest=/opt/kafka3/config/server.properties owner=moretv group=moretv mode=0771
       tags: config
-
 
     - name: sync  modi conf script to desc host
       copy: src=/data/tools/ansible/modules/ansible/scripts/modi_conf/{{ item }} dest=/data/scripts/{{ item }} owner=moretv group=moretv mode=0755
@@ -43,8 +53,4 @@
       args:
         chdir: /data/scripts
     
-    - name: touch install file
-      shell: touch /app/kafka3_2.10-0.10.1.0/.install
-      tags: install
-      args:
-        creates: /app/kafka3_2.10-0.10.1.0/.install
+

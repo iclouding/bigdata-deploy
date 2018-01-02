@@ -23,14 +23,25 @@
     第二部：执行sh文件
 
 
------启动、停止单台kafka
+-------------------------------------------------------------------------------------------------------------------
+-----安装kafka3
+--安装
+ansible-playbook -i kafka.host install_kafka_3.yml -t install
+--配置
+ansible-playbook -i kafka.host install_kafka_3.yml -t config
+--定制启动停止脚本分发
+ansible-playbook -i kafka.host install_kafka_bin_3.yml
+
+
+-----启动、停止单台kafka3系列的某一台
 守护进程启动kafka server
 cd /opt/kafka3;./bin/kafka-server-start.sh  -daemon ./config/server.properties
 停止kafka server
 cd /opt/kafka3;./bin/kafka-server-stop.sh
 
-#配置文件下发
-ansible-playbook -i kafka.host install_kafka_3.yml -t config
+-----启动、停止kafka3系列
+ansible all -i kafka.host -mshell -a"su - moretv -c 'cd /opt/kafka3 &&  ./bin/kafka-server-stop.sh '"
+ansible all -i kafka.host -mshell -a"su - moretv -c 'cd /opt/kafka3 &&  ./bin/kafka-server-start.sh -daemon ./config/server.properties '"
 
 -----追加kafka启动命令到系统启动项
 ansible all -i kafka.host -mshell -a"echo 'su - moretv -c \". /etc/profile;cd /opt/kafka2;./bin/kafka-server-start.sh  -daemon ./config/server.properties\"' >> /etc/rc.local"
@@ -40,9 +51,4 @@ ansible all -i kafka.host -mshell -a"echo 'su - moretv -c \". /etc/profile;cd /o
 -----删除/etc/rc.local中关键字的行
 ansible all -i kafka.host -mshell -a" sed -i -e '/kafka-server-start/d' /etc/rc.local "
 
-cd /opt/kafka3;./bin/kafka-server-stop.sh
-cd /opt/kafka3;./bin/kafka-server-start.sh  -daemon ./config/server.properties
 
-
-ansible all -i kafka.host -mshell -a"su - moretv -c 'cd /opt/kafka2/ &&  ./bin/kafka-server-stop.sh '"
-ansible all -i kafka.host -mshell -a"su - moretv -c 'cd /opt/kafka2/ &&  ./bin/kafka-server-start.sh -daemon ./config/server.properties '"

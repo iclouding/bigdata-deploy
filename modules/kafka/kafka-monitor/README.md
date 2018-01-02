@@ -22,7 +22,7 @@ Topic:single-cluster-monitor	PartitionCount:12	ReplicationFactor:1
 
 ###启动
 cd /data/scripts/kafka-monitor
-nohup sh   ./bin/kafka-monitor-start.sh config/single-cluster-monitor.properties >log.single.log 2>&1 &
+nohup sh   ./bin/kafka-monitor-start.sh config/single-cluster-monitor.properties > /dev/null 2>&1 &
 
 ###监控UI
 http://bigdata-appsvr-130-8:8000/index.html
