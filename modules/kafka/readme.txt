@@ -24,7 +24,7 @@
 
 
 -------------------------------------------------------------------------------------------------------------------
------安装kafka3
+---------------安装kafka3---------------
 --安装
 ansible-playbook -i kafka.host install_kafka_3.yml -t install
 --配置
@@ -51,4 +51,5 @@ ansible all -i kafka.host -mshell -a"echo 'su - moretv -c \". /etc/profile;cd /o
 -----删除/etc/rc.local中关键字的行
 ansible all -i kafka.host -mshell -a" sed -i -e '/kafka-server-start/d' /etc/rc.local "
 
+---------------安装kafka4---------------
 

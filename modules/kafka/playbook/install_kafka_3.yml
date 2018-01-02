@@ -19,6 +19,7 @@
 
     - name: /app/kafka3_2.10-0.8.2.2  owner to kafka3
       shell: chown -R moretv. /app/kafka3_2.10-0.10.1.0
+      tags: install
 
     - name: create kafka need directory
       file: path={{ item }}  state=directory  owner=moretv group=moretv

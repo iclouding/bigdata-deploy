@@ -3,44 +3,48 @@
   tasks:
     - name: copy kafka tar file to remote host
       shell: ncftpget -z -ubigdata -p'whaley!90365' 10.255.130.6 /tmp bigdata/{{ item }}
+      tags: install
       with_items:
         - kafka4_2.11-0.10.1.0.zip
 
     - name: tar kafka tar to /app
       shell: cd /tmp && unzip  kafka4_2.11-0.10.1.0.zip -d /app
+      tags: install
       args:
         creates: /app/kafka4_2.11-0.10.1.0/.install
 
     - name: /app/kafka4_2.11-0.8.2.2  owner to kafka4
       file: name=/app/kafka4_2.11-0.10.1.0  owner=moretv group=moretv
+      tags: install
 
     - name: /app/kafka4_2.11-0.10.1.0  owner to kafka4
       shell: chown -R moretv. /app/kafka4_2.11-0.10.1.0
+      tags: install
 
-    - name: create Create a soft link to kafka4
+    - name: create a soft link to kafka4
       file: src=/app/kafka4_2.11-0.10.1.0 dest=/opt/kafka4 state=link owner=moretv group=moretv
-
-    - name: copy kafka config file to remote host
-      copy: src=/data/tools/ansible/modules/kafka/config/kafka4.properties dest=/opt/kafka4/config/server.properties owner=moretv group=moretv mode=0771
+      tags: install
 
     - name: create kafka need directory
       file: path={{ item }}  state=directory  owner=moretv group=moretv
+      tags: install
       with_items:
         - /data/logs/kafka4
 
-    - name: sync  modi conf script to desc host
+    - name: copy kafka config file to remote host
+      copy: src=/data/tools/ansible/modules/kafka/config/kafka4.properties dest=/opt/kafka4/config/server.properties owner=moretv group=moretv mode=0771
+      tags: config
+
+    - name: sync modi conf script to desc host
       copy: src=/data/tools/ansible/modules/ansible/scripts/modi_conf/{{ item }} dest=/data/scripts/{{ item }} owner=moretv group=moretv mode=0755
+      tags: config
       with_items:
         - make_conf.py
         - kafka.conf
 
     - name: run modi config script
       shell: python make_conf.py kafka.conf
+      tags: config
       args:
         chdir: /data/scripts
-    
-    - name: touch install file
-      shell: touch /app/kafka4_2.11-0.10.1.0/.install
-      tags: install
-      args:
-        creates: /app/kafka4_2.11-0.10.1.0/.install
+
