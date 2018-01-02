@@ -29,7 +29,7 @@
 ansible-playbook -i kafka.host install_kafka_3.yml -t install
 --配置
 ansible-playbook -i kafka.host install_kafka_3.yml -t config
---定制启动停止脚本分发
+--定制的启动停止脚本分发
 ansible-playbook -i kafka.host install_kafka_bin_3.yml
 
 
@@ -52,4 +52,11 @@ ansible all -i kafka.host -mshell -a"echo 'su - moretv -c \". /etc/profile;cd /o
 ansible all -i kafka.host -mshell -a" sed -i -e '/kafka-server-start/d' /etc/rc.local "
 
 ---------------安装kafka4---------------
+--安装
+ansible-playbook -i kafka.host install_kafka_4.yml -t install
+--配置
+ansible-playbook -i kafka.host install_kafka_4.yml -t config
+--定制的启动停止脚本分发
+ansible-playbook -i kafka.host install_kafka_bin_4.yml
+
 
