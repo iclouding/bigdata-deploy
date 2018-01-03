@@ -91,6 +91,13 @@ cgroup权限的更改
       ansible nn1 -i dev_rolling.host -mshell -a"su - hdfs -c 'hdfs namenode -rollingUpgrade started'"
       改用在nn1机器上，cd /data/logs/hadoop-hdfs;nohup hdfs namenode -rollingUpgrade started >1.log 2>&1 &
       可以查看日志，后来发现nn2机器上也有rollingUpgrade在启动，（之前在管理机器ctrl+c强制退出了）ps -ef|grep rollingUpgrade
+    6.升级ResourceManager节点
+      a.到没有和namenode相重合的ResourceManager节点，以root用户执行
+        rm -f /opt/hadoop;ln -s /app/hadoop-2.9.0 /opt/hadoop;chown -h hadoop:hadoop /opt/hadoop
+      b.重启ResourceManager节点,yarn用户
+        首先重启standby状态的ResourceManager节点
+        sh /opt/hadoop/sbin/yarn-daemon.sh stop resourcemanager
+        sh /opt/hadoop/sbin/yarn-daemon.sh start resourcemanager
 3.升级DNs
     1.选择一小部分数据节点（例如特定机架下的所有数据节点）。
          1.运行“hdfs dfsadmin -shutdownDatanode <DATANODE_HOST：IPC_PORT> upgrade”来关闭所选数据节点之一。
@@ -151,3 +158,16 @@ namenode的进程变成org.apache.hadoop.hdfs.server.namenode.NameNode -rollingU
 如果想要关闭此种类型的namenode进程，需要在/data/logs/hadoop-hdfs位置，hadoop-hdfs-namenode.pid文件中写入当前namenode的进程号，
 然后通过在namenode节点，使用/opt/hadoop/sbin/hadoop-daemon.sh stop namenode来关闭namenode.
 
+2.常用命令
+a.重启所有node manager[需要在RM上执行]
+    sh /opt/hadoop/sbin/yarn-daemon.sh stop resourcemanager
+    sh /opt/hadoop/sbin/yarn-daemon.sh start resourcemanager
+b.重启所有node manager[需要在RM上执行]
+    sh /opt/hadoop/sbin/yarn-daemons.sh stop   nodemanager
+    sh /opt/hadoop/sbin/yarn-daemons.sh start  nodemanager
+c.重启ApplicationHistoryServer
+    sh /opt/hadoop/sbin/yarn-daemon.sh stop  timelineserver
+    sh /opt/hadoop/sbin/yarn-daemon.sh start timelineserver
+d.重启JobHistoryServer
+    sh /opt/hadoop/sbin/mr-jobhistory-daemon.sh stop  historyserver
+    sh /opt/hadoop/sbin/mr-jobhistory-daemon.sh start historyserver
