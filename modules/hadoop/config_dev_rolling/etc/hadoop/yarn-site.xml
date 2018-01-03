@@ -352,7 +352,7 @@
     <property>
         <description>配置nodemanager使用多少物理cpu资源,比如24核服务器配置90的话,最近使用21.6核</description>
         <name>yarn.nodemanager.resource.percentage-physical-cpu-limit</name>
-        <value>80</value>
+        <value>10</value>
     </property>
     <property>
         <description>是控制是否严格限制cpu,即按任务申请的core限制,还是非严格限制,即按core的比率限制</description>
