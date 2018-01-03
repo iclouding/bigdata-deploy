@@ -171,3 +171,12 @@ c.重启ApplicationHistoryServer
 d.重启JobHistoryServer
     sh /opt/hadoop/sbin/mr-jobhistory-daemon.sh stop  historyserver
     sh /opt/hadoop/sbin/mr-jobhistory-daemon.sh start historyserver
+e.更新yarn-site.xml文件，调节cpu负载值
+ansible all -i dev_rolling.host -mcopy -a"src=/data/tools/ansible/modules/hadoop/config_dev_rolling/etc/hadoop/yarn-site.xml dest=/opt/hadoop/etc/hadoop  owner=hadoop group=hadoop mode=755"
+以yarn用户,
+到standby resource manager机器重启resourcemanager，然后到active resource manager机器重启resourcemanager
+重启nodemanager，
+ansible nodemanager -i dev_rolling.host -mshell -a"su - yarn -c '/opt/hadoop/sbin/yarn-daemon.sh stop  nodemanager'"
+ansible nodemanager -i dev_rolling.host -mshell -a"su - yarn -c '/opt/hadoop/sbin/yarn-daemon.sh start nodemanager'"
+
+
