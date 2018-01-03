@@ -100,6 +100,15 @@ ansible logstashs -i logstash.host -mshell -a"su - moretv -c  'cd /opt/logstash_
    */6 * * * * source /etc/profile;sh /opt/logstash_v5/bin/start_logstash.sh kafka_topic_distribute_medusa_player_sdk_startplay.conf > /dev/null 2>&1
    #Ansible: logstash autostart job 9
    */6 * * * * source /etc/profile;sh /opt/logstash_v5/bin/start_logstash.sh kafka_topic_distribute_player_sdk_startplay_merge.conf > /dev/null 2>&1
-
-
-   sh /opt/kafka3/bin/kafka-console-consumer.sh --topic openrs-medusa-player-sdk-startplay  -bootstrap-server bigdata-appsvr-130-1:9094 |head
+  sh /opt/kafka3/bin/kafka-console-consumer.sh --topic openrs-medusa-player-sdk-startplay  -bootstrap-server bigdata-appsvr-130-1:9094 |head
+--【62错误码】测试环境【使用线上数据，并且部署在现网】
+分发：
+ansible logstashs -i logstash.host -mcopy -a"src=/data/tools/ansible/modules/logstash_v5/config/etc/logstash_test/kafka_topic_distribute_medusa_player_sdk_startplay_test.conf dest=/opt/logstash_v5/config  owner=moretv group=moretv mode=755"
+ansible logstashs -i logstash.host -mcopy -a"src=/data/tools/ansible/modules/logstash_v5/config/etc/logstash_test/kafka_topic_distribute_player_sdk_startplay_merge_test.conf dest=/opt/logstash_v5/config  owner=moretv group=moretv mode=755"
+启动：
+ansible logstashs -i logstash.host -mshell -a"su - moretv -c  'cd /opt/logstash_v5/bin;sh start_logstash.sh kafka_topic_distribute_medusa_player_sdk_startplay_test.conf'"
+ansible logstashs -i logstash.host -mshell -a"su - moretv -c  'cd /opt/logstash_v5/bin;sh start_logstash.sh kafka_topic_distribute_player_sdk_startplay_merge_test.conf'"
+检测：
+ansible logstashs -i logstash.host -mshell -a"su - moretv -c  'ps -ef|grep  kafka_topic_distribute_player_sdk_startplay_merge_test.conf'"
+ansible logstashs -i logstash.host -mshell -a"su - moretv -c  'ps -ef|grep  kafka_topic_distribute_medusa_player_sdk_startplay_test.conf'"
+ansible logstashs -i logstash.host -mshell -a"su - moretv -c  'ps -ef|grep  kafka_topic_distribute_helios_player_sdk_startplay_test.conf'"
