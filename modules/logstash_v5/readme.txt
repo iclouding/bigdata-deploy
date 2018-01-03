@@ -112,3 +112,4 @@ ansible logstashs -i logstash.host -mshell -a"su - moretv -c  'cd /opt/logstash_
 ansible logstashs -i logstash.host -mshell -a"su - moretv -c  'ps -ef|grep  kafka_topic_distribute_player_sdk_startplay_merge_test.conf'"
 ansible logstashs -i logstash.host -mshell -a"su - moretv -c  'ps -ef|grep  kafka_topic_distribute_medusa_player_sdk_startplay_test.conf'"
 ansible logstashs -i logstash.host -mshell -a"su - moretv -c  'ps -ef|grep  kafka_topic_distribute_helios_player_sdk_startplay_test.conf'"
+sh /opt/kafka3/bin/kafka-console-consumer.sh --topic openrs-helios-medusa-play-vod-quality-test  -bootstrap-server bigdata-appsvr-130-1:9094 |head
