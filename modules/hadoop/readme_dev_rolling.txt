@@ -178,5 +178,8 @@ ansible all -i dev_rolling.host -mcopy -a"src=/data/tools/ansible/modules/hadoop
 重启nodemanager，
 ansible nodemanager -i dev_rolling.host -mshell -a"su - yarn -c '/opt/hadoop/sbin/yarn-daemon.sh stop  nodemanager'"
 ansible nodemanager -i dev_rolling.host -mshell -a"su - yarn -c '/opt/hadoop/sbin/yarn-daemon.sh start nodemanager'"
-
+f.yarn的其他两个demon服务
+jps
+ApplicationHistoryServer ->  timeline             /opt/hadoop/sbin/yarn-daemon.sh start timelineserver          [yarn]
+JobHistoryServer         -> JobHistoryServer      /opt/hadoop/sbin//mr-jobhistory-daemon.sh start historyserver [yarn]
 
