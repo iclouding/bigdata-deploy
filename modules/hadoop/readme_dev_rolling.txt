@@ -146,8 +146,8 @@ cgroup权限的更改
 
    2.重复上述步骤，直到集群中的所有数据节点都被升级。
 4.完成滚动升级
-   1.运行“hdfs dfsadmin -rollingUpgrade finalize”来完成滚动升级。
-     ansible nn2 -i dev_rolling.host -mshell -a"su - hdfs -c 'hdfs dfsadmin -rollingUpgrade finalize'"
+   1.运行“hdfs dfsadmin -rollingUpgrade finalize”来完成滚动升级。【等待一周后、没有发现问题再执行finalize命令，否则影响将级和回滚】
+     【等一周、确认升级无误】ansible nn2 -i dev_rolling.host -mshell -a"su - hdfs -c 'hdfs dfsadmin -rollingUpgrade finalize'"
 
 
 --------------其他--------------:
