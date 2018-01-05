@@ -113,3 +113,13 @@ ansible logstashs -i logstash.host -mshell -a"su - moretv -c  'ps -ef|grep  kafk
 ansible logstashs -i logstash.host -mshell -a"su - moretv -c  'ps -ef|grep  kafka_topic_distribute_medusa_player_sdk_startplay_test.conf'"
 ansible logstashs -i logstash.host -mshell -a"su - moretv -c  'ps -ef|grep  kafka_topic_distribute_helios_player_sdk_startplay_test.conf'"
 sh /opt/kafka3/bin/kafka-console-consumer.sh --topic openrs-helios-medusa-play-vod-quality-test  -bootstrap-server bigdata-appsvr-130-1:9094 |head
+
+ansible logstashs -i logstash.host -mshell -a"su - moretv -c  'cat /data/logs/logstash_v5/openrs-medusa-player-sdk-startplay-test.log|grep tvwy342d7pno'"
+ansible logstashs -i logstash.host -mshell -a"su - moretv -c  'cat /data/logs/logstash_v5/openrs-medusa-player-sdk-startplay-test.log|grep p0021ilwtlh'"
+ansible logstashs -i logstash.host -mshell -a"su - moretv -c  'cat /data/logs/logstash_v5/openrs-helios-medusa-play-vod-quality-test.log|grep tvwy342d7pno'"
+ansible logstashs -i logstash.host -mshell -a"su - moretv -c  'cat /data/logs/logstash_v5/openrs-helios-medusa-play-vod-quality-test.log|grep b0020o8eq5n'"
+ansible logstashs -i logstash.host -mshell -a"su - moretv -c  'cat /data/logs/logstash_v5/openrs-helios-medusa-play-vod-quality-test.log|grep tvwyefklmnhj'"
+
+sh /opt/kafka3/bin/kafka-console-consumer.sh --topic log-raw-boikgpokn78sb95ktmsc1bnkechpgj9l -bootstrap-server bigdata-appsvr-130-1:9094 | grep p0021ilwtlh|grep 304303_50101_1300062 |head
+sh /opt/kafka3/bin/kafka-console-consumer.sh --topic log-raw-boikgpokn78sb95ktmsc1bnkechpgj9l -bootstrap-server bigdata-appsvr-130-1:9094 | grep p0021ilwtlh|grep 304303_50101_1300062 |head
+sh /opt/kafka3/bin/kafka-console-consumer.sh --topic medusa-processed-log  -bootstrap-server bigdata-appsvr-130-1:9094 | grep medusa-player-sdk-startPlay|grep 304303_50101_1300062|grep vod|head
