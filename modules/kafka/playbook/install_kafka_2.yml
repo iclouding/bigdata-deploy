@@ -3,45 +3,51 @@
   tasks:
     - name: copy kafka tar file to remote host
       shell: ncftpget -z -ubigdata -p'whaley!90365' 10.255.130.6 /tmp bigdata/{{ item }}
+      tags: install
       with_items:
         - kafka2_2.11-0.8.2.2.tar.gz
 
     - name: tar kafka tar to /app
       shell: cd /tmp && tar zxvf  kafka2_2.11-0.8.2.2.tar.gz -C /app
+      tags: install
       args:
         creates: /app/kafka2_2.11-0.8.2.2/.install
 
-    - name: /app/kafka_2.11-0.8.2.2 owner to kafka2
-      file: name=/app/kafka2_2.11-0.8.2.2 owner=moretv group=moretv
+    - name: /app/kafka2_2.11-0.8.2.2  owner to kafka2
+      file: name=/app/kafka2_2.11-0.8.2.2  owner=moretv group=moretv
+      tags: install
 
-    - name: /app/kafka3_2.10-0.8.2.2  owner to kafka3
-      shell: chown -R moretv. /app/kafka2_2.11-0.8.2.2/
-
-
-    - name: create Create a soft link to kafka
-      file: src=/app/kafka2_2.11-0.8.2.2 dest=/opt/kafka2 state=link owner=moretv group=moretv
-
-    - name: copy kafka config file to remote host
-      copy: src=/data/tools/ansible/modules/kafka/config/kafka2.properties dest=/opt/kafka2/config/server.properties owner=moretv group=moretv mode=0771
+    - name: /app/kafka2_2.11-0.8.2.2  owner to kafka2
+      shell: chown -R moretv. /app/kafka2_2.11-0.8.2.2
+      tags: install
 
     - name: create kafka need directory
       file: path={{ item }}  state=directory  owner=moretv group=moretv
+      tags: install
       with_items:
         - /data/logs/kafka2
 
+    - name: /app/kafka2_2.11-0.8.2.2  owner to kafka4
+      shell: chmod 771 -R /app/kafka2_2.11-0.8.2.2/bin/*
+      tags: install
+
+    - name: create a soft link to kafka2
+      file: src=/app/kafka2_2.11-0.8.2.2 dest=/opt/kafka2 state=link owner=moretv group=moretv
+      tags: install
+
+    - name: copy kafka config file to remote host
+      copy: src=/data/tools/ansible/modules/kafka/config/kafka2.properties dest=/opt/kafka2/config/server.properties owner=moretv group=moretv mode=0771
+      tags: config
+
     - name: sync  modi conf script to desc host
       copy: src=/data/tools/ansible/modules/ansible/scripts/modi_conf/{{ item }} dest=/data/scripts/{{ item }} owner=moretv group=moretv mode=0755
+      tags: config
       with_items:
         - make_conf.py
         - kafka.conf
 
     - name: run modi config script
       shell: python make_conf.py kafka.conf
+      tags: config
       args:
         chdir: /data/scripts
-
-    - name: touch install file
-      shell: touch /app/kafka2_2.11-0.8.2.2/.install
-      tags: install
-      args:
-        creates: /app/kafka2_2.11-0.8.2.2/.install

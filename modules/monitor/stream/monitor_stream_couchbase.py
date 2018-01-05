@@ -31,8 +31,7 @@ def log_msg(fun_name, err_msg, level):
 
 def send_alter_mail(sub, body, sendto):
     mail_content = dict()
-    mysub = " %s " % socket.gethostname()
-    mail_content["sub"] = mysub + sub
+    mail_content["sub"] = sub
     mail_content["content"] = body
     mail_content["sendto"] = sendto
     mail_url = 'http://10.19.15.127:5006/mail/api/v1.0/send'

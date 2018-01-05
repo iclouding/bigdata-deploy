@@ -19,7 +19,7 @@ nohup sh /opt/kafka3/bin/kafka-console-consumer.sh --topic openrs-helios-medusa-
 
 业务简介：
 对于电视猫业务：
-  当eventId为medusa-player-sdk-startPlay，并且errorCode为304303_101_62，并且playType为vod，并且source为tencent2或qq
+  当eventId为medusa-player-sdk-startPlay，并且errorCode为304303_50101_1300062，并且playType为vod，并且source为tencent2或qq
  输出 ["videoSid","^source$","playUrl"] 为kafka topic1
 
 对于电视业务：
