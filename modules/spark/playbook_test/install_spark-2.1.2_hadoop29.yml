@@ -35,3 +35,7 @@
         - spark-defaults.conf
         - spark-env.sh
         - log4j.properties
+        - slaves
+        - hive-site.xml
+        - spark-thrift-sparkconf.conf
+        - launch-thriftserver.sh
