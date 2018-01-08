@@ -1,0 +1,43 @@
+---
+- hosts: all
+  tasks:
+
+    - name: create directory
+      file: path={{ item }} state=directory owner=spark group=hadoop
+      tags: install
+      with_items:
+        - /data/logs/spark221
+
+    - name: copy spark tar file to remote host
+      shell: ncftpget -z -ubigdata -p'whaley!90365' 10.255.130.6 /tmp bigdata/{{ item }}
+      tags: install
+      with_items:
+        - spark-2.2.1-bin-hadoop2.9.0.tgz
+
+    - name: tar spark tar to /app
+      shell: cd /tmp && tar zxvf  spark-2.2.1-bin-hadoop2.9.0.tgz  -C /app
+      tags: install
+      args:
+        creates: /app/spark-2.2.1-bin-hadoop2.9.0/.install
+
+    - name: owner to spark
+      shell: chown -R spark:hadoop /app/spark-2.2.1-bin-hadoop2.9.0
+      tags: install
+
+    - name: /app/spark-2.2.1-bin-hadoop2.9.0 owner to spark
+      file: name=/app/spark-2.2.1-bin-hadoop2.9.0 owner=spark group=hadoop
+      tags: install
+
+     - name: create a soft link to spark
+       file: src={{ item.src }} dest={{ item.dest }} state=link owner=spark group=hadoop
+       tags: install
+       with_items:
+         - { src: '/app/spark-2.2.1-bin-hadoop2.9.0', dest: '/opt/spark221' }
+
+    - name: copy spark config file to remote host spark221_hadoop29_test_config
+      copy: src=/data/tools/ansible/modules/spark/config_test/spark2.2.1_hadoop29/{{ item }} dest=/app/spark-2.2.1-bin-hadoop2.9.0/conf/{{ item }} owner=spark group=hadoop mode=0771
+      tags: spark221_hadoop29_test_config
+      with_items:
+        - spark-defaults.conf
+        - spark-env.sh
+        - log4j.properties

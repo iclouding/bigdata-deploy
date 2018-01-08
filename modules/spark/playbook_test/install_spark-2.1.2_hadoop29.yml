@@ -28,9 +28,9 @@
       file: name=/app/spark-2.1.2-bin-hadoop2.9.0 owner=spark group=hadoop
       tags: install
 
-    - name: copy spark config file to remote host spark2.1.2_hadoop29_dev
-      copy: src=/data/tools/ansible/modules/spark/config/spark2.1.2_hadoop29_dev/{{ item }} dest=/app/spark-2.1.2-bin-hadoop2.9.0/conf/{{ item }} owner=spark group=hadoop mode=0771
-      tags: spark212_hadoop29_dev_config
+    - name: copy spark config file to remote host spark2.1.2_hadoop29_test
+      copy: src=/data/tools/ansible/modules/spark/config_test/spark2.1.2_hadoop29/{{ item }} dest=/app/spark-2.1.2-bin-hadoop2.9.0/conf/{{ item }} owner=spark group=hadoop mode=0771
+      tags: spark212_hadoop29_test_config
       with_items:
         - spark-defaults.conf
         - spark-env.sh
