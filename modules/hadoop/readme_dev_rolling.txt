@@ -99,7 +99,7 @@ cgroup权限的更改
         sh /opt/hadoop/sbin/yarn-daemon.sh stop resourcemanager
         sh /opt/hadoop/sbin/yarn-daemon.sh start resourcemanager
 3.升级DNs
-    1.选择一小部分数据节点（例如特定机架下的所有数据节点）。
+    1.选择一小部分数据节点（例如特定机架下的所有数据节点，hdfs dfsadmin -printTopology）。
          1.运行“hdfs dfsadmin -shutdownDatanode <DATANODE_HOST：IPC_PORT> upgrade”来关闭所选数据节点之一。
            在nn2节点【这个时候已经成为了active】,hdfs dfsadmin -shutdownDatanode 10.255.129.104:50020 upgrade
            ansible nn2 -i dev_rolling.host -mshell -a"su - hdfs -c 'hdfs dfsadmin -shutdownDatanode 10.255.129.104:50020 upgrade'"
@@ -146,7 +146,7 @@ cgroup权限的更改
 
    2.重复上述步骤，直到集群中的所有数据节点都被升级。
 4.完成滚动升级
-   1.运行“hdfs dfsadmin -rollingUpgrade finalize”来完成滚动升级。【等待一周后、没有发现问题再执行finalize命令，否则影响将级和回滚】
+   1.运行“hdfs dfsadmin -rollingUpgrade finalize”来完成滚动升级。【等待一周后、没有发现问题再执行finalize命令，否则影响降级和回滚】
      【等一周、确认升级无误】ansible nn2 -i dev_rolling.host -mshell -a"su - hdfs -c 'hdfs dfsadmin -rollingUpgrade finalize'"
 
 
