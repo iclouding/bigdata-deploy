@@ -44,7 +44,7 @@ for f in $HADOOP_HOME/contrib/capacity-scheduler/*.jar; do
 done
 
 # The maximum amount of heap to use, in MB. Default is 1000.
-export HADOOP_HEAPSIZE=24768
+export HADOOP_HEAPSIZE=8192
 #export HADOOP_NAMENODE_INIT_HEAPSIZE=4096
 # Extra Java runtime options.  Empty by default.
 export HADOOP_OPTS="$HADOOP_OPTS  -Dhadoop.home.dir=$HADOOP_HOME -Djava.net.preferIPv4Stack=true"
