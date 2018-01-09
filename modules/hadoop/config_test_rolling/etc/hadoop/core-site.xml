@@ -74,4 +74,14 @@
         <value>/opt/hadoop/etc/hadoop/excludes</value>
     </property>
 
+    <!-- used for hue access,jiulin -->
+    <property>
+        <name>hadoop.proxyuser.hue.groups</name>
+        <value>*</value>
+    </property>
+    <property>
+        <name>hadoop.proxyuser.hue.hosts</name>
+        <value>*</value>
+    </property>
+
 </configuration>
