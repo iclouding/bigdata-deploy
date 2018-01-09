@@ -46,4 +46,9 @@
         - slaves
         - hive-site.xml
         - spark-thrift-sparkconf.conf
+
+    - name: copy spark config file to remote host spark221_hadoop29_test_config2
+      copy: src=/data/tools/ansible/modules/spark/config_test/spark2.2.1_hadoop29/{{ item }} dest=/app/spark-2.2.1-bin-hadoop2.9.0/sbin/{{ item }} owner=spark group=hadoop mode=0744
+      tags: spark221_hadoop29_test_config
+      with_items:
         - launch-thriftserver.sh
