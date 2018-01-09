@@ -41,35 +41,40 @@ ansible-playbook -i test_rolling.host install_hadoop-bin_test_rolling.yml -t con
 --------------linux cgroup--------------:
 1.安装cgroup
 cd /data/tools/ansible/modules/hadoop/playbook
-ansible all -i test_rolling.host -mshell -a"yum install -y libcgroup-tools"
+ansible cgroup -i test_rolling.host -mshell -a"yum install -y libcgroup-tools"
 
 2.启动cgroup
-ansible all -i test_rolling.host -mshell -a"systemctl start cgconfig.service"
+ansible cgroup -i test_rolling.host -mshell -a"systemctl start cgconfig.service"
 
 3.查看cgroup服务是否启动成功
-ansible all -i test_rolling.host -mshell -a"systemctl status cgconfig.service"
+ansible cgroup -i test_rolling.host -mshell -a"systemctl status cgconfig.service"
 
 4.创建hadoop-yarn命名的cgroup
-ansible all -i test_rolling.host -mshell -a"cd /sys/fs/cgroup/cpu;mkdir -p hadoop-yarn"
+ansible cgroup -i test_rolling.host -mshell -a"cd /sys/fs/cgroup/cpu;mkdir -p hadoop-yarn"
 查看目录创建是否成功
-ansible all -i test_rolling.host -mshell -a"ls -al /sys/fs/cgroup/cpu/"
+ansible cgroup -i test_rolling.host -mshell -a"ls -al /sys/fs/cgroup/cpu/hadoop-yarn"
 
-5.改变权限
+5.改变权限[等待安装完hadoop后操作]
 系统还要求etc/hadoop/container-executor.cfg 的所有父目录(一直到/ 目录) owner 都为 root
-  ansible all -i test_rolling.host -mshell -a"cd /app;chown root:hadoop hadoop-2.9.0"
-  ansible all -i test_rolling.host -mshell -a"cd /app/hadoop-2.9.0;chown root:hadoop etc"
-  ansible all -i test_rolling.host -mshell -a"cd /app/hadoop-2.9.0/etc;chown root:hadoop hadoop"
+  ansible cgroup -i test_rolling.host -mshell -a"cd /app;chown root:hadoop hadoop-2.9.0"
+  ansible cgroup -i test_rolling.host -mshell -a"cd /app/hadoop-2.9.0;chown root:hadoop etc"
+  ansible cgroup -i test_rolling.host -mshell -a"cd /app/hadoop-2.9.0/etc;chown root:hadoop hadoop"
 
 container-executor权限有特殊要求
-  ansible all -i test_rolling.host -mshell -a"cd /app/hadoop-2.9.0/bin;chown root:hadoop container-executor"
-  ansible all -i test_rolling.host -mshell -a"cd /app/hadoop-2.9.0;chmod 6050 bin/container-executor"
+  ansible cgroup -i test_rolling.host -mshell -a"cd /app/hadoop-2.9.0/bin;chown root:hadoop container-executor"
+  ansible cgroup -i test_rolling.host -mshell -a"cd /app/hadoop-2.9.0;chmod 6050 bin/container-executor"
 
-cgroup权限的更改
-  ansible all -i test_rolling.host -mshell -a"cd /sys/fs/cgroup/;chmod 777 cpu,cpuacct"
-  ansible all -i test_rolling.host -mshell -a"cd /sys/fs/cgroup/cpu,cpuacct;chmod 777 -R hadoop-yarn"
+cgroup权限的更改[测试环境，刚才all host执行5步骤]
+  ansible cgroup -i test_rolling.host -mshell -a"cd /sys/fs/cgroup/;chmod 777 cpu,cpuacct"
+  ansible cgroup -i test_rolling.host -mshell -a"cd /sys/fs/cgroup/cpu,cpuacct;chmod 777 -R hadoop-yarn"
 
 
 --------------rolling update--------------:
+hdfs@bigtest-appsvr-129-1,/home/hdfs/fsimage_backup目录，备份fsimage镜像
+执行 hdfs dfsadmin  -fetchImage  .
+或者
+到namenode active节点，/data/hdfs/name/current目录,拷贝最新的镜像，例如，fsimage_0000000000050828706
+
 假设有两个名称节点NN1和NN2，其中NN1和NN2分别处于活动和待机状态。以下是升级HA集群的步骤：
 1.准备滚动升级
     1.运行“hdfs dfsadmin -rollingUpgrade prepare”为回滚创建一个fsimage。[在NN1机器上运行]
@@ -185,4 +190,8 @@ f.yarn的其他两个demon服务
 jps
 ApplicationHistoryServer ->  timeline             /opt/hadoop/sbin/yarn-daemon.sh start timelineserver          [yarn]
 JobHistoryServer         -> JobHistoryServer      /opt/hadoop/sbin//mr-jobhistory-daemon.sh start historyserver [yarn]
-
+g.检测特定文件夹只能够文件块是否损坏
+hdfs fsck --help
+hdfs fsck /user/spark/
+hdfs fsck -list-corruptfileblocks /user/spark/
+hdfs fsck -delete /user/spark/.sparkStaging/application_1513602413357_0134/__spark_libs__7578766376575669211.zip
