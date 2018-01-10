@@ -37,6 +37,7 @@ ansible-playbook -i test_rolling.host install_hadoop-bin_test_rolling.yml -t ins
 
 --配置分发
 ansible-playbook -i test_rolling.host install_hadoop-bin_test_rolling.yml -t config
+ansible-playbook -i test_rolling.host install_hadoop-bin_test_rolling.yml -t ranger_config
 
 --------------linux cgroup--------------:
 1.安装cgroup
@@ -220,32 +221,34 @@ hdfs fsck --help
 3/user/spark/
 hdfs fsck -list-corruptfileblocks /user/spark/
 hdfs fsck -delete /user/spark/.sparkStaging/application_1513602413357_0134/__spark_libs__7578766376575669211.zip
-h.重启所有data node[需要在NN active上执行]
-sh /opt/hadoop/sbin/hadoop-daemons.sh stop datanode
-sh /opt/hadoop/sbin/hadoop-daemons.sh start datanode
-ansible nn2 -i test_rolling.host -mshell -a"su - hdfs -c 'hdfs dfsadmin -shutdownDatanode 10.255.129.205:50020 upgrade'"
 
-
+--------------------------------启动停止命令--------------------------------
+启动停止全部datanode
 ansible nn1 -i test_rolling.host -mshell -a"su - hdfs -c 'sh /opt/hadoop/sbin/hadoop-daemons.sh stop datanode'"
 ansible nn1 -i test_rolling.host -mshell -a"su - hdfs -c 'sh /opt/hadoop/sbin/hadoop-daemons.sh start datanode'"
 
+滚动启动namenode
 ansible nn1 -i test_rolling.host -mshell -a"su - hdfs -c 'hdfs namenode -rollingUpgrade started'"
 ansible nn2 -i test_rolling.host -mshell -a"su - hdfs -c 'hdfs namenode -rollingUpgrade started'"
 
+启动停止resourcemanager
 ansible rm1 -i test_rolling.host -mshell -a"su - yarn -c '/opt/hadoop/sbin/yarn-daemon.sh start resourcemanager'"
 ansible rm1 -i test_rolling.host -mshell -a"su - yarn -c '/opt/hadoop/sbin/yarn-daemon.sh start resourcemanager'"
 ansible rm1 -i test_rolling.host -mshell -a"su - yarn -c '/opt/hadoop/sbin/yarn-daemon.sh stop resourcemanager'"
 ansible rm2 -i test_rolling.host -mshell -a"su - yarn -c '/opt/hadoop/sbin/yarn-daemon.sh stop resourcemanager'"
 
-
+启动停止全部nodemanager
 ansible rm2 -i test_rolling.host -mshell -a"su - yarn -c 'sh /opt/hadoop/sbin/yarn-daemons.sh start nodemanager'"
-ansible rm2 -i test_rolling.host -mshell -a"su - yarn -c 'sh /opt/hadoop/sbin/yarn-daemons.sh stop nodemanager'"
+ansible rm2 -i test_rolling.host -mshell -a"su - yarn -c 'sh /opt/hadoop/sbin/yarn-daemons.sh stop  nodemanager'"
 
-ansible nodemanager -i test_rolling.host -mshell -a"su - hdfs -c 'hdfs dfsadmin -shutdownDatanode localhost:50020 upgrade'"
+正常启动停止namenode
+ansible nn1 -i test_rolling.host -mshell -a"su - hdfs -c '/opt/hadoop/sbin/hadoop-daemon.sh stop  namenode'"
+ansible nn2 -i test_rolling.host -mshell -a"su - hdfs -c '/opt/hadoop/sbin/hadoop-daemon.sh stop  namenode'"
+ansible nn1 -i test_rolling.host -mshell -a"su - hdfs -c '/opt/hadoop/sbin/hadoop-daemon.sh start namenode'"
+ansible nn2 -i test_rolling.host -mshell -a"su - hdfs -c '/opt/hadoop/sbin/hadoop-daemon.sh start namenode'"
 
-ansible nodemanager -i test_rolling.host -mshell -a"su - hdfs -c 'jps'"
 
-
+--------------------------------查看服务是否正常--------------------------------
 查看datanode是否正常
 ansible nodemanager -i test_rolling.host -mshell -a"su - hdfs -c 'jps'"
 查看node manager是否正常
@@ -254,5 +257,9 @@ ansible nodemanager -i test_rolling.host -mshell -a"su - yarn -c 'jps'"
 ansible namenode -i test_rolling.host -mshell -a"su - hdfs -c 'jps'"
 查看resource manager是否正常
 ansible resourcemanager -i test_rolling.host -mshell -a"su - yarn -c 'jps'"
-JobHistoryServer
-ApplicationHistoryServer
+查看journalnode是否正常
+ansible journalnode -i test_rolling.host -mshell -a"su - hdfs -c 'jps'"
+查看JobHistoryServer是否正常
+ansible jobhistoryserver -i test_rolling.host -mshell -a"su - yarn -c 'jps'"
+查看JobHistoryServer是否正常
+ansible timelineserver -i test_rolling.host -mshell -a"su - yarn -c 'jps'"
