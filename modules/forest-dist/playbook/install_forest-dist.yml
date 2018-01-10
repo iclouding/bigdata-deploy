@@ -1,35 +1,37 @@
 ---
 - hosts: forest-dist
-  tasks:
+  vars: 
+    - appversion: 1.0.0
 
+  tasks:
     - name: copy file to remote host
       shell: ncftpget -z -ubigdata -p'whaley!90365' 10.255.130.6 /tmp bigdata/{{ item }}
       tags: install
       with_items:
-        - forest-dist-bin.zip
+        - forest-dist-{{ appversion }}-bin.zip
 
     - name: unzip file to /app
-      shell: cd /app && unzip forest-dist-bin.zip
+      shell: cd /app && unzip forest-dist--{{ appversion }}-bin.zip
       tags: install
       args:
-        creates: /app/forest-dist-bin/.install
+        creates: /app/forest-dist-{{ appversion }}/.install
 
     - name: create log directory
       file: path=/data/logs/forest-dist state=directory owner=hadoop group=hadoop mode=0777
       tags: install
 
     - name: change owner
-      file: name=/app/forest-dist owner=hadoop group=hadoop
+      file: name=/app/forest-dist-{{ appversion }} owner=hadoop group=hadoop
       tags: install
 
     - name: touch install file
-      shell: touch /app/forest-dist/.install
+      shell: touch /app/forest-dist-{{ appversion }}/.install
       tags: install
       args:
-        creates: /app/forest-dist/.install
+        creates: /app/forest-dist-{{ appversion }}/.install
 
     - name: copy config file
-      copy: src=/data/tools/ansible/modules/forest-dist/config/{{item.src}} dest=/app/forest-dist/{{item.src}} owner=hadoop group=hadoop mode=755
+      copy: src=/data/tools/ansible/modules/forest-dist/config/{{item.src}} dest=/app/forest-dist-{{ appversion }}/{{item.dest}} owner=hadoop group=hadoop mode=755
       tags: config
       with_items:
         - { src: 'conf/GenericActionLogPostProcessor.properties', dest: 'conf/GenericActionLogPostProcessor.properties'}
@@ -46,18 +48,18 @@
         - { src: 'sbin/commit_tmp_file.sh', dest: 'sbin/commit_tmp_file.sh'}
 
     - name: create a soft link
-      file: src=/app/forest-dist dest=/opt/forest-dist state=link owner=hadoop group=hadoop
+      file: src=/app/forest-dist dest=/opt/forest-dist-{{ appversion }} state=link owner=hadoop group=hadoop
       tags: link
 
     - name: create soft link to hdfs
-      file: src=/opt/hadoop/etc/hadoop/{{item.src}} dest=/app/forest-dist/conf/{{item.dest}} state=link owner=hadoop group=hadoop
+      file: src=/opt/hadoop/etc/hadoop/{{item.src}} dest=/app/forest-dist-{{ appversion }}/conf/{{item.dest}} state=link owner=hadoop group=hadoop
       tags: link
       with_items:
         - { src: 'core-site.xml', dest: 'core-site.xml'}
         - { src: 'hdfs-site.xml', dest: 'hdfs-site.xml'}
 
     - name: update jar file
-      copy: src=/data/tools/ansible/modules/forest-dist/config/{{item.src}} dest=/app/forest-dist/{{item.src}} owner=hadoop group=hadoop mode=755
+      copy: src=/data/tools/ansible/modules/forest-dist/config/{{item.src}} dest=/app/forest-dist-{{ appversion }}/{{item.src}} owner=hadoop group=hadoop mode=755
       tags: updatejar
       with_items:
         - { src: 'lib/forest-actionlog-1.0-SNAPSHOT.jar', dest: 'lib/forest-actionlog-1.0-SNAPSHOT.jar'}
