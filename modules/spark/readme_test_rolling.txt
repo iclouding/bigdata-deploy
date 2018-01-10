@@ -39,5 +39,8 @@ ansible all -i spark.host -mshell -a"mkdir /app/spark-2.2.1-bin-hadoop2.9.0/bk ;
 ansible all -i spark.host -mcopy -a"src=/data/tools/ansible/modules/spark/package/jersey-client-1.9.jar dest=/app/spark-2.2.1-bin-hadoop2.9.0/jars  owner=spark group=hadoop mode=755"
 ansible all -i spark.host -mcopy -a"src=/data/tools/ansible/modules/spark/package/jersey-core-1.9.jar dest=/app/spark-2.2.1-bin-hadoop2.9.0/jars  owner=spark group=hadoop mode=755"
 
+启动spark thrift server
+ansible thriftserver -i spark.host -mshell -a"su - spark -c 'cd /opt/spark221/sbin && ./launch-thriftserver.sh'"
+
 
 

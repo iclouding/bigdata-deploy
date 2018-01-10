@@ -37,6 +37,7 @@ ansible-playbook -i test_rolling.host install_hadoop-bin_test_rolling.yml -t ins
 
 --配置分发
 ansible-playbook -i test_rolling.host install_hadoop-bin_test_rolling.yml -t config
+ansible-playbook -i test_rolling.host install_hadoop-bin_test_rolling.yml -t ranger_config
 
 --------------linux cgroup--------------:
 1.安装cgroup
@@ -48,31 +49,30 @@ ansible cgroup -i test_rolling.host -mshell -a"systemctl start cgconfig.service"
 关闭：
 ansible cgroup -i test_rolling.host -mshell -a"systemctl stop cgconfig.service"
 
-
 3.查看cgroup服务是否启动成功
 ansible cgroup -i test_rolling.host -mshell -a"systemctl status cgconfig.service"
 
 4.创建hadoop-yarn命名的cgroup[启动服务后，创建目录]
+ansible cgroup -i test_rolling.host -mshell -a"cd /sys/fs/cgroup/;chmod 777 'cpu,cpuacct'"
 ansible cgroup -i test_rolling.host -mshell -a"cd /sys/fs/cgroup/cpu;mkdir -p hadoop-yarn"
+cgroup权限的更改
+ansible cgroup -i test_rolling.host -mshell -a"cd /sys/fs/cgroup/cpu,cpuacct;chmod 777 -R hadoop-yarn"
+
 查看目录创建是否成功
 ansible cgroup -i test_rolling.host -mshell -a"ls -al /sys/fs/cgroup/cpu/hadoop-yarn"
+ansible cgroup -i test_rolling.host -mshell -a"ls -al /sys/fs/cgroup/cpu,cpuacct "
+ansible cgroup -i test_rolling.host -mshell -a"ls -al /sys/fs/cgroup "
 
 5.改变权限[等待安装完hadoop后操作]
 系统还要求etc/hadoop/container-executor.cfg 的所有父目录(一直到/ 目录) owner 都为 root
-  ansible cgroup -i test_rolling.host -mshell -a"cd /app;chown root:hadoop hadoop-2.9.0"
-  ansible cgroup -i test_rolling.host -mshell -a"cd /app/hadoop-2.9.0;chown root:hadoop etc"
-  ansible cgroup -i test_rolling.host -mshell -a"cd /app/hadoop-2.9.0/etc;chown root:hadoop hadoop"
+  ansible all -i test_rolling.host -mshell -a"cd /app;chown root:hadoop hadoop-2.9.0"
+  ansible all -i test_rolling.host -mshell -a"cd /app/hadoop-2.9.0;chown root:hadoop etc"
+  ansible all -i test_rolling.host -mshell -a"cd /app/hadoop-2.9.0/etc;chown root:hadoop hadoop"
 
 container-executor权限有特殊要求
-  ansible cgroup -i test_rolling.host -mshell -a"cd /app/hadoop-2.9.0/bin;chown root:hadoop container-executor"
-  ansible cgroup -i test_rolling.host -mshell -a"cd /app/hadoop-2.9.0;chmod 6050 bin/container-executor"
+  ansible all -i test_rolling.host -mshell -a"cd /app/hadoop-2.9.0/bin;chown root:hadoop container-executor"
+  ansible all -i test_rolling.host -mshell -a"cd /app/hadoop-2.9.0;chmod 6050 bin/container-executor"
 
-cgroup权限的更改[测试环境，刚才all host执行5步骤]
-  ansible cgroup -i test_rolling.host -mshell -a"cd /sys/fs/cgroup/;chmod 777 cpu,cpuacct"
-  ansible cgroup -i test_rolling.host -mshell -a"cd /sys/fs/cgroup/cpu,cpuacct;chmod 777 -R hadoop-yarn"
-  检测：
-  ansible cgroup -i test_rolling.host -mshell -a"ls -al /sys/fs/cgroup/cpu,cpuacct "
-  ansible cgroup -i test_rolling.host -mshell -a"ls -al /sys/fs/cgroup "
 
 
 --------------rolling update--------------:
@@ -220,32 +220,34 @@ hdfs fsck --help
 3/user/spark/
 hdfs fsck -list-corruptfileblocks /user/spark/
 hdfs fsck -delete /user/spark/.sparkStaging/application_1513602413357_0134/__spark_libs__7578766376575669211.zip
-h.重启所有data node[需要在NN active上执行]
-sh /opt/hadoop/sbin/hadoop-daemons.sh stop datanode
-sh /opt/hadoop/sbin/hadoop-daemons.sh start datanode
-ansible nn2 -i test_rolling.host -mshell -a"su - hdfs -c 'hdfs dfsadmin -shutdownDatanode 10.255.129.205:50020 upgrade'"
 
-
+--------------------------------启动停止命令--------------------------------
+启动停止全部datanode
 ansible nn1 -i test_rolling.host -mshell -a"su - hdfs -c 'sh /opt/hadoop/sbin/hadoop-daemons.sh stop datanode'"
 ansible nn1 -i test_rolling.host -mshell -a"su - hdfs -c 'sh /opt/hadoop/sbin/hadoop-daemons.sh start datanode'"
 
+滚动启动namenode
 ansible nn1 -i test_rolling.host -mshell -a"su - hdfs -c 'hdfs namenode -rollingUpgrade started'"
 ansible nn2 -i test_rolling.host -mshell -a"su - hdfs -c 'hdfs namenode -rollingUpgrade started'"
 
+启动停止resourcemanager
 ansible rm1 -i test_rolling.host -mshell -a"su - yarn -c '/opt/hadoop/sbin/yarn-daemon.sh start resourcemanager'"
-ansible rm1 -i test_rolling.host -mshell -a"su - yarn -c '/opt/hadoop/sbin/yarn-daemon.sh start resourcemanager'"
+ansible rm2 -i test_rolling.host -mshell -a"su - yarn -c '/opt/hadoop/sbin/yarn-daemon.sh start resourcemanager'"
 ansible rm1 -i test_rolling.host -mshell -a"su - yarn -c '/opt/hadoop/sbin/yarn-daemon.sh stop resourcemanager'"
 ansible rm2 -i test_rolling.host -mshell -a"su - yarn -c '/opt/hadoop/sbin/yarn-daemon.sh stop resourcemanager'"
 
-
+启动停止全部nodemanager
 ansible rm2 -i test_rolling.host -mshell -a"su - yarn -c 'sh /opt/hadoop/sbin/yarn-daemons.sh start nodemanager'"
-ansible rm2 -i test_rolling.host -mshell -a"su - yarn -c 'sh /opt/hadoop/sbin/yarn-daemons.sh stop nodemanager'"
+ansible rm2 -i test_rolling.host -mshell -a"su - yarn -c 'sh /opt/hadoop/sbin/yarn-daemons.sh stop  nodemanager'"
 
-ansible nodemanager -i test_rolling.host -mshell -a"su - hdfs -c 'hdfs dfsadmin -shutdownDatanode localhost:50020 upgrade'"
+正常启动停止namenode
+ansible nn1 -i test_rolling.host -mshell -a"su - hdfs -c '/opt/hadoop/sbin/hadoop-daemon.sh stop  namenode'"
+ansible nn2 -i test_rolling.host -mshell -a"su - hdfs -c '/opt/hadoop/sbin/hadoop-daemon.sh stop  namenode'"
+ansible nn1 -i test_rolling.host -mshell -a"su - hdfs -c '/opt/hadoop/sbin/hadoop-daemon.sh start namenode'"
+ansible nn2 -i test_rolling.host -mshell -a"su - hdfs -c '/opt/hadoop/sbin/hadoop-daemon.sh start namenode'"
 
-ansible nodemanager -i test_rolling.host -mshell -a"su - hdfs -c 'jps'"
 
-
+--------------------------------查看服务是否正常--------------------------------
 查看datanode是否正常
 ansible nodemanager -i test_rolling.host -mshell -a"su - hdfs -c 'jps'"
 查看node manager是否正常
@@ -254,5 +256,9 @@ ansible nodemanager -i test_rolling.host -mshell -a"su - yarn -c 'jps'"
 ansible namenode -i test_rolling.host -mshell -a"su - hdfs -c 'jps'"
 查看resource manager是否正常
 ansible resourcemanager -i test_rolling.host -mshell -a"su - yarn -c 'jps'"
-JobHistoryServer
-ApplicationHistoryServer
+查看journalnode是否正常
+ansible journalnode -i test_rolling.host -mshell -a"su - hdfs -c 'jps'"
+查看JobHistoryServer是否正常
+ansible jobhistoryserver -i test_rolling.host -mshell -a"su - yarn -c 'jps'"
+查看JobHistoryServer是否正常
+ansible timelineserver -i test_rolling.host -mshell -a"su - yarn -c 'jps'"
