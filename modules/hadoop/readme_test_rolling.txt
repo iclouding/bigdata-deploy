@@ -41,15 +41,18 @@ ansible-playbook -i test_rolling.host install_hadoop-bin_test_rolling.yml -t con
 --------------linux cgroup--------------:
 1.安装cgroup
 cd /data/tools/ansible/modules/hadoop/playbook
-ansible cgroup -i test_rolling.host -mshell -a"yum install -y libcgroup-tools"
+ansible cgroup -i test_rolling.host -mshell -a"yum install -y libcgroup libcgroup-tools"
 
 2.启动cgroup
 ansible cgroup -i test_rolling.host -mshell -a"systemctl start cgconfig.service"
+关闭：
+ansible cgroup -i test_rolling.host -mshell -a"systemctl stop cgconfig.service"
+
 
 3.查看cgroup服务是否启动成功
 ansible cgroup -i test_rolling.host -mshell -a"systemctl status cgconfig.service"
 
-4.创建hadoop-yarn命名的cgroup
+4.创建hadoop-yarn命名的cgroup[启动服务后，创建目录]
 ansible cgroup -i test_rolling.host -mshell -a"cd /sys/fs/cgroup/cpu;mkdir -p hadoop-yarn"
 查看目录创建是否成功
 ansible cgroup -i test_rolling.host -mshell -a"ls -al /sys/fs/cgroup/cpu/hadoop-yarn"
@@ -67,6 +70,9 @@ container-executor权限有特殊要求
 cgroup权限的更改[测试环境，刚才all host执行5步骤]
   ansible cgroup -i test_rolling.host -mshell -a"cd /sys/fs/cgroup/;chmod 777 cpu,cpuacct"
   ansible cgroup -i test_rolling.host -mshell -a"cd /sys/fs/cgroup/cpu,cpuacct;chmod 777 -R hadoop-yarn"
+  检测：
+  ansible cgroup -i test_rolling.host -mshell -a"ls -al /sys/fs/cgroup/cpu,cpuacct "
+  ansible cgroup -i test_rolling.host -mshell -a"ls -al /sys/fs/cgroup "
 
 
 --------------rolling update--------------:
@@ -115,9 +121,9 @@ hdfs@bigtest-appsvr-129-1,/home/hdfs/fsimage_backup目录，备份fsimage镜像
         ansible rm1 -i test_rolling.host -mshell -a"su - yarn -c '/opt/hadoop/sbin/yarn-daemon.sh start resourcemanager'"
       b.重启node manager节点,yarn用户
         ansible rm2 -i test_rolling.host -mshell -a"su - yarn -c '/opt/hadoop/sbin/yarn-daemons.sh start  nodemanager'"
-    7.升级app server节点
+    7.升级app server节点[等namenode和datanode节点都升级完成，再操作.TODO]
     ansible appserver -i test_rolling.host -mshell -a"rm -f /opt/hadoop;ln -s /app/hadoop-2.9.0 /opt/hadoop;chown -h hadoop:hadoop /opt/hadoop"
-
+    8.重启ApplicationHistoryServer和JobHistoryServer[等namenode和datanode节点都升级完成，再操作.TODO]
 3.升级DNs
     1.选择一小部分数据节点（例如特定机架下的所有数据节点，hdfs dfsadmin -printTopology）。
          1.运行“hdfs dfsadmin -shutdownDatanode <DATANODE_HOST：IPC_PORT> upgrade”来关闭所选数据节点之一。
@@ -195,7 +201,7 @@ b.重启所有node manager[需要在RM上执行]
 c.重启ApplicationHistoryServer
     sh /opt/hadoop/sbin/yarn-daemon.sh stop  timelineserver
     sh /opt/hadoop/sbin/yarn-daemon.sh start timelineserver
-d.重启JobHistoryServer
+d.重启JobHistoryServer[yarn用户]
     sh /opt/hadoop/sbin/mr-jobhistory-daemon.sh stop  historyserver
     sh /opt/hadoop/sbin/mr-jobhistory-daemon.sh start historyserver
 e.更新yarn-site.xml文件，调节cpu负载值
@@ -211,10 +217,42 @@ ApplicationHistoryServer ->  timeline             /opt/hadoop/sbin/yarn-daemon.s
 JobHistoryServer         -> JobHistoryServer      /opt/hadoop/sbin//mr-jobhistory-daemon.sh start historyserver [yarn]
 g.检测特定文件夹只能够文件块是否损坏
 hdfs fsck --help
-hdfs fsck /user/spark/
+3/user/spark/
 hdfs fsck -list-corruptfileblocks /user/spark/
 hdfs fsck -delete /user/spark/.sparkStaging/application_1513602413357_0134/__spark_libs__7578766376575669211.zip
 h.重启所有data node[需要在NN active上执行]
 sh /opt/hadoop/sbin/hadoop-daemons.sh stop datanode
 sh /opt/hadoop/sbin/hadoop-daemons.sh start datanode
+ansible nn2 -i test_rolling.host -mshell -a"su - hdfs -c 'hdfs dfsadmin -shutdownDatanode 10.255.129.205:50020 upgrade'"
 
+
+ansible nn1 -i test_rolling.host -mshell -a"su - hdfs -c 'sh /opt/hadoop/sbin/hadoop-daemons.sh stop datanode'"
+ansible nn1 -i test_rolling.host -mshell -a"su - hdfs -c 'sh /opt/hadoop/sbin/hadoop-daemons.sh start datanode'"
+
+ansible nn1 -i test_rolling.host -mshell -a"su - hdfs -c 'hdfs namenode -rollingUpgrade started'"
+ansible nn2 -i test_rolling.host -mshell -a"su - hdfs -c 'hdfs namenode -rollingUpgrade started'"
+
+ansible rm1 -i test_rolling.host -mshell -a"su - yarn -c '/opt/hadoop/sbin/yarn-daemon.sh start resourcemanager'"
+ansible rm1 -i test_rolling.host -mshell -a"su - yarn -c '/opt/hadoop/sbin/yarn-daemon.sh start resourcemanager'"
+ansible rm1 -i test_rolling.host -mshell -a"su - yarn -c '/opt/hadoop/sbin/yarn-daemon.sh stop resourcemanager'"
+ansible rm2 -i test_rolling.host -mshell -a"su - yarn -c '/opt/hadoop/sbin/yarn-daemon.sh stop resourcemanager'"
+
+
+ansible rm2 -i test_rolling.host -mshell -a"su - yarn -c 'sh /opt/hadoop/sbin/yarn-daemons.sh start nodemanager'"
+ansible rm2 -i test_rolling.host -mshell -a"su - yarn -c 'sh /opt/hadoop/sbin/yarn-daemons.sh stop nodemanager'"
+
+ansible nodemanager -i test_rolling.host -mshell -a"su - hdfs -c 'hdfs dfsadmin -shutdownDatanode localhost:50020 upgrade'"
+
+ansible nodemanager -i test_rolling.host -mshell -a"su - hdfs -c 'jps'"
+
+
+查看datanode是否正常
+ansible nodemanager -i test_rolling.host -mshell -a"su - hdfs -c 'jps'"
+查看node manager是否正常
+ansible nodemanager -i test_rolling.host -mshell -a"su - yarn -c 'jps'"
+查看namenode是否正常
+ansible namenode -i test_rolling.host -mshell -a"su - hdfs -c 'jps'"
+查看resource manager是否正常
+ansible resourcemanager -i test_rolling.host -mshell -a"su - yarn -c 'jps'"
+JobHistoryServer
+ApplicationHistoryServer

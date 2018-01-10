@@ -52,3 +52,12 @@
       with_items:
         - {name: 'container-executor.cfg', dest: '/app/hadoop-2.9.0/etc/hadoop',owner: 'root',group: 'hadoop',  mode: '755'}
 
+    - name: ranger config
+      copy: src=/data/tools/ansible/modules/hadoop/config_test_rolling/etc/hadoop/{{ item.name }} dest={{ item.dest }} owner={{ item.owner }} group={{ item.group }} mode={{ item.mode }}
+      tags: ranger_config
+      with_items:
+        - {name: 'ranger-policymgr-ssl.xml', dest: '/app/hadoop-2.9.0/etc/hadoop',owner: 'hadoop',group: 'hadoop',  mode: '744'}
+        - {name: 'ranger-hdfs-security.xml', dest: '/app/hadoop-2.9.0/etc/hadoop',owner: 'hadoop',group: 'hadoop',  mode: '744'}
+        - {name: 'ranger-hdfs-audit.xml', dest: '/app/hadoop-2.9.0/etc/hadoop',owner: 'hadoop',group: 'hadoop',  mode: '744'}
+        - {name: 'ranger-security.xml', dest: '/app/hadoop-2.9.0/etc/hadoop',owner: 'hadoop',group: 'hadoop',  mode: '644'}
+

@@ -74,7 +74,7 @@
         <value>/opt/hadoop/etc/hadoop/excludes</value>
     </property>
 
-    <!-- used for hue access,jiulin -->
+    <!-- for ranger -->
     <property>
         <name>hadoop.proxyuser.hue.groups</name>
         <value>*</value>
