@@ -1,12 +1,13 @@
 [
   {
     "targets": [
-      "10.10.10.1:65160",
+      "10.255.128.1:9100",
       "10.10.10.2:65160"
     ],
     "labels": {
       "job": "Center",
-      "service": "qtest"
+      "service": "qtest",
+      "group": "cmpt"
     }
   },
   {

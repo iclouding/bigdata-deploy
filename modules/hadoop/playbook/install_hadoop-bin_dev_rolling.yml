@@ -1,0 +1,54 @@
+---
+- hosts: all
+  tasks:
+
+    - name: download hadoop tar file
+      shell: ncftpget -z -ubigdata -p'whaley!90365' 10.255.130.6 /tmp bigdata/{{ item }}
+      tags: install
+      with_items:
+        - hadoop-2.9.0.tar.gz
+
+    - name: decompress hadoop-2.9.0.tar.gz
+      shell: cd /tmp && tar xvf  hadoop-2.9.0.tar.gz -C /app && chown -R hadoop:hadoop /app/hadoop-2.9.0
+      tags: install
+      args:
+        creates: /app/hadoop-2.9.0/.install
+
+    - name: touch install file
+      shell: touch /app/hadoop-2.9.0/.install
+      tags: install
+      args:
+        creates: /app/hadoop-2.9.0/.install
+
+    - name: create soft link for shuffle service
+      file: src=/app/spark-2.1.2-bin-hadoop2.9.0/yarn/spark-2.1.2-yarn-shuffle.jar dest=/app/hadoop-2.9.0/share/hadoop/yarn/spark-yarn-shuffle.jar state=link owner=hadoop group=hadoop
+      tags: install
+
+    - name: copy hadoop config file to remote host
+      copy: src=/data/tools/ansible/modules/hadoop/config_dev_rolling/etc/hadoop/{{ item.name }} dest={{ item.dest }} owner=hadoop group=hadoop mode=755
+      tags: config
+      with_items:
+        - {name: 'capacity-scheduler.xml', dest: '/app/hadoop-2.9.0/etc/hadoop'}
+        - {name: 'fair-scheduler.xml', dest: '/app/hadoop-2.9.0/etc/hadoop'}
+        - {name: 'configuration.xsl', dest: '/app/hadoop-2.9.0/etc/hadoop'}
+        - {name: 'core-site.xml', dest: '/app/hadoop-2.9.0/etc/hadoop'}
+        - {name: 'getRack.py', dest: '/app/hadoop-2.9.0/etc/hadoop'}
+        - {name: 'hadoop-env.sh', dest: '/app/hadoop-2.9.0/etc/hadoop'}
+        - {name: 'hadoop-metrics.properties', dest: '/app/hadoop-2.9.0/etc/hadoop'}
+        - {name: 'hadoop-metrics2.properties', dest: '/app/hadoop-2.9.0/etc/hadoop'}
+        - {name: 'hdfs-site.xml', dest: '/app/hadoop-2.9.0/etc/hadoop'}
+        - {name: 'log4j.properties', dest: '/app/hadoop-2.9.0/etc/hadoop'}
+        - {name: 'mapred-env.sh', dest: '/app/hadoop-2.9.0/etc/hadoop'}
+        - {name: 'mapred-site.xml', dest: '/app/hadoop-2.9.0/etc/hadoop'}
+        - {name: 'slaves', dest: '/app/hadoop-2.9.0/etc/hadoop'}
+        - {name: 'slaves-journalnode', dest: '/app/hadoop-2.9.0/etc/hadoop'}
+        - {name: 'yarn-env.sh', dest: '/app/hadoop-2.9.0/etc/hadoop'}
+        - {name: 'yarn-site.xml', dest: '/app/hadoop-2.9.0/etc/hadoop'}
+        - {name: 'excludes', dest: '/app/hadoop-2.9.0/etc/hadoop'}
+
+    - name: container-executor.cfg config and change owner
+      copy: src=/data/tools/ansible/modules/hadoop/config_dev_rolling/etc/hadoop/{{ item.name }} dest={{ item.dest }} owner={{ item.owner }} group={{ item.group }} mode={{ item.mode }}
+      tags: config
+      with_items:
+        - {name: 'container-executor.cfg', dest: '/app/hadoop-2.9.0/etc/hadoop',owner: 'root',group: 'hadoop',  mode: '755'}
+
