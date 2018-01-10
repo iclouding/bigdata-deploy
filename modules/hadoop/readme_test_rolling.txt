@@ -49,31 +49,30 @@ ansible cgroup -i test_rolling.host -mshell -a"systemctl start cgconfig.service"
 关闭：
 ansible cgroup -i test_rolling.host -mshell -a"systemctl stop cgconfig.service"
 
-
 3.查看cgroup服务是否启动成功
 ansible cgroup -i test_rolling.host -mshell -a"systemctl status cgconfig.service"
 
 4.创建hadoop-yarn命名的cgroup[启动服务后，创建目录]
+ansible cgroup -i test_rolling.host -mshell -a"cd /sys/fs/cgroup/;chmod 777 'cpu,cpuacct'"
 ansible cgroup -i test_rolling.host -mshell -a"cd /sys/fs/cgroup/cpu;mkdir -p hadoop-yarn"
+cgroup权限的更改
+ansible cgroup -i test_rolling.host -mshell -a"cd /sys/fs/cgroup/cpu,cpuacct;chmod 777 -R hadoop-yarn"
+
 查看目录创建是否成功
 ansible cgroup -i test_rolling.host -mshell -a"ls -al /sys/fs/cgroup/cpu/hadoop-yarn"
+ansible cgroup -i test_rolling.host -mshell -a"ls -al /sys/fs/cgroup/cpu,cpuacct "
+ansible cgroup -i test_rolling.host -mshell -a"ls -al /sys/fs/cgroup "
 
 5.改变权限[等待安装完hadoop后操作]
 系统还要求etc/hadoop/container-executor.cfg 的所有父目录(一直到/ 目录) owner 都为 root
-  ansible cgroup -i test_rolling.host -mshell -a"cd /app;chown root:hadoop hadoop-2.9.0"
-  ansible cgroup -i test_rolling.host -mshell -a"cd /app/hadoop-2.9.0;chown root:hadoop etc"
-  ansible cgroup -i test_rolling.host -mshell -a"cd /app/hadoop-2.9.0/etc;chown root:hadoop hadoop"
+  ansible all -i test_rolling.host -mshell -a"cd /app;chown root:hadoop hadoop-2.9.0"
+  ansible all -i test_rolling.host -mshell -a"cd /app/hadoop-2.9.0;chown root:hadoop etc"
+  ansible all -i test_rolling.host -mshell -a"cd /app/hadoop-2.9.0/etc;chown root:hadoop hadoop"
 
 container-executor权限有特殊要求
-  ansible cgroup -i test_rolling.host -mshell -a"cd /app/hadoop-2.9.0/bin;chown root:hadoop container-executor"
-  ansible cgroup -i test_rolling.host -mshell -a"cd /app/hadoop-2.9.0;chmod 6050 bin/container-executor"
+  ansible all -i test_rolling.host -mshell -a"cd /app/hadoop-2.9.0/bin;chown root:hadoop container-executor"
+  ansible all -i test_rolling.host -mshell -a"cd /app/hadoop-2.9.0;chmod 6050 bin/container-executor"
 
-cgroup权限的更改[测试环境，刚才all host执行5步骤]
-  ansible cgroup -i test_rolling.host -mshell -a"cd /sys/fs/cgroup/;chmod 777 cpu,cpuacct"
-  ansible cgroup -i test_rolling.host -mshell -a"cd /sys/fs/cgroup/cpu,cpuacct;chmod 777 -R hadoop-yarn"
-  检测：
-  ansible cgroup -i test_rolling.host -mshell -a"ls -al /sys/fs/cgroup/cpu,cpuacct "
-  ansible cgroup -i test_rolling.host -mshell -a"ls -al /sys/fs/cgroup "
 
 
 --------------rolling update--------------:
@@ -233,7 +232,7 @@ ansible nn2 -i test_rolling.host -mshell -a"su - hdfs -c 'hdfs namenode -rolling
 
 启动停止resourcemanager
 ansible rm1 -i test_rolling.host -mshell -a"su - yarn -c '/opt/hadoop/sbin/yarn-daemon.sh start resourcemanager'"
-ansible rm1 -i test_rolling.host -mshell -a"su - yarn -c '/opt/hadoop/sbin/yarn-daemon.sh start resourcemanager'"
+ansible rm2 -i test_rolling.host -mshell -a"su - yarn -c '/opt/hadoop/sbin/yarn-daemon.sh start resourcemanager'"
 ansible rm1 -i test_rolling.host -mshell -a"su - yarn -c '/opt/hadoop/sbin/yarn-daemon.sh stop resourcemanager'"
 ansible rm2 -i test_rolling.host -mshell -a"su - yarn -c '/opt/hadoop/sbin/yarn-daemon.sh stop resourcemanager'"
 

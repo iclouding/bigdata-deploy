@@ -62,7 +62,7 @@ container-executor权限有特殊要求
   ansible all -i dev_rolling.host -mshell -a"cd /app/hadoop-2.9.0;chmod 6050 bin/container-executor"
 
 cgroup权限的更改
-  ansible all -i dev_rolling.host -mshell -a"cd /sys/fs/cgroup/;chmod 777 cpu,cpuacct"
+  ansible all -i dev_rolling.host -mshell -a"cd /sys/fs/cgroup/;chmod 777 'cpu,cpuacct'"
   ansible all -i dev_rolling.host -mshell -a"cd /sys/fs/cgroup/cpu,cpuacct;chmod 777 -R hadoop-yarn"
 
 
