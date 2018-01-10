@@ -48,7 +48,7 @@
         - { src: 'sbin/commit_tmp_file.sh', dest: 'sbin/commit_tmp_file.sh'}
 
     - name: create a soft link
-      file: src=/app/forest-dist dest=/opt/forest-dist-{{ appversion }} state=link owner=hadoop group=hadoop
+      file: src=/app/forest-dist-{{ appversion }} dest=/opt/forest-dist state=link owner=hadoop group=hadoop
       tags: link
 
     - name: create soft link to hdfs
