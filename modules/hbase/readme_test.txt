@@ -26,6 +26,9 @@ ansible hmaster -i hbase_test.host -mshell -a"su - hadoop -c  'cd /opt/hbase/bin
 --停止hbase[慎用]
 ansible hmaster -i hbase_test.host -mshell -a"su - hadoop -c  'cd /opt/hbase/bin;sh stop-hbase.sh'"
 
+--重启regionserver
+ansible regionserver -i hbase_test.host -mshell -a"su - hadoop -c'/opt/hbase/bin/hbase-daemon.sh restart regionserver'"
+
 --重启hbase ThriftServer
 ansible all -i hbase_test.host -mcopy -a"src=/data/tools/ansible/modules/hbase/config/etc/hbase/hbase-env.sh dest=/opt/hbase/conf  owner=hadoop group=hadoop mode=755"
 ansible all -i hbase_test.host -mcopy -a"src=/data/tools/ansible/modules/hbase/config/etc/hbase/hbase-site.xml dest=/opt/hbase/conf  owner=hadoop group=hadoop mode=755"
