@@ -35,6 +35,17 @@ ansible logstashs -i logstash.host -mshell -a"su - moretv -c  'cd /opt/logstash_
 ansible logstashs -i logstash.host -mshell -a"su - moretv -c  'cd /opt/logstash_v5/bin;sh stop_logstash.sh kafka_topic_distribute_ad_vod_whaley_product.conf'"
 
 
+--62错误码-生产环境
+ansible logstashs -i logstash.host -mcopy -a"src=/data/tools/ansible/modules/logstash_v5/config/etc/logstash/kafka_topic_distribute_medusa_player_sdk_startplay.conf dest=/opt/logstash_v5/config  owner=moretv group=moretv mode=755"
+ansible logstashs -i logstash.host -mshell -a"su - moretv -c  'cd /opt/logstash_v5/bin;sh start_logstash.sh kafka_topic_distribute_medusa_player_sdk_startplay.conf'"
+ansible logstashs -i logstash.host -mshell -a"su - moretv -c  'ps -ef|grep  kafka_topic_distribute_medusa_player_sdk_startplay.conf'"
+ansible logstashs -i logstash.host -mshell -a"su - moretv -c  'tail /data/logs/logstash_v5/openrs-medusa-player-sdk-startplay-product.log'"
+
+ansible logstashs -i logstash.host -mshell -a"su - moretv -c  'ps -ef|grep  kafka_topic_distribute_player_sdk_startplay_merge.conf'"
+
+
+
+
 --增加cronjob
 ansible logstashs -i logstash.host -m cron -a "name='logstash autostart job 1' minute=*/6  user='moretv' job='. /etc/profile;sh /opt/logstash_v5/bin/start_logstash.sh kafka_topic_distribute_helios_hot_16.conf > /dev/null 2>&1'  "
 ansible logstashs -i logstash.host -m cron -a "name='logstash autostart job 2' minute=*/6  user='moretv' job='. /etc/profile;sh /opt/logstash_v5/bin/start_logstash.sh kafka_topic_distribute_helios_status.conf > /dev/null 2>&1'  "
