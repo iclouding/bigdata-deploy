@@ -21,8 +21,8 @@
       tags: install
 
     - name: change owner
+      shell: chown -R hadoop:hadoop /app/forest-dist-{{ appversion }}
       file: name=/app/forest-dist-{{ appversion }} owner=hadoop group=hadoop
-      tags: install
 
     - name: touch install file
       shell: touch /app/forest-dist-{{ appversion }}/.install
