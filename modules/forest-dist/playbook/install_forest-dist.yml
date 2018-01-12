@@ -1,5 +1,5 @@
 ---
-- hosts: forest-dist
+- hosts: nodes
   vars: 
     - appversion: 1.0.0
 
@@ -11,7 +11,7 @@
         - forest-dist-{{ appversion }}-bin.zip
 
     - name: unzip file to /app
-      shell: cd /tmp && unzip forest-dist--{{ appversion }}-bin.zip -d /app
+      shell: cd /tmp && unzip forest-dist-{{ appversion }}-bin.zip -d /app
       tags: install
       args:
         creates: /app/forest-dist-{{ appversion }}/.install
