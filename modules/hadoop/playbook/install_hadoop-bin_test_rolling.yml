@@ -61,3 +61,9 @@
         - {name: 'ranger-hdfs-audit.xml', dest: '/app/hadoop-2.9.0/etc/hadoop',owner: 'hadoop',group: 'hadoop',  mode: '744'}
         - {name: 'ranger-security.xml', dest: '/app/hadoop-2.9.0/etc/hadoop',owner: 'hadoop',group: 'hadoop',  mode: '644'}
 
+    - name: cgroup config
+      copy: src=/data/tools/ansible/modules/hadoop/config_test_rolling/etc/hadoop/{{ item.name }} dest={{ item.dest }} owner={{ item.owner }} group={{ item.group }} mode={{ item.mode }}
+      tags: cgroup_config
+      with_items:
+        - {name: 'cgrules.conf',  dest: '/etc',owner: 'root',group: 'root',  mode: '644'}
+        - {name: 'cgconfig.conf', dest: '/etc',owner: 'root',group: 'root',  mode: '644'}

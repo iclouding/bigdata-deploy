@@ -1,4 +1,32 @@
 
 
+ansible nodemanager -i test_rolling.host -mshell -a"ls -al /sys/fs/cgroup/cpu/limitcpu"
+ansible nodemanager -i test_rolling.host -mshell -a"ls -al /sys/fs/cgroup/cpu/hadoop-yarn"
+ansible nodemanager -i test_rolling.host -mshell -a"ls -al /sys/fs/cgroup/cpu,cpuacct "
+ansible nodemanager -i test_rolling.host -mshell -a"ls -al /sys/fs/cgroup "
+
+
+
 
 cgget hadoop-yarn
+
+cgdelete -g cpu:hadoop-yarn
+
+ansible nodemanager -i test_rolling.host -mshell -a"systemctl stop cgred "
+ansible nodemanager -i test_rolling.host -mshell -a"systemctl stop cgconfig "
+
+ansible nodemanager -i test_rolling.host -mshell -a"cgdelete -g cpu:limitcpu"
+
+ansible nodemanager -i test_rolling.host -mshell -a"cgdelete -g cpu:test1"
+
+
+cat /etc/cgrules.conf
+
+systemctl restart cgred
+systemctl restart cgconfig
+
+systemctl status cgconfig
+systemctl status cgred
+
+systemctl stop cgred
+systemctl stop cgconfig

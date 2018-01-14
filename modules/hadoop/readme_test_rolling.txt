@@ -319,6 +319,9 @@ ansible hadoop-cmd-node -i test_rolling.host -mshell -a"su - hdfs -c 'hadoop fs 
 
 ansible nodemanager -i test_rolling.host -mshell -a"su - hdfs -c 'rm -r /data12/hdfs/data/*'"
 
+ansible nodemanager -i test_rolling.host -mcopy -a"src=/data/tools/ansible/modules/hadoop/scripts/write_process_id_to_cgroup.sh dest=/root/  owner=root group=root mode=755"
+
+ansible nodemanager -i test_rolling.host -mshell -a"sh /root/write_process_id_to_cgroup.sh"
 
 -------
 [hdfs@bigtest-cmpt-129-19 hadoop]$ /opt/hadoop/sbin/start-dfs.sh
