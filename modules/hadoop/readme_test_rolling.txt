@@ -55,7 +55,6 @@ ansible cgroup -i test_rolling.host -mshell -a"systemctl status cgconfig.service
 4.创建hadoop-yarn命名的cgroup[启动服务后，创建目录]
 ansible cgroup -i test_rolling.host -mshell -a"cd /sys/fs/cgroup/;chmod 777 'cpu,cpuacct'"
 ansible cgroup -i test_rolling.host -mshell -a"cd /sys/fs/cgroup/cpu;mkdir -p hadoop-yarn"
-cgroup权限的更改
 ansible cgroup -i test_rolling.host -mshell -a"cd /sys/fs/cgroup/cpu,cpuacct;chmod 777 -R hadoop-yarn"
 
 查看目录创建是否成功
@@ -291,6 +290,17 @@ ansible namenode -i test_rolling.host -mshell -a"su - hdfs -c 'jps'"
 ansible test -mshell -a'uptime'
 ansible test -mshell -a'who -b'
 
+--------------------------------触发重启后，一次执行恢复命令集合--------------------------------
+ansible cgroup -i test_rolling.host -mshell -a"systemctl start cgconfig.service"
+ansible cgroup -i test_rolling.host -mshell -a"cd /sys/fs/cgroup/;chmod 777 'cpu,cpuacct'"
+ansible cgroup -i test_rolling.host -mshell -a"cd /sys/fs/cgroup/cpu;mkdir -p hadoop-yarn"
+ansible cgroup -i test_rolling.host -mshell -a"cd /sys/fs/cgroup/cpu,cpuacct;chmod 777 -R hadoop-yarn"
+ansible nn1 -i test_rolling.host -mshell -a"su - hdfs -c 'sh /opt/hadoop/sbin/hadoop-daemons.sh start datanode'"
+ansible rm2 -i test_rolling.host -mshell -a"su - yarn -c 'sh /opt/hadoop/sbin/yarn-daemons.sh start nodemanager'"
+ansible rm1 -i test_rolling.host -mshell -a"su - yarn -c '/opt/hadoop/sbin/yarn-daemon.sh stop resourcemanager'"
+ansible rm2 -i test_rolling.host -mshell -a"su - yarn -c '/opt/hadoop/sbin/yarn-daemon.sh stop resourcemanager'"
+ansible rm1 -i test_rolling.host -mshell -a"su - yarn -c '/opt/hadoop/sbin/yarn-daemon.sh start resourcemanager'"
+ansible rm2 -i test_rolling.host -mshell -a"su - yarn -c '/opt/hadoop/sbin/yarn-daemon.sh start resourcemanager'"
 
 --------------------------------清理hdfs--------------------------------
 ansible journalnode -i test_rolling.host -mshell -a"su - hdfs -c  'rm -rf /data/hdfs/journal/hans'"
@@ -309,7 +319,7 @@ ansible hadoop-cmd-node -i test_rolling.host -mshell -a"su - hdfs -c 'hadoop fs 
 
 ansible nodemanager -i test_rolling.host -mshell -a"su - hdfs -c 'rm -r /data12/hdfs/data/*'"
 
-x
+
 -------
 [hdfs@bigtest-cmpt-129-19 hadoop]$ /opt/hadoop/sbin/start-dfs.sh
 Starting namenodes on [bigtest-cmpt-129-18 bigtest-cmpt-129-19]
