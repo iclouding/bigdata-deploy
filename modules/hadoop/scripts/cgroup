@@ -6,6 +6,11 @@ ansible nodemanager -i test_rolling.host -mshell -a"ls -al /sys/fs/cgroup/cpu,cp
 ansible nodemanager -i test_rolling.host -mshell -a"ls -al /sys/fs/cgroup "
 
 
+ansible-playbook -i test_rolling_cgroup.host install_hadoop-bin_test_rolling.yml -t cgroup_config
+ansible nodemanager -i test_rolling.host -mshell -a"systemctl start cgconfig "
+ansible nodemanager -i test_rolling.host -mshell -a"systemctl start cgred "
+ansible rm2 -i test_rolling.host -mshell -a"su - yarn -c 'sh /opt/hadoop/sbin/yarn-daemons.sh start nodemanager'"
+
 
 
 cgget hadoop-yarn
@@ -18,6 +23,13 @@ ansible nodemanager -i test_rolling.host -mshell -a"systemctl stop cgconfig "
 ansible nodemanager -i test_rolling.host -mshell -a"cgdelete -g cpu:limitcpu"
 
 ansible nodemanager -i test_rolling.host -mshell -a"cgdelete -g cpu:test1"
+
+
+
+ansible nodemanager -i test_rolling.host -mshell -a"systemctl status cgconfig "
+ansible nodemanager -i test_rolling.host -mshell -a"systemctl status cgred "
+
+
 
 
 cat /etc/cgrules.conf
