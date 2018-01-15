@@ -39,6 +39,9 @@ ansible-playbook -i test_rolling.host install_hadoop-bin_test_rolling.yml -t ins
 ansible-playbook -i test_rolling.host install_hadoop-bin_test_rolling.yml -t config
 ansible-playbook -i test_rolling.host install_hadoop-bin_test_rolling.yml -t ranger_config
 
+配置cgroup服务
+ansible-playbook -i test_rolling.host install_hadoop-bin_test_rolling.yml -t cgroup_config
+
 --------------linux cgroup--------------:
 1.安装cgroup
 cd /data/tools/ansible/modules/hadoop/playbook

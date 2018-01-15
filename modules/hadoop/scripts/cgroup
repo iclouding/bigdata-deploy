@@ -25,9 +25,13 @@ ansible nodemanager -i test_rolling.host -mshell -a"cgdelete -g cpu:limitcpu"
 ansible nodemanager -i test_rolling.host -mshell -a"cgdelete -g cpu:test1"
 
 
-
+sh /opt/hadoop/sbin/yarn-daemon.sh start nodemanager
 ansible nodemanager -i test_rolling.host -mshell -a"systemctl status cgconfig "
 ansible nodemanager -i test_rolling.host -mshell -a"systemctl status cgred "
+
+保证在机器重启的时候，服务启动
+ansible nodemanager -i test_rolling.host -mshell -a"systemctl enable cgred "
+ansible nodemanager -i test_rolling.host -mshell -a"systemctl enable cgconfig "
 
 
 
@@ -42,3 +46,4 @@ systemctl status cgred
 
 systemctl stop cgred
 systemctl stop cgconfig
+
