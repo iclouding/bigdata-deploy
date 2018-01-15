@@ -146,7 +146,12 @@ class Checktask():
             return is_found
 
     def read_pid(self):
-        filename = '/tmp/%s.pid' % self.keyword
+
+        if not re.search('/', self.keyword):
+            filename = '/tmp/%s.pid' % self.keyword
+        else:
+            filename = "%s.pid" % self.keyword
+
         if os.path.isfile(filename):
             with open(filename, 'r') as f:
                 data = f.readline().strip()
