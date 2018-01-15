@@ -30,8 +30,8 @@
 
     - name: check cgconfig status
       shell: systemctl status cgconfig
-      tags: cgroup_status
+      tags: cgconfig_status
 
     - name: check cgrep status
       shell: systemctl status cgred
-      tags: cgrep_status
+      tags: cgred_status
