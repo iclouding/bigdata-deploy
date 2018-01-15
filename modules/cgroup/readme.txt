@@ -21,5 +21,11 @@ ansible-playbook -i test.host cgroup_test.yml -t cgroup_start
 
 --停止cgconfig和cgred服务
 ansible-playbook -i test.host cgroup_test.yml -t cgroup_stop
+
+--查看cgconfig状态
+ansible-playbook -i test.host cgroup_test.yml -t cgconfig_status
+
+--查看cgred状态
+ansible-playbook -i test.host cgroup_test.yml -t cgred_status
 ----------------------------------------测试环境----------------------------------------
 

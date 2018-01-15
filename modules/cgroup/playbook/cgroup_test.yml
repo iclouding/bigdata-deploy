@@ -27,3 +27,11 @@
     - name: restart cgconfig and cgred
       shell: systemctl stop cgconfig && systemctl stop cgred
       tags: cgroup_stop
+
+    - name: check cgconfig status
+      shell: systemctl status cgconfig
+      tags: cgroup_status
+
+    - name: check cgrep status
+      shell: systemctl status cgred
+      tags: cgrep_status
