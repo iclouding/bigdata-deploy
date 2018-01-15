@@ -7,7 +7,6 @@ bigtest-cmpt-129-202
 bigtest-cmpt-129-203
 bigtest-cmpt-129-204
 bigtest-cmpt-129-205
-bigtest-cmpt-129-206
 bigtest-appsvr-129-1
 bigtest-appsvr-129-2
 bigtest-appsvr-129-3
@@ -17,21 +16,22 @@ bigtest-appsvr-129-6
 bigtest-appsvr-129-7
 bigtest-appsvr-129-8
 bigtest-appsvr-129-9
+
 [worker]
 bigtest-cmpt-129-201
 bigtest-cmpt-129-202
 bigtest-cmpt-129-203
 bigtest-cmpt-129-204
 bigtest-cmpt-129-205
-bigtest-cmpt-129-206
-
 
 [master]
 bigtest-cmpt-129-19
-[historyserver1]
-bigtest-cmpt-129-18
+
 [historyserver]
 bigtest-cmpt-129-20
+
+[historyserver1]
+bigtest-cmpt-129-18
 
 [thriftserver]
 bigtest-cmpt-129-18

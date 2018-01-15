@@ -13,12 +13,13 @@
       args:
         creates: /app/kafka3_2.10-0.10.1.0/.install
 
-    - name: /app/kafka3_2.10-0.8.2.2  owner to kafka3
+    - name: /app/kafka3_2.10-0.10.1.0  owner to kafka3
       file: name=/app/kafka3_2.10-0.10.1.0  owner=moretv group=moretv
       tags: install
 
-    - name: /app/kafka3_2.10-0.8.2.2  owner to kafka3
+    - name: /app/kafka3_2.10-0.10.1.0  owner to kafka3
       shell: chown -R moretv. /app/kafka3_2.10-0.10.1.0
+      tags: install
 
     - name: create kafka need directory
       file: path={{ item }}  state=directory  owner=moretv group=moretv
@@ -26,11 +27,9 @@
       with_items:
         - /data/logs/kafka3
 
-    - name: touch install file
-      shell: touch /app/kafka3_2.10-0.10.1.0/.install
+    - name: /app/kafka3_2.10-0.10.1.0  owner to kafka4
+      shell: chmod 771 -R /app/kafka3_2.10-0.10.1.0/bin/*
       tags: install
-      args:
-        creates: /app/kafka3_2.10-0.10.1.0/.install
 
     - name: create a soft link to kafka3
       file: src=/app/kafka3_2.10-0.10.1.0 dest=/opt/kafka3 state=link owner=moretv group=moretv

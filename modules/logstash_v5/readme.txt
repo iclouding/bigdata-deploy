@@ -35,6 +35,17 @@ ansible logstashs -i logstash.host -mshell -a"su - moretv -c  'cd /opt/logstash_
 ansible logstashs -i logstash.host -mshell -a"su - moretv -c  'cd /opt/logstash_v5/bin;sh stop_logstash.sh kafka_topic_distribute_ad_vod_whaley_product.conf'"
 
 
+--62错误码-生产环境
+ansible logstashs -i logstash.host -mcopy -a"src=/data/tools/ansible/modules/logstash_v5/config/etc/logstash/kafka_topic_distribute_medusa_player_sdk_startplay.conf dest=/opt/logstash_v5/config  owner=moretv group=moretv mode=755"
+ansible logstashs -i logstash.host -mshell -a"su - moretv -c  'cd /opt/logstash_v5/bin;sh start_logstash.sh kafka_topic_distribute_medusa_player_sdk_startplay.conf'"
+ansible logstashs -i logstash.host -mshell -a"su - moretv -c  'ps -ef|grep  kafka_topic_distribute_medusa_player_sdk_startplay.conf'"
+ansible logstashs -i logstash.host -mshell -a"su - moretv -c  'tail /data/logs/logstash_v5/openrs-medusa-player-sdk-startplay-product.log'"
+
+ansible logstashs -i logstash.host -mshell -a"su - moretv -c  'ps -ef|grep  kafka_topic_distribute_player_sdk_startplay_merge.conf'"
+
+
+
+
 --增加cronjob
 ansible logstashs -i logstash.host -m cron -a "name='logstash autostart job 1' minute=*/6  user='moretv' job='. /etc/profile;sh /opt/logstash_v5/bin/start_logstash.sh kafka_topic_distribute_helios_hot_16.conf > /dev/null 2>&1'  "
 ansible logstashs -i logstash.host -m cron -a "name='logstash autostart job 2' minute=*/6  user='moretv' job='. /etc/profile;sh /opt/logstash_v5/bin/start_logstash.sh kafka_topic_distribute_helios_status.conf > /dev/null 2>&1'  "
@@ -100,6 +111,26 @@ ansible logstashs -i logstash.host -mshell -a"su - moretv -c  'cd /opt/logstash_
    */6 * * * * source /etc/profile;sh /opt/logstash_v5/bin/start_logstash.sh kafka_topic_distribute_medusa_player_sdk_startplay.conf > /dev/null 2>&1
    #Ansible: logstash autostart job 9
    */6 * * * * source /etc/profile;sh /opt/logstash_v5/bin/start_logstash.sh kafka_topic_distribute_player_sdk_startplay_merge.conf > /dev/null 2>&1
+  sh /opt/kafka3/bin/kafka-console-consumer.sh --topic openrs-medusa-player-sdk-startplay  -bootstrap-server bigdata-appsvr-130-1:9094 |head
+--【62错误码】测试环境【使用线上数据，并且部署在现网】
+分发：
+ansible logstashs -i logstash.host -mcopy -a"src=/data/tools/ansible/modules/logstash_v5/config/etc/logstash_test/kafka_topic_distribute_medusa_player_sdk_startplay_test.conf dest=/opt/logstash_v5/config  owner=moretv group=moretv mode=755"
+ansible logstashs -i logstash.host -mcopy -a"src=/data/tools/ansible/modules/logstash_v5/config/etc/logstash_test/kafka_topic_distribute_player_sdk_startplay_merge_test.conf dest=/opt/logstash_v5/config  owner=moretv group=moretv mode=755"
+启动：
+ansible logstashs -i logstash.host -mshell -a"su - moretv -c  'cd /opt/logstash_v5/bin;sh start_logstash.sh kafka_topic_distribute_medusa_player_sdk_startplay_test.conf'"
+ansible logstashs -i logstash.host -mshell -a"su - moretv -c  'cd /opt/logstash_v5/bin;sh start_logstash.sh kafka_topic_distribute_player_sdk_startplay_merge_test.conf'"
+检测：
+ansible logstashs -i logstash.host -mshell -a"su - moretv -c  'ps -ef|grep  kafka_topic_distribute_player_sdk_startplay_merge_test.conf'"
+ansible logstashs -i logstash.host -mshell -a"su - moretv -c  'ps -ef|grep  kafka_topic_distribute_medusa_player_sdk_startplay_test.conf'"
+ansible logstashs -i logstash.host -mshell -a"su - moretv -c  'ps -ef|grep  kafka_topic_distribute_helios_player_sdk_startplay_test.conf'"
+sh /opt/kafka3/bin/kafka-console-consumer.sh --topic openrs-helios-medusa-play-vod-quality-test  -bootstrap-server bigdata-appsvr-130-1:9094 |head
 
+ansible logstashs -i logstash.host -mshell -a"su - moretv -c  'cat /data/logs/logstash_v5/openrs-medusa-player-sdk-startplay-test.log|grep tvwy342d7pno'"
+ansible logstashs -i logstash.host -mshell -a"su - moretv -c  'cat /data/logs/logstash_v5/openrs-medusa-player-sdk-startplay-test.log|grep p0021ilwtlh'"
+ansible logstashs -i logstash.host -mshell -a"su - moretv -c  'cat /data/logs/logstash_v5/openrs-helios-medusa-play-vod-quality-test.log|grep tvwy342d7pno'"
+ansible logstashs -i logstash.host -mshell -a"su - moretv -c  'cat /data/logs/logstash_v5/openrs-helios-medusa-play-vod-quality-test.log|grep b0020o8eq5n'"
+ansible logstashs -i logstash.host -mshell -a"su - moretv -c  'cat /data/logs/logstash_v5/openrs-helios-medusa-play-vod-quality-test.log|grep tvwyefklmnhj'"
 
-   sh /opt/kafka3/bin/kafka-console-consumer.sh --topic openrs-medusa-player-sdk-startplay  -bootstrap-server bigdata-appsvr-130-1:9094 |head
+sh /opt/kafka3/bin/kafka-console-consumer.sh --topic log-raw-boikgpokn78sb95ktmsc1bnkechpgj9l -bootstrap-server bigdata-appsvr-130-1:9094 | grep p0021ilwtlh|grep 304303_50101_1300062 |head
+sh /opt/kafka3/bin/kafka-console-consumer.sh --topic log-raw-boikgpokn78sb95ktmsc1bnkechpgj9l -bootstrap-server bigdata-appsvr-130-1:9094 | grep p0021ilwtlh|grep 304303_50101_1300062 |head
+sh /opt/kafka3/bin/kafka-console-consumer.sh --topic medusa-processed-log  -bootstrap-server bigdata-appsvr-130-1:9094 | grep medusa-player-sdk-startPlay|grep 304303_50101_1300062|grep vod|head

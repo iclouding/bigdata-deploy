@@ -6,6 +6,7 @@ ansible-playbook -i forest-dist.host install_forest-dist.yml -t updatejar
 
 
 #启动任务
+ansible forest-dist -i forest-dist.host -m shell -a" su - hadoop -c  'cd /opt/forest-dist; ./sbin/launch_msgproc.sh start --taskName=all ' "
 ansible forest-dist -i forest-dist.host -m shell -a" su - hadoop -c  'cd /opt/forest-dist; ./sbin/launch_msgproc.sh start --taskName=medusa ' "
 ansible forest-dist -i forest-dist.host -m shell -a" su - hadoop -c  'cd /opt/forest-dist; ./sbin/launch_msgproc.sh start --taskName=whaleytv ' "
 ansible forest-dist -i forest-dist.host -m shell -a" su - hadoop -c  'cd /opt/forest-dist; ./sbin/launch_msgproc.sh start --taskName=whaleyvr_orca ' "
@@ -15,12 +16,7 @@ ansible forest-dist -i forest-dist.host -m shell -a" su - hadoop -c  'cd /opt/fo
 
 
 #停止任务
-ansible forest-dist -i forest-dist.host -m shell -a" su - hadoop -c  'cd /opt/forest-dist; ./sbin/launch_msgproc.sh stop --taskName=medusa ' "
-ansible forest-dist -i forest-dist.host -m shell -a" su - hadoop -c  'cd /opt/forest-dist; ./sbin/launch_msgproc.sh stop --taskName=whaleytv ' "
-ansible forest-dist -i forest-dist.host -m shell -a" su - hadoop -c  'cd /opt/forest-dist; ./sbin/launch_msgproc.sh stop --taskName=whaleyvr_orca ' "
-ansible forest-dist -i forest-dist.host -m shell -a" su - hadoop -c  'cd /opt/forest-dist; ./sbin/launch_msgproc.sh stop --taskName=eagle_mobilehelper ' "
-ansible forest-dist -i forest-dist.host -m shell -a" su - hadoop -c  'cd /opt/forest-dist; ./sbin/launch_msgproc.sh stop --taskName=crawler ' "
-ansible forest-dist -i forest-dist.host -m shell -a" su - hadoop -c  'cd /opt/forest-dist; ./sbin/launch_msgproc.sh stop --taskName=whaley_other ' "
+升级时需要逐台重启
 
 
 
