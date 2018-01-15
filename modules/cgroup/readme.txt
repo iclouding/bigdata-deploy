@@ -23,9 +23,11 @@ ansible-playbook -i test.host cgroup_test.yml -t cgroup_start
 ansible-playbook -i test.host cgroup_test.yml -t cgroup_stop
 
 --查看cgconfig状态
-ansible-playbook -i test.host cgroup_test.yml -t cgconfig_status
+ansible nodemanager -i test.host -mshell -a"systemctl status cgconfig.service"
 
 --查看cgred状态
 ansible-playbook -i test.host cgroup_test.yml -t cgred_status
+ansible nodemanager -i test.host -mshell -a"systemctl status cgred.service"
+
 ----------------------------------------测试环境----------------------------------------
 
