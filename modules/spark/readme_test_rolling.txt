@@ -41,6 +41,7 @@ ansible all -i spark.host -mcopy -a"src=/data/tools/ansible/modules/spark/packag
 
 启动spark thrift server
 ansible thriftserver -i spark.host -mshell -a"su - spark -c 'cd /opt/spark221/sbin && ./launch-thriftserver.sh'"
-
+切换软连接
+ansible all -i spark.host -mshell -a"rm -f /opt/spark220;ln -s /app/spark-2.2.1-bin-hadoop2.9.0 /opt/spark220;chown -h spark:hadoop /opt/spark220"
 
 

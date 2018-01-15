@@ -39,6 +39,9 @@ ansible-playbook -i test_rolling.host install_hadoop-bin_test_rolling.yml -t ins
 ansible-playbook -i test_rolling.host install_hadoop-bin_test_rolling.yml -t config
 ansible-playbook -i test_rolling.host install_hadoop-bin_test_rolling.yml -t ranger_config
 
+配置cgroup服务
+ansible-playbook -i test_rolling.host install_hadoop-bin_test_rolling.yml -t cgroup_config
+
 --------------linux cgroup--------------:
 1.安装cgroup
 cd /data/tools/ansible/modules/hadoop/playbook
@@ -55,7 +58,6 @@ ansible cgroup -i test_rolling.host -mshell -a"systemctl status cgconfig.service
 4.创建hadoop-yarn命名的cgroup[启动服务后，创建目录]
 ansible cgroup -i test_rolling.host -mshell -a"cd /sys/fs/cgroup/;chmod 777 'cpu,cpuacct'"
 ansible cgroup -i test_rolling.host -mshell -a"cd /sys/fs/cgroup/cpu;mkdir -p hadoop-yarn"
-cgroup权限的更改
 ansible cgroup -i test_rolling.host -mshell -a"cd /sys/fs/cgroup/cpu,cpuacct;chmod 777 -R hadoop-yarn"
 
 查看目录创建是否成功
@@ -246,12 +248,34 @@ ansible nn2 -i test_rolling.host -mshell -a"su - hdfs -c '/opt/hadoop/sbin/hadoo
 ansible nn1 -i test_rolling.host -mshell -a"su - hdfs -c '/opt/hadoop/sbin/hadoop-daemon.sh start namenode'"
 ansible nn2 -i test_rolling.host -mshell -a"su - hdfs -c '/opt/hadoop/sbin/hadoop-daemon.sh start namenode'"
 
+正常启动停止timelineserver
+ansible timelineserver -i test_rolling.host -mshell -a"su - yarn -c '/opt/hadoop/sbin/yarn-daemon.sh stop timelineserver'"
+ansible timelineserver -i test_rolling.host -mshell -a"su - yarn -c '/opt/hadoop/sbin/yarn-daemon.sh start timelineserver'"
+
+正常启动停止jobhistoryserver
+ansible jobhistoryserver -i test_rolling.host -mshell -a"su - yarn -c '/opt/hadoop/sbin/mr-jobhistory-daemon.sh stop  historyserver'"
+ansible jobhistoryserver -i test_rolling.host -mshell -a"su - yarn -c '/opt/hadoop/sbin/mr-jobhistory-daemon.sh start  historyserver'"
+
+
+正常启动停止zkfc
+--初始化zkfc根节点
+hdfs zkfc -formatZK
+ansible namenode -i test_rolling.host -mshell -a"su - hdfs -c  '/opt/hadoop/sbin/hadoop-daemon.sh start zkfc'"
+ansible namenode -i test_rolling.host -mshell -a"su - hdfs -c  '/opt/hadoop/sbin/hadoop-daemon.sh stop  zkfc'"
+
+
+正常启动停止journalnode
+ansible journalnode -i test_rolling.host -mshell -a"su - hdfs -c  '/opt/hadoop/sbin/hadoop-daemon.sh start journalnode'"
+ansible journalnode -i test_rolling.host -mshell -a"su - hdfs -c  '/opt/hadoop/sbin/hadoop-daemon.sh stop journalnode'"
 
 --------------------------------查看服务是否正常--------------------------------
 查看datanode是否正常
 ansible nodemanager -i test_rolling.host -mshell -a"su - hdfs -c 'jps'"
+ansible nodemanager -i test_rolling.host -mshell -a"su - hdfs -c ' ps -eo pid,lstart,etime,cmd | grep DataNode'"
 查看node manager是否正常
 ansible nodemanager -i test_rolling.host -mshell -a"su - yarn -c 'jps'"
+ansible nodemanager -i test_rolling.host -mshell -a"su - yarn -c ' ps -eo pid,lstart,etime,cmd | grep NodeManager'"
+
 查看namenode是否正常
 ansible namenode -i test_rolling.host -mshell -a"su - hdfs -c 'jps'"
 查看resource manager是否正常
@@ -260,5 +284,63 @@ ansible resourcemanager -i test_rolling.host -mshell -a"su - yarn -c 'jps'"
 ansible journalnode -i test_rolling.host -mshell -a"su - hdfs -c 'jps'"
 查看JobHistoryServer是否正常
 ansible jobhistoryserver -i test_rolling.host -mshell -a"su - yarn -c 'jps'"
-查看JobHistoryServer是否正常
+查看timelineserver是否正常
 ansible timelineserver -i test_rolling.host -mshell -a"su - yarn -c 'jps'"
+查看zkfc是否正常
+ansible namenode -i test_rolling.host -mshell -a"su - hdfs -c 'jps'"
+
+查看测试环境机器启动时间
+ansible test -mshell -a'uptime'
+ansible test -mshell -a'who -b'
+
+--------------------------------触发重启后，一次执行恢复命令集合--------------------------------
+ansible cgroup -i test_rolling.host -mshell -a"systemctl start cgconfig.service"
+ansible cgroup -i test_rolling.host -mshell -a"cd /sys/fs/cgroup/;chmod 777 'cpu,cpuacct'"
+ansible cgroup -i test_rolling.host -mshell -a"cd /sys/fs/cgroup/cpu;mkdir -p hadoop-yarn"
+ansible cgroup -i test_rolling.host -mshell -a"cd /sys/fs/cgroup/cpu,cpuacct;chmod 777 -R hadoop-yarn"
+ansible nn1 -i test_rolling.host -mshell -a"su - hdfs -c 'sh /opt/hadoop/sbin/hadoop-daemons.sh start datanode'"
+ansible rm2 -i test_rolling.host -mshell -a"su - yarn -c 'sh /opt/hadoop/sbin/yarn-daemons.sh start nodemanager'"
+ansible rm1 -i test_rolling.host -mshell -a"su - yarn -c '/opt/hadoop/sbin/yarn-daemon.sh stop resourcemanager'"
+ansible rm2 -i test_rolling.host -mshell -a"su - yarn -c '/opt/hadoop/sbin/yarn-daemon.sh stop resourcemanager'"
+ansible rm1 -i test_rolling.host -mshell -a"su - yarn -c '/opt/hadoop/sbin/yarn-daemon.sh start resourcemanager'"
+ansible rm2 -i test_rolling.host -mshell -a"su - yarn -c '/opt/hadoop/sbin/yarn-daemon.sh start resourcemanager'"
+
+--------------------------------清理hdfs--------------------------------
+ansible journalnode -i test_rolling.host -mshell -a"su - hdfs -c  'rm -rf /data/hdfs/journal/hans'"
+ansible namenode    -i test_rolling.host -mshell -a"su - hdfs -c  'rm -rf /data/hdfs/name/*'"
+hdfs namenode -format[在zhu节点执行]
+/opt/hadoop/sbin/hadoop-daemon.sh start namenode[在zhu节点执行]
+hdfs namenode -bootstrapStandby [在从节点执行]
+sh /opt/hadoop/sbin/hadoop-daemons.sh start datanode
+
+ansible hadoop-cmd-node -i test_rolling.host -mshell -a"su - hdfs -c 'hadoop fs -mkdir -p /tmp/logs/spark && hadoop fs -chmod -R 777 /tmp/logs/spark'"
+ansible hadoop-cmd-node -i test_rolling.host -mshell -a"su - hdfs -c 'hadoop fs -chown -R spark:hadoop /tmp/logs/spark'"
+ansible hadoop-cmd-node -i test_rolling.host -mshell -a"su - hdfs -c 'hadoop fs -setfacl -m group:hadoop:rwx /tmp'"
+ansible hadoop-cmd-node -i test_rolling.host -mshell -a"su - hdfs -c 'hadoop fs -mkdir -p /user && hadoop fs -chmod -R 777 /user'"
+ansible hadoop-cmd-node -i test_rolling.host -mshell -a"su - hdfs -c 'hadoop fs -setfacl -m group:hadoop:rwx /user'"
+ansible hadoop-cmd-node -i test_rolling.host -mshell -a"su - hdfs -c 'hadoop fs -setfacl -m group::r-x /'"
+
+ansible nodemanager -i test_rolling.host -mshell -a"su - hdfs -c 'rm -r /data12/hdfs/data/*'"
+
+ansible nodemanager -i test_rolling.host -mcopy -a"src=/data/tools/ansible/modules/hadoop/scripts/write_process_id_to_cgroup.sh dest=/root/  owner=root group=root mode=755"
+
+ansible nodemanager -i test_rolling.host -mshell -a"sh /root/write_process_id_to_cgroup.sh"
+
+-------
+[hdfs@bigtest-cmpt-129-19 hadoop]$ /opt/hadoop/sbin/start-dfs.sh
+Starting namenodes on [bigtest-cmpt-129-18 bigtest-cmpt-129-19]
+bigtest-cmpt-129-19: starting namenode, logging to /data/logs/hadoop-hdfs/hdfs/hadoop-hdfs-namenode-bigtest-cmpt-129-19.out
+bigtest-cmpt-129-18: starting namenode, logging to /data/logs/hadoop-hdfs/hdfs/hadoop-hdfs-namenode-bigtest-cmpt-129-18.out
+bigtest-cmpt-129-204: starting datanode, logging to /data/logs/hadoop-hdfs/hdfs/hadoop-hdfs-datanode-bigtest-cmpt-129-204.out
+bigtest-cmpt-129-201: starting datanode, logging to /data/logs/hadoop-hdfs/hdfs/hadoop-hdfs-datanode-bigtest-cmpt-129-201.out
+bigtest-cmpt-129-202: starting datanode, logging to /data/logs/hadoop-hdfs/hdfs/hadoop-hdfs-datanode-bigtest-cmpt-129-202.out
+bigtest-cmpt-129-203: starting datanode, logging to /data/logs/hadoop-hdfs/hdfs/hadoop-hdfs-datanode-bigtest-cmpt-129-203.out
+bigtest-cmpt-129-205: starting datanode, logging to /data/logs/hadoop-hdfs/hdfs/hadoop-hdfs-datanode-bigtest-cmpt-129-205.out
+Starting journal nodes [bigtest-cmpt-129-18 bigtest-cmpt-129-19 bigtest-cmpt-129-20]
+bigtest-cmpt-129-19: starting journalnode, logging to /data/logs/hadoop-hdfs/hdfs/hadoop-hdfs-journalnode-bigtest-cmpt-129-19.out
+bigtest-cmpt-129-20: starting journalnode, logging to /data/logs/hadoop-hdfs/hdfs/hadoop-hdfs-journalnode-bigtest-cmpt-129-20.out
+bigtest-cmpt-129-18: starting journalnode, logging to /data/logs/hadoop-hdfs/hdfs/hadoop-hdfs-journalnode-bigtest-cmpt-129-18.out
+Starting ZK Failover Controllers on NN hosts [bigtest-cmpt-129-18 bigtest-cmpt-129-19]
+bigtest-cmpt-129-19: starting zkfc, logging to /data/logs/hadoop-hdfs/hdfs/hadoop-hdfs-zkfc-bigtest-cmpt-129-19.out
+bigtest-cmpt-129-18: starting zkfc, logging to /data/logs/hadoop-hdfs/hdfs/hadoop-hdfs-zkfc-bigtest-cmpt-129-18.out
+-------
