@@ -62,3 +62,11 @@ nohup sh /opt/hbase/bin/rolling-restart.sh --rs-only  --graceful > rolling.log 2
 4.启动hbase regionserver cronjob
 在ansible机器上,hbase/playbook目录，执行
   ansible regionserver -i hbase_test.host -m cron -a "name='check hbase regionserver ' minute=*/6  user='hadoop' job='. /etc/profile;sh /opt/hbase/conf/monitor_hbase.sh org.apache.hadoop.hbase.regionserver.HRegionServer regionserver >/dev/null 2>&1'  "
+
+
+
+
+/opt/hbase/bin/hbase-daemon.sh start   regionserver
+/opt/hbase/bin/hbase-daemon.sh restart regionserver
+ansible regionserver -i hbase_test.host -mshell -a"su - hadoop -c'/opt/hbase/bin/hbase-daemon.sh start regionserver'"
+ansible regionserver -i hbase_test.host -mshell -a"su - hadoop -c'jps'"
