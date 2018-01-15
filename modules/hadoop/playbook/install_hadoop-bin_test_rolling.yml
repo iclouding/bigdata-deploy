@@ -62,6 +62,7 @@
         - {name: 'ranger-security.xml', dest: '/app/hadoop-2.9.0/etc/hadoop',owner: 'hadoop',group: 'hadoop',  mode: '644'}
 
 - hosts: nodemanager
+  tasks:
     - name: cgroup config files
       copy: src=/data/tools/ansible/modules/hadoop/config_test_rolling/etc/hadoop/{{ item.name }} dest={{ item.dest }} owner={{ item.owner }} group={{ item.group }} mode={{ item.mode }}
       tags: cgroup_config
