@@ -1,0 +1,38 @@
+---
+
+- hosts: ngx-extsvr-tcpproxy
+  tasks:
+
+    - name: make online dir
+      file: dest=/opt/openresty/nginx/conf/online state=directory  mode=755 owner=root group=root
+
+    - name: make log dir
+      file: dest=/data/logs/nginx state=directory  mode=755 owner=nobody group=nobody
+
+    - name: copy app-svr-webproxy config file to remote host
+      copy: src=/data/tools/ansible/modules/nginx/config/ngx-extsvr-webproxy/{{ item.name }} dest=/opt/openresty/nginx/conf/{{ item.dest }} owner=root group=root mode=0771
+      with_items:
+        - {name: 'tcp/nginx_extsvr_tcpproxy.conf', dest: 'tcp/'}
+
+- hosts: ngx-extsvr-webproxy
+  tasks:
+
+    - name: make online dir
+      file: dest=/opt/openresty/nginx/conf/online state=directory  mode=755 owner=root group=root
+
+    - name: make log dir
+      file: dest=/data/logs/nginx state=directory  mode=755 owner=nobody group=nobody
+
+    - name: copy app-svr-webproxy config file to remote host
+      copy: src=/data/tools/ansible/modules/nginx/config/ngx-extsvr-webproxy/{{ item.name }} dest=/opt/openresty/nginx/conf/{{ item.dest }} owner=root group=root mode=0771
+      with_items:
+        - {name: 'nginx.conf', dest: 'nginx.conf'}
+        - {name: 'online/nginx_comm_proxy.block', dest: 'online/'}
+        - {name: 'online/nginx_comm_proxy_ws.block', dest: 'online/'}
+        - {name: 'online/nginx_comm_userblank.block', dest: 'online/'}
+        - {name: 'online/nginx_extsvr_webproxy.conf', dest: 'online/'}
+        - {name: 'online/nginx_monitor.conf', dest: 'online/'}
+
+    - name : reload nginx worker process
+      shell : /opt/openresty/nginx/sbin/nginx -t -c /opt/openresty/nginx/conf/nginx.conf && /opt/openresty/nginx/sbin/nginx -s reload
+
