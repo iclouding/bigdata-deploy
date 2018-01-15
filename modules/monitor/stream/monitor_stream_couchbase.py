@@ -37,8 +37,7 @@ def send_alter_mail(sub, body, sendto):
     mail_url = 'http://10.19.15.127:5006/mail/api/v1.0/send'
 
     heads = {'content-type': 'application/json'}
-    r = requests.post(url=mail_url, headers=heads,
-                      data=json.dumps(mail_content))
+    r = requests.post(url=mail_url, headers=heads, data=json.dumps(mail_content))
     if r.status_code == 200:
         log_msg("send_alter_mail", "send mail success", 1)
     else:
@@ -53,8 +52,7 @@ def run_command_out(cmd):
     else:
         msg = "run cmd {0} Failed,output was {1} ".format(cmd, out)
         log_msg("run", msg, 2)
-        return None
-        # raise Exception(msg, 2)
+        return None  # raise Exception(msg, 2)
 
 
 class Checktask():
@@ -81,11 +79,9 @@ class Checktask():
             raise Exception(msg, 2)
 
     def check_yarn_list_workflow(self):
-        log_msg("check_yarn", "keyword %s,type %s" %
-                (self.keyword, self.type), 1)
+        log_msg("check_yarn", "keyword %s,type %s" % (self.keyword, self.type), 1)
         if not self.check_yarn_service():
-            start_service = "su - {0} -c '{1}'".format(
-                self.users, self.commands)
+            start_service = "su - {0} -c '{1}'".format(self.users, self.commands)
             sub = "{0} {1} 服务不存在".format(socket.gethostname(), self.keyword)
             found_no_service = "{0} 服务并不存在，启动脚本开启服务".format(self.keyword)
             log_msg("check", found_no_service, 2)
@@ -93,24 +89,21 @@ class Checktask():
             run_command_out(start_service)
             time.sleep(60)
             if not self.check_yarn_service():
-                sub = "{0} {1}服务重启未成功".format(
-                    socket.gethostname(), self.keyword)
+                sub = "{0} {1}服务重启未成功".format(socket.gethostname(), self.keyword)
                 start_failed = "{0}服务运行脚本开启服务失败".format(self.keyword)
                 log_msg("start", start_failed, 2)
                 send_alter_mail(sub, start_failed, self.alter_mail)
         log_msg("check_end", "check %s success!" % self.keyword, 1)
 
-        # run command
-        # check keyword
+        # run command  # check keyword
 
         # run commands
 
     def check_yarn_service(self):
-        check_cmd = "su - {0} -c ' yarn application -list | grep {1}'".format(
-            self.users, self.keyword)
+        check_cmd = "su - {0} -c ' yarn application -list | grep {1}'".format(self.users, self.keyword)
         output = run_command_out(check_cmd)
         if output:
-            check_item = output.split('\n')[-1].split()
+            check_item = output.split('\n')[-1].split('\t')
             pattern = '^{0}$'.format(self.keyword)
             match = re.match(pattern, check_item[1])
             if match and check_item[5] == 'RUNNING':
@@ -121,11 +114,9 @@ class Checktask():
             return False
 
     def check_ps_keyword_workflow(self):
-        log_msg("check_ps", "keyword %s,type %s " %
-                (self.keyword, self.type), 1)
+        log_msg("check_ps", "keyword %s,type %s " % (self.keyword, self.type), 1)
         if not self.check_ps_keyword_service():
-            start_service = "su - {0} -c '{1}'".format(
-                self.users, self.commands)
+            start_service = "su - {0} -c '{1}'".format(self.users, self.commands)
             sub = "{0} {1} 服务不存在".format(socket.gethostname(), self.keyword)
             found_no_service = "{0} 服务并不存在，启动脚本开启服务".format(self.keyword)
             log_msg("check", found_no_service, 2)
@@ -134,8 +125,7 @@ class Checktask():
             # run_command_out(start_service)
             time.sleep(60)
             if not self.check_ps_keyword_service():
-                sub = "{0} {1}服务重启未成功".format(
-                    socket.gethostname(), self.keyword)
+                sub = "{0} {1}服务重启未成功".format(socket.gethostname(), self.keyword)
                 start_failed = "{0}服务运行脚本开启服务失败".format(self.keyword)
                 log_msg("start", start_failed, 2)
                 send_alter_mail(sub, start_failed, self.alter_mail)
@@ -156,7 +146,12 @@ class Checktask():
             return is_found
 
     def read_pid(self):
-        filename = '/tmp/%s.pid' % self.keyword
+
+        if not re.search('/', self.keyword):
+            filename = '/tmp/%s.pid' % self.keyword
+        else:
+            filename = "%s.pid" % self.keyword
+
         if os.path.isfile(filename):
             with open(filename, 'r') as f:
                 data = f.readline().strip()
@@ -180,9 +175,7 @@ def main():
     for item in check_data:
         c = Checktask(item)
         c.check_workflow()
-        del c
-        # t = myThread(item)
-        # t.start()
+        del c  # t = myThread(item)  # t.start()
 
 
 if __name__ == "__main__":

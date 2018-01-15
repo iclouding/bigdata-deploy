@@ -34,6 +34,10 @@ ansible nodemanager -i test_rolling.host -mshell -a"systemctl enable cgred "
 ansible nodemanager -i test_rolling.host -mshell -a"systemctl enable cgconfig "
 
 
+ansible nodemanager -i test_rolling.host -mshell -a"systemctl restart cgred "
+ansible nodemanager -i test_rolling.host -mshell -a"systemctl restart cgconfig "
+
+
 
 
 cat /etc/cgrules.conf
