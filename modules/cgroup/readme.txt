@@ -57,4 +57,7 @@ systemctl restart cgconfig
 systemctl restart cgred
 systemctl status cgconfig
 systemctl status cgred
+systemctl stop cgconfig
+systemctl stop cgred
+cgdelete -g cpu:bigdata_limit
 

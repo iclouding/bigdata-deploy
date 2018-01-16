@@ -69,4 +69,5 @@ nohup sh /opt/hbase/bin/rolling-restart.sh --rs-only  --graceful > rolling.log 2
 /opt/hbase/bin/hbase-daemon.sh start   regionserver
 /opt/hbase/bin/hbase-daemon.sh restart regionserver
 ansible regionserver -i hbase_test.host -mshell -a"su - hadoop -c'/opt/hbase/bin/hbase-daemon.sh start regionserver'"
+ansible hbase-master-backup -i hbase_test.host -mshell -a"su - hadoop -c'/opt/hbase/bin/hbase-daemon.sh start master'"
 ansible regionserver -i hbase_test.host -mshell -a"su - hadoop -c'jps'"
