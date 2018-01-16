@@ -44,12 +44,15 @@ ansible nodemanager -i test.host -mshell -a"systemctl status cgconfig.service"
 --查看cgred状态
 ansible nodemanager -i test.host -mshell -a"systemctl status cgred.service"
 
-----------------------------------------命令集合----------------------------------------
-删除无用的cgroup组
+--删除无用的cgroup组
 ansible nodemanager -i test.host -mshell -a"cgdelete -g cpu:limitcpu"
+
 ansible nodemanager -i test.host -mshell -a"cgdelete -g memory:limitcpu"
-ansible nodemanager -i host.host -mshell -a"systemctl restart cgred "
-ansible nodemanager -i host.host -mshell -a"systemctl restart cgconfig "
+ansible nodemanager -i test.host -mshell -a"systemctl restart cgred "
+ansible nodemanager -i test.host -mshell -a"systemctl restart cgconfig "
+
+----------------------------------------命令集合----------------------------------------
+
 systemctl restart cgconfig
 systemctl restart cgred
 systemctl status cgconfig
