@@ -61,10 +61,18 @@ bigdata-appsvr-130-6
 bigdata-appsvr-130-7
 
 [nodemanager]
-bigdata-cmpt-128-30
+bigdata-cmpt-128-21
+bigdata-cmpt-128-22
+bigdata-cmpt-128-23
+bigdata-cmpt-128-24
+bigdata-cmpt-128-25
+bigdata-cmpt-128-26
+bigdata-cmpt-128-28
+bigdata-cmpt-128-29
 
 [already_online]
 bigdata-cmpt-128-27
+bigdata-cmpt-128-30
 
 [namenode]
 bigdata-cmpt-128-1
