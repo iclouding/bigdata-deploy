@@ -22,7 +22,7 @@ ansible nodemanager -i test_rolling.host -mshell -a"systemctl stop cgconfig "
 
 ansible nodemanager -i test_rolling.host -mshell -a"cgdelete -g cpu:limitcpu"
 
-ansible nodemanager -i test_rolling.host -mshell -a"cgdelete -g cpu:test1"
+ansible nodemanager -i test_rolling.host -mshell -a"cgdelete -g cpu:limityarncpu"
 
 
 sh /opt/hadoop/sbin/yarn-daemon.sh start nodemanager

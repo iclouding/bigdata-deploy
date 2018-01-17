@@ -344,3 +344,4 @@ Starting ZK Failover Controllers on NN hosts [bigtest-cmpt-129-18 bigtest-cmpt-1
 bigtest-cmpt-129-19: starting zkfc, logging to /data/logs/hadoop-hdfs/hdfs/hadoop-hdfs-zkfc-bigtest-cmpt-129-19.out
 bigtest-cmpt-129-18: starting zkfc, logging to /data/logs/hadoop-hdfs/hdfs/hadoop-hdfs-zkfc-bigtest-cmpt-129-18.out
 -------
+ansible all -i test_rolling.host -mcopy -a"src=/data/tools/ansible/modules/hadoop/config_test_rolling/etc/hadoop/hadoop-metrics2.properties dest=/opt/hadoop/etc/hadoop  owner=hadoop group=hadoop mode=755"
