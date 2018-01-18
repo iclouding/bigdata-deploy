@@ -345,3 +345,75 @@ bigtest-cmpt-129-19: starting zkfc, logging to /data/logs/hadoop-hdfs/hdfs/hadoo
 bigtest-cmpt-129-18: starting zkfc, logging to /data/logs/hadoop-hdfs/hdfs/hadoop-hdfs-zkfc-bigtest-cmpt-129-18.out
 -------
 ansible all -i test_rolling.host -mcopy -a"src=/data/tools/ansible/modules/hadoop/config_test_rolling/etc/hadoop/hadoop-metrics2.properties dest=/opt/hadoop/etc/hadoop  owner=hadoop group=hadoop mode=755"
+
+
+ansible rm1 -i test_rolling.host -mshell -a"su - yarn -c 'sh /opt/hadoop/sbin/stop-yarn.sh'"
+ansible jobhistoryserver -i test_rolling.host -mshell -a"su - yarn -c '/opt/hadoop/sbin/mr-jobhistory-daemon.sh stop  historyserver'"
+ansible timelineserver -i test_rolling.host -mshell -a"su - yarn -c '/opt/hadoop/sbin/yarn-daemon.sh stop timelineserver'"
+
+
+[在dfs服务启动的情况，操作namenode format]
+ansible journalnode -i test_rolling.host -mshell -a"su - hdfs -c  'rm -rf /data/hdfs/journal/hans'"
+hdfs namenode -format
+format好后，停止dfs
+ansible nn2 -i test_rolling.host -mshell -a"su - hdfs -c 'sh /opt/hadoop/sbin/stop-dfs.sh'"
+
+切换软连接
+ansible all -i test_rolling.host -mshell -a"rm -f /opt/hadoop;ln -s /app/hadoop-2.6.2 /opt/hadoop;chown -h hadoop:hadoop /opt/hadoop"
+ansible namenode    -i test_rolling.host -mshell -a"su - hdfs -c  'rm -rf /data/hdfs/name/*'"
+ansible nn2 -i test_rolling.host -mshell -a"su - hdfs -c 'sh /opt/hadoop/sbin/start-dfs.sh'"
+hdfs zkfc -formatZK
+hdfs namenode -format [on nn2]
+hdfs namenode -format [on nn1]
+
+ansible all -i test_rolling.host -mcopy -a"src=/data/tools/ansible/modules/hadoop/config_test_rolling/etc/hadoop/hadoop-metrics2.properties dest=/opt/hadoop/etc/hadoop  owner=hadoop group=hadoop mode=755"
+
+ansible nodemanager -i test_rolling.host -mshell -a"su - hdfs -c 'rm -r /data1/hdfs/data/*'"
+ansible nodemanager -i test_rolling.host -mshell -a"su - hdfs -c 'rm -r /data2/hdfs/data/*'"
+ansible nodemanager -i test_rolling.host -mshell -a"su - hdfs -c 'rm -r /data3/hdfs/data/*'"
+ansible nodemanager -i test_rolling.host -mshell -a"su - hdfs -c 'rm -r /data4/hdfs/data/*'"
+ansible nodemanager -i test_rolling.host -mshell -a"su - hdfs -c 'rm -r /data5/hdfs/data/*'"
+ansible nodemanager -i test_rolling.host -mshell -a"su - hdfs -c 'rm -r /data6/hdfs/data/*'"
+ansible nodemanager -i test_rolling.host -mshell -a"su - hdfs -c 'rm -r /data7/hdfs/data/*'"
+ansible nodemanager -i test_rolling.host -mshell -a"su - hdfs -c 'rm -r /data8/hdfs/data/*'"
+ansible nodemanager -i test_rolling.host -mshell -a"su - hdfs -c 'rm -r /data9/hdfs/data/*'"
+ansible nodemanager -i test_rolling.host -mshell -a"su - hdfs -c 'rm -r /data10/hdfs/data/*'"
+ansible nodemanager -i test_rolling.host -mshell -a"su - hdfs -c 'rm -r /data11/hdfs/data/*'"
+ansible nodemanager -i test_rolling.host -mshell -a"su - hdfs -c 'rm -r /data12/hdfs/data/*'"
+
+
+--初始化hdfs目录
+hadoop fs -mkdir -p /tmp/logs/spark && hadoop fs -chmod -R 777 /tmp/logs/spark
+hadoop fs -chown -R spark:hadoop /tmp/logs/spark
+hadoop fs -setfacl -m group:hadoop:rwx /tmp
+hadoop fs -mkdir -p /user && hadoop fs -chmod -R 777 /user
+hadoop fs -setfacl -m group:hadoop:rwx /user
+hadoop fs -setfacl -m group::r-x /
+hadoop fs -setfacl -m other::r-x /
+hadoop fs -chmod -R 777 '/tmp/hadoop'
+ansible journalnode -i test_rolling.host -mshell -a"su - hdfs -c  'cd /opt/hadoop/;sbin/hadoop-daemon.sh start journalnode'"
+
+ansible nodemanager -i test_rolling.host -mshell -a"su - hdfs -c 'jps'"
+ansible namenode -i test_rolling.host -mshell -a"su - hdfs -c 'jps'"
+sh hadoop-daemons.sh start datanode
+
+
+ansible rm1 -i test_rolling.host -mshell -a"su - yarn -c '/opt/hadoop/sbin/yarn-daemon.sh stop resourcemanager'"
+ansible rm1 -i test_rolling.host -mshell -a"su - yarn -c '/opt/hadoop/sbin/yarn-daemon.sh start resourcemanager'"
+ansible rm2 -i test_rolling.host -mshell -a"su - yarn -c '/opt/hadoop/sbin/yarn-daemon.sh stop resourcemanager'"
+ansible rm2 -i test_rolling.host -mshell -a"su - yarn -c '/opt/hadoop/sbin/yarn-daemon.sh start resourcemanager'"
+ansible rm2 -i test_rolling.host -mshell -a"su - yarn -c 'sh /opt/hadoop/sbin/yarn-daemons.sh start nodemanager'"
+
+ansible nodemanager -i test_rolling.host -mshell -a"su - yarn -c 'jps'"
+
+
+ansible all -i spark.host -mshell -a"rm -f /opt/spark2;ln -s /app/spark-2.1.0-bin-hadoop2.6.2 /opt/spark2;chown -h spark:hadoop /opt/spark2"
+ansible all -i spark.host -mshell -a"rm -f /opt/spark220;ln -s /app/spark-2.2.0-bin-hadoop2.6.2 /opt/spark220;chown -h spark:hadoop /opt/spark220"
+
+ansible all -i test_rolling.host -mshell -a"rm /opt/hadoop/etc/hadoop/ranger* "
+
+ansible cgroup -i test_rolling.host -mshell -a"systemctl stop cgconfig.service"
+ansible cgroup -i test_rolling.host -mshell -a"systemctl stop cgred.service"
+
+ansible all -i test_rolling.host -mcopy -a"src=/data/tools/ansible/modules/hadoop/config_test/etc/hadoop/hdfs-site.xml dest=/opt/hadoop/etc/hadoop  owner=hadoop group=hadoop mode=755"
+ansible all -i test_rolling.host -mcopy -a"src=/data/tools/ansible/modules/hadoop/config_test/etc/hadoop/hdfs-site.xml dest=/opt/hadoop/etc/hadoop  owner=hadoop group=hadoop mode=755"

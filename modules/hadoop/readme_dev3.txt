@@ -113,7 +113,7 @@ ansible hadoop-cmd-node -i dev3.host -mshell -a"su - hdfs -c 'hadoop fs -setfacl
 ansible hadoop-cmd-node -i dev3.host -mshell -a"su - hdfs -c 'hadoop fs -mkdir -p /user && hadoop fs -chmod -R 777 /user'"
 ansible hadoop-cmd-node -i dev3.host -mshell -a"su - hdfs -c 'hadoop fs -setfacl -m group:hadoop:rwx /user'"
 ansible hadoop-cmd-node -i dev3.host -mshell -a"su - hdfs -c 'hadoop fs -setfacl -m group::r-x /'"
-#ansible hadoop-cmd-node -i dev3.host -mshell -a"su - hdfs -c 'hadoop fs -setfacl -m other::r-x /'"
+ansible hadoop-cmd-node -i dev3.host -mshell -a"su - hdfs -c 'hadoop fs -setfacl -m other::r-x /'"
 
 --启动resourcemanager
 ansible resourcemanager -i dev3.host -mshell -a"su - yarn -c  'cd /opt/hadoop/sbin; ./yarn-daemon.sh start resourcemanager'"
