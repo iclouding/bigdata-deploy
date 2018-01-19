@@ -29,7 +29,7 @@ iptables -A INPUT -p tcp  -s 10.10.0.0/16 -j ACCEPT
 iptables -A INPUT -p tcp  -s 10.19.0.0/16 -j ACCEPT
 ##################DNS#################################
 iptables -A INPUT -p udp --dport 53 -j ACCEPT
-iptables -A INPUT -p udp --dport 8650 -j ACCEP
+iptables -A INPUT -p udp --dport 8650 -j ACCEPT
 iptables -A INPUT -p udp --dport 40123 -j ACCEPT
 #################Other service########################
 iptables -A INPUT -p tcp --dport 80 -j ACCEPT
