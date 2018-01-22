@@ -11,7 +11,7 @@ ansible-playbook -i hbase.host install_hbase-bin.yml -t config
 --添加crontab
 ansible hmaster -i hbase.host -m cron -a "name='check hbase master ' minute=*/6  user='hadoop' job='sh /opt/hbase/conf/monitor_hbase.sh org.apache.hadoop.hbase.master.HMaster master >/dev/null 2>&1'  "
 ansible hbase-master-backup -i hbase.host -m cron -a "name='check hbase master ' minute=*/6  user='hadoop' job='sh /opt/hbase/conf/monitor_hbase.sh org.apache.hadoop.hbase.master.HMaster master >/dev/null 2>&1'  "
-ansible regionserver -i hbase.host -m cron -a "name='check hbase regionserver ' minute=*/6  user='hadoop' job='. /etc/profile;sh /opt/hbase/conf/monitor_hbase.sh org.apache.hadoop.hbase.regionserver.HRegionServer regionserver >/dev/null 2>&1'  "
+ansible regionserver -i hbase.host -m cron -a "name='check hbase regionserver ' minute=*/2  user='hadoop' job='. /etc/profile;sh /opt/hbase/conf/monitor_hbase.sh org.apache.hadoop.hbase.regionserver.HRegionServer regionserver >/dev/null 2>&1'  "
 
 
 
