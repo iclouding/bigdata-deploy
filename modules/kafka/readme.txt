@@ -75,3 +75,6 @@ ansible-playbook -i kafka.host install_kafka_bin_2.yml
 ansible all -i kafka.host -mshell -a"su - moretv -c 'cd /opt/kafka2 &&  ./bin/kafka-server-stop.sh '"
 ansible all -i kafka.host -mshell -a"su - moretv -c 'cd /opt/kafka2 &&  ./bin/kafka-server-start.sh -daemon ./config/server.properties '"
 
+
+---------------常用命令 ---------------
+ansible all -i kafka.host -mshell -a"su - moretv -c 'netstat |grep 9094|wc -l'"
