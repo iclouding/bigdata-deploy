@@ -154,3 +154,7 @@ medusa日志处理，4，5，6，7，8，9六台机器，每台启动8个线程�
 --nginx配置分发
 ansible-playbook -i forest.host install_forest.yml -t config_for_nginx
 ansible-playbook -i forest.host install_forest.yml -t config_for_stop
+
+
+ansible all -i forest.host -mcopy -a"src=/data/tools/ansible/modules/forest/config/whaley_thorprobe_stop.sh dest=/opt/forest-bi/Forest-1.0.0-SNAPSHOT-bin/bin  owner=moretv group=moretv mode=755"
+ansible run-apps-machine -i forest.host -mshell -a"su - moretv -c  'cd /opt/forest-bi/Forest-1.0.0-SNAPSHOT-bin/bin;sh whaley_thorprobe_stop.sh'"

@@ -44,8 +44,6 @@ ansible logstashs -i logstash.host -mshell -a"su - moretv -c  'tail /data/logs/l
 ansible logstashs -i logstash.host -mshell -a"su - moretv -c  'ps -ef|grep  kafka_topic_distribute_player_sdk_startplay_merge.conf'"
 
 
-
-
 --增加cronjob
 ansible logstashs -i logstash.host -m cron -a "name='logstash autostart job 1' minute=*/6  user='moretv' job='. /etc/profile;sh /opt/logstash_v5/bin/start_logstash.sh kafka_topic_distribute_helios_hot_16.conf > /dev/null 2>&1'  "
 ansible logstashs -i logstash.host -m cron -a "name='logstash autostart job 2' minute=*/6  user='moretv' job='. /etc/profile;sh /opt/logstash_v5/bin/start_logstash.sh kafka_topic_distribute_helios_status.conf > /dev/null 2>&1'  "
@@ -134,3 +132,71 @@ ansible logstashs -i logstash.host -mshell -a"su - moretv -c  'cat /data/logs/lo
 sh /opt/kafka3/bin/kafka-console-consumer.sh --topic log-raw-boikgpokn78sb95ktmsc1bnkechpgj9l -bootstrap-server bigdata-appsvr-130-1:9094 | grep p0021ilwtlh|grep 304303_50101_1300062 |head
 sh /opt/kafka3/bin/kafka-console-consumer.sh --topic log-raw-boikgpokn78sb95ktmsc1bnkechpgj9l -bootstrap-server bigdata-appsvr-130-1:9094 | grep p0021ilwtlh|grep 304303_50101_1300062 |head
 sh /opt/kafka3/bin/kafka-console-consumer.sh --topic medusa-processed-log  -bootstrap-server bigdata-appsvr-130-1:9094 | grep medusa-player-sdk-startPlay|grep 304303_50101_1300062|grep vod|head
+
+
+
+--------------------------------------------------梳理--------------------------------------------------
+------------------------logstash梳理
+--取消cronjob
+ansible logstashs -i logstash.host -m cron -a "name='logstash autostart job 1' state=absent minute=*/6  user='moretv' job='. /etc/profile;sh /opt/logstash_v5/bin/start_logstash.sh kafka_topic_distribute_helios_hot_16.conf > /dev/null 2>&1'  "
+ansible logstashs -i logstash.host -m cron -a "name='logstash autostart job 2' state=absent minute=*/6  user='moretv' job='. /etc/profile;sh /opt/logstash_v5/bin/start_logstash.sh kafka_topic_distribute_helios_status.conf > /dev/null 2>&1'  "
+ansible logstashs -i logstash.host -m cron -a "name='logstash autostart job 4' state=absent minute=*/6  user='moretv' job='. /etc/profile;sh /opt/logstash_v5/bin/start_logstash.sh kafka_topic_distribute_medusa_hot.conf > /dev/null 2>&1'  "
+ansible logstashs -i logstash.host -m cron -a "name='logstash autostart job 5' state=absent minute=*/6  user='moretv' job='. /etc/profile;sh /opt/logstash_v5/bin/start_logstash.sh kafka_topic_distribute_ad_turnon_medusa_product.conf > /dev/null 2>&1'  "
+ansible logstashs -i logstash.host -m cron -a "name='logstash autostart job 6' state=absent minute=*/6  user='moretv' job='. /etc/profile;sh /opt/logstash_v5/bin/start_logstash.sh kafka_topic_distribute_ad_vod_whaley_product.conf > /dev/null 2>&1'  "
+
+
+--杀死进程
+ansible logstashs -i logstash.host -mshell -a"su - moretv -c  'cd /opt/logstash_v5/bin;sh stop_logstash.sh kafka_topic_distribute_helios_hot_16.conf'"
+ansible logstashs -i logstash.host -mshell -a"su - moretv -c  'cd /opt/logstash_v5/bin;sh stop_logstash.sh kafka_topic_distribute_helios_status.conf'"
+ansible logstashs -i logstash.host -mshell -a"su - moretv -c  'cd /opt/logstash_v5/bin;sh stop_logstash.sh kafka_topic_distribute_medusa_hot.conf'"
+ansible logstashs -i logstash.host -mshell -a"su - moretv -c  'cd /opt/logstash_v5/bin;sh stop_logstash.sh kafka_topic_distribute_ad_turnon_medusa_product.conf'"
+ansible logstashs -i logstash.host -mshell -a"su - moretv -c  'cd /opt/logstash_v5/bin;sh stop_logstash.sh kafka_topic_distribute_ad_vod_whaley_product.conf'"
+
+--停止62错误码测试进程
+ansible logstashs -i logstash.host -mshell -a"su - moretv -c  'cd /opt/logstash_v5/bin;sh stop_logstash.sh kafka_topic_distribute_medusa_player_sdk_startplay_test.conf'"
+ansible logstashs -i logstash.host -mshell -a"su - moretv -c  'cd /opt/logstash_v5/bin;sh stop_logstash.sh kafka_topic_distribute_player_sdk_startplay_merge_test.conf'"
+
+
+62错误码测试使用，可以切换输入topic为forest-medusa-player-sdk-startplay、forest-helios-player-sdk-startplay
+/opt/logstash_v5/config/kafka_topic_distribute_medusa_player_sdk_startplay_test.conf
+/opt/logstash_v5/config/kafka_topic_distribute_player_sdk_startplay_merge_test.conf
+
+
+62错误码使用，可以切换输入topic为forest-medusa-player-sdk-startplay、forest-helios-player-sdk-startplay
+/opt/logstash_v5/config/kafka_topic_distribute_medusa_player_sdk_startplay.conf
+/opt/logstash_v5/config/kafka_topic_distribute_helios_player_sdk_startplay.conf
+/opt/logstash_v5/config/kafka_topic_distribute_player_sdk_startplay_merge.conf
+
+
+李拓在使用，可以切换新forest的kafka topic
+kafka_topic_distribute_medusa_player_sdk_parse_startplay.conf
+kafka_topic_distribute_helios_player_sdk_parse_startplay.conf
+
+
+------------------------kylin梳理
+目前只有MEDUSA_PLAY_LIVE_QOS_CUBE【播放质量】仍然在运行，其他的业务例如雷神、资讯、广告都可以停止，最好需要与业务方再次确认。
+MEDUSA_PLAY_LIVE_QOS_CUBE【播放质量】影响 冰鑫的tableau,刘英东使用kylin的查询觉果做监控、以及吴鹏程查看播放质量明细。
+后期可以使用实时分析系统的medusa-play-live-qos任务来做代替，如果logType为playqos、liveqos可以使用电视猫最新版本日志格式，那么可以停掉旧版forest中对qos的解析，而使用
+李拓的按logtype拆分出来kafka topic.
+
+
+logstash的配置对应的业务
+kafka_topic_distribute_helios_hot_16
+kafka_topic_distribute_helios_status
+kafka_topic_distribute_medusa_hot
+kafka_topic_distribute_ad_turnon_medusa_product
+kafka_topic_distribute_ad_vod_whaley_product
+
+
+------------------------旧版forest梳理
+停止进程：
+cn.whaley.turbo.forest.main.ThorProbeLogProcessingApp2  【雷神】
+停止cronjob
+ansible run-apps-machine -i forest.host -m cron -a "name='forest autostart job 3' state=absent minute=*/6  user='moretv' job=' . /etc/profile;sh /opt/forest-bi/Forest-1.0.0-SNAPSHOT-bin/bin/whaley_thorprobe_start.sh > /dev/null 2>&1'  "
+
+cn.whaley.turbo.forest.main.MedusaPlayqosProcessingApp  【播放质量,依赖medusa-processed-log】
+cn.whaley.turbo.forest.main.NginxHeliosLogProcessingApp 【产生 helios-processed-log】
+cn.whaley.turbo.forest.main.NginxMedusaLogProcessingApp 【产生 medusa-processed-log】
+
+后续ai从helios-processed-log、medusa-processed-log切换按logtype拆分的topic，播放质量切换topic后，可以停止旧forest运行。
+

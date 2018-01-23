@@ -73,6 +73,11 @@ ansible regionserver -i hbase_test.host -mshell -a"su - hadoop -c'/opt/hbase/bin
 ansible hmaster             -i hbase_test.host -mshell -a"su - hadoop -c'/opt/hbase/bin/hbase-daemon.sh start master'"
 ansible hbase-master-backup -i hbase_test.host -mshell -a"su - hadoop -c'/opt/hbase/bin/hbase-daemon.sh start master'"
 
+
+ansible hmaster             -i hbase_test.host -mshell -a"su - hadoop -c'/opt/hbase/bin/hbase-daemon.sh stop master'"
+ansible hbase-master-backup -i hbase_test.host -mshell -a"su - hadoop -c'/opt/hbase/bin/hbase-daemon.sh stop master'"
+
+
 ansible regionserver -i hbase_test.host -mshell -a"su - hadoop -c'jps'"
 
 
