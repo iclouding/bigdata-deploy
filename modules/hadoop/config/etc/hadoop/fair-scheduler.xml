@@ -68,7 +68,7 @@
     </queue>
     <queue name="parquet_convert">
         <minResources>204800 mb, 40 vcores</minResources>
-        <maxResources>2048000 mb, 400 vcores</maxResources>
+        <maxResources>2048000 mb, 500 vcores</maxResources>
         <schedulingMode>fair</schedulingMode>
         <weight>3.0</weight>
         <minSharePreemptionTimeout>2</minSharePreemptionTimeout>
