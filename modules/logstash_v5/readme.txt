@@ -200,3 +200,13 @@ cn.whaley.turbo.forest.main.NginxMedusaLogProcessingApp 【产生 medusa-process
 
 后续ai从helios-processed-log、medusa-processed-log切换按logtype拆分的topic，播放质量切换topic后，可以停止旧forest运行。
 
+
+
+--取消cronjob
+ansible logstashs -i logstash.host -m cron -a "name='logstash autostart job 11' state=absent minute=*/6  user='moretv' job='. /etc/profile;sh /opt/logstash_v5/bin/start_logstash.sh kafka_topic_distribute_helios_player_sdk_parse_startplay.conf > /dev/null 2>&1'  "
+ansible logstashs -i logstash.host -m cron -a "name='logstash autostart job 10' state=absent minute=*/6  user='moretv' job='. /etc/profile;sh /opt/logstash_v5/bin/start_logstash.sh kafka_topic_distribute_medusa_player_sdk_parse_startplay.conf > /dev/null 2>&1'  "
+
+--停止进程
+ansible logstashs -i logstash.host -mshell -a"su - moretv -c  'cd /opt/logstash_v5/bin;sh stop_logstash.sh kafka_topic_distribute_helios_player_sdk_parse_startplay.conf'"
+ansible logstashs -i logstash.host -mshell -a"su - moretv -c  'cd /opt/logstash_v5/bin;sh stop_logstash.sh kafka_topic_distribute_medusa_player_sdk_parse_startplay.conf'"
+
