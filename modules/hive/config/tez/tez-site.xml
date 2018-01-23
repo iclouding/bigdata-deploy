@@ -813,6 +813,7 @@
         <name>tez.queue.name</name>
         <description>String value. The queue name for all jobs being submitted from a given client.</description>
         <type>string</type>
+        <value>long_running</value>
     </property>
 
     <property>
