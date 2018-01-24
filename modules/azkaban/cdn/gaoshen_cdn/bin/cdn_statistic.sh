@@ -55,6 +55,7 @@ if [ -z "$hdfsDir" ]; then
     exit 1
 fi
 
+TimeStamp=`date +%H%M%S.%N`
 microsoft_host='media-wr'
 microsoft_host2='media2-wr'
 table_name=""
@@ -63,21 +64,21 @@ if [[ $host == *$microsoft_host* ]] || [[ $host == *$microsoft_host2* ]]
 then
   table_name="ods.v_log_microsoft_cdn_mediags"
   status_col="sc_status"
-  hive -e "
+  hive --hiveconf hive.session.id=wu.jiulin_odsEtlCdnLog_${logTime}-${TimeStamp} -e "
 alter table ods.t_log_microsoft_cdn_mediags add if not exists partition(key_time='${logTime}',key_host='${host}')
 location '/log/cdn/${logTime}/${host}';
 "
 else
   table_name="ods.v_log_cdn_mediags"
   status_col="status"
-  hive -e "
+  hive --hiveconf hive.session.id=wu.jiulin_odsEtlCdnLog_${logTime}-${TimeStamp} -e "
 alter table ods.t_log_cdn_mediags add if not exists partition(key_time='$logTime',key_host='$host')
 location '/log/cdn/${logTime}/${host}';
 "
 fi
 
 set -x
-hive -e "
+hive --hiveconf hive.session.id=wu.jiulin_odsEtlCdnLog_${logTime}-${TimeStamp} -e "
 set tez.am.resource.memory.mb=8192;
 set hive.tez.container.size=8192;
 set fs.hdfs.impl.disable.cache=true;
@@ -100,7 +101,7 @@ if [ "$ret" != "0" ]; then
     exit 1
 fi
 
-hive -e "
+hive --hiveconf hive.session.id=wu.jiulin_odsEtlCdnLog_${logTime}-${TimeStamp} -e "
 set tez.am.resource.memory.mb=8192;
 set hive.tez.container.size=8192;
 set fs.hdfs.impl.disable.cache=false;
