@@ -19,3 +19,6 @@
                     cd /opt/storm
                     nohup ./bin/storm ui &
            观察UI界面
+
+
+    ansible all -i storm_supervisor_new.host -mshell -a'su - storm -c "cd /opt/storm && nohup ./bin/storm supervisor 2>&1 &"'
