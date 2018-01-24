@@ -46,7 +46,8 @@ ansible run-apps-machine -i forest.host -mshell -a"su - moretv -c  'cd /opt/fore
 ansible run-apps-machine -i forest.host -mshell -a"su - moretv -c  'cd /opt/forest-bi/Forest-1.0.0-SNAPSHOT-bin/bin;sh nginx_helios_product_restart.sh'"
 --重启 medusa平展化进程(nginx)
 ansible run-apps-machine -i forest.host -mshell -a"su - moretv -c  'cd /opt/forest-bi/Forest-1.0.0-SNAPSHOT-bin/bin;sh nginx_medusa_product_restart.sh'"
-
+--重启 medusa playqos
+ansible run-apps-machine -i forest.host -mshell -a"su - moretv -c  'cd /opt/forest-bi/Forest-1.0.0-SNAPSHOT-bin/bin;sh medua_playqos_restart.sh'"
 
 
 --检查 helios平展化进程(logcenter)
@@ -154,3 +155,10 @@ medusa日志处理，4，5，6，7，8，9六台机器，每台启动8个线程�
 --nginx配置分发
 ansible-playbook -i forest.host install_forest.yml -t config_for_nginx
 ansible-playbook -i forest.host install_forest.yml -t config_for_stop
+
+
+ansible all -i forest.host -mcopy -a"src=/data/tools/ansible/modules/forest/config/forest.properties dest=/opt/forest-bi/Forest-1.0.0-SNAPSHOT-bin/conf  owner=moretv group=moretv mode=755"
+ansible all -i forest.host -mcopy -a"src=/data/tools/ansible/modules/forest/config/Forest-1.0.0-SNAPSHOT.jar dest=/opt/forest-bi/Forest-1.0.0-SNAPSHOT-bin/lib  owner=moretv group=moretv mode=755"
+
+ansible run-apps-machine -i forest.host -mshell -a"su - moretv -c  'cd /opt/forest-bi/Forest-1.0.0-SNAPSHOT-bin/bin;sh whaley_thorprobe_stop.sh'"
+

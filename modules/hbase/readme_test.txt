@@ -26,6 +26,11 @@ ansible hmaster -i hbase_test.host -mshell -a"su - hadoop -c  'cd /opt/hbase/bin
 --停止hbase[慎用]
 ansible hmaster -i hbase_test.host -mshell -a"su - hadoop -c  'cd /opt/hbase/bin;sh stop-hbase.sh'"
 
+--重启regionserver
+ansible regionserver -i hbase_test.host -mshell -a"su - hadoop -c'/opt/hbase/bin/hbase-daemon.sh restart regionserver'"
+
+ansible regionserver -i hbase_test.host -mshell -a"su - hadoop -c'ps -ef|grep regionserver'"
+
 --重启hbase ThriftServer
 ansible all -i hbase_test.host -mcopy -a"src=/data/tools/ansible/modules/hbase/config/etc/hbase/hbase-env.sh dest=/opt/hbase/conf  owner=hadoop group=hadoop mode=755"
 ansible all -i hbase_test.host -mcopy -a"src=/data/tools/ansible/modules/hbase/config/etc/hbase/hbase-site.xml dest=/opt/hbase/conf  owner=hadoop group=hadoop mode=755"
@@ -57,3 +62,26 @@ nohup sh /opt/hbase/bin/rolling-restart.sh --rs-only  --graceful > rolling.log 2
 4.启动hbase regionserver cronjob
 在ansible机器上,hbase/playbook目录，执行
   ansible regionserver -i hbase_test.host -m cron -a "name='check hbase regionserver ' minute=*/6  user='hadoop' job='. /etc/profile;sh /opt/hbase/conf/monitor_hbase.sh org.apache.hadoop.hbase.regionserver.HRegionServer regionserver >/dev/null 2>&1'  "
+
+
+
+
+/opt/hbase/bin/hbase-daemon.sh start   regionserver
+/opt/hbase/bin/hbase-daemon.sh restart regionserver
+ansible regionserver -i hbase_test.host -mshell -a"su - hadoop -c'/opt/hbase/bin/hbase-daemon.sh start regionserver'"
+ansible regionserver -i hbase_test.host -mshell -a"su - hadoop -c'/opt/hbase/bin/hbase-daemon.sh stop regionserver'"
+ansible hmaster             -i hbase_test.host -mshell -a"su - hadoop -c'/opt/hbase/bin/hbase-daemon.sh start master'"
+ansible hbase-master-backup -i hbase_test.host -mshell -a"su - hadoop -c'/opt/hbase/bin/hbase-daemon.sh start master'"
+
+
+ansible hmaster             -i hbase_test.host -mshell -a"su - hadoop -c'/opt/hbase/bin/hbase-daemon.sh stop master'"
+ansible hbase-master-backup -i hbase_test.host -mshell -a"su - hadoop -c'/opt/hbase/bin/hbase-daemon.sh stop master'"
+
+
+ansible regionserver -i hbase_test.host -mshell -a"su - hadoop -c'jps'"
+
+
+ansible regionserver -i hbase_test.host -mshell -a"su - hadoop -c'jps'"
+ansible hmaster -i hbase_test.host -mshell -a"su - hadoop -c'jps'"
+ansible hbase-master-backup -i hbase_test.host -mshell -a"su - hadoop -c'jps'"
+

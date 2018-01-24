@@ -112,10 +112,12 @@ py -a"src=/data/tools/ansible/modules/hive/config/hive.sh dest=/opt/hive/bin/hiv
 #启动metastore服务：nohup /app/apache-hive-2.1.1-bin/bin/hive --service metastore -p 9083 &
 
 
-
-
-
-
+----安装tez
+hdfs user:
+hadoop fs -mkdir -p  /libs/common
+hadoop fs -chmod -R 777 /libs
+spark user:
+hadoop fs -put -f /app/apache-tez-0.8.4-bin/share/tez.tar.gz /libs/common
 
 
 

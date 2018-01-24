@@ -62,7 +62,7 @@ container-executor权限有特殊要求
   ansible all -i dev_rolling.host -mshell -a"cd /app/hadoop-2.9.0;chmod 6050 bin/container-executor"
 
 cgroup权限的更改
-  ansible all -i dev_rolling.host -mshell -a"cd /sys/fs/cgroup/;chmod 777 cpu,cpuacct"
+  ansible all -i dev_rolling.host -mshell -a"cd /sys/fs/cgroup/;chmod 777 'cpu,cpuacct'"
   ansible all -i dev_rolling.host -mshell -a"cd /sys/fs/cgroup/cpu,cpuacct;chmod 777 -R hadoop-yarn"
 
 
@@ -99,7 +99,7 @@ cgroup权限的更改
         sh /opt/hadoop/sbin/yarn-daemon.sh stop resourcemanager
         sh /opt/hadoop/sbin/yarn-daemon.sh start resourcemanager
 3.升级DNs
-    1.选择一小部分数据节点（例如特定机架下的所有数据节点）。
+    1.选择一小部分数据节点（例如特定机架下的所有数据节点，hdfs dfsadmin -printTopology）。
          1.运行“hdfs dfsadmin -shutdownDatanode <DATANODE_HOST：IPC_PORT> upgrade”来关闭所选数据节点之一。
            在nn2节点【这个时候已经成为了active】,hdfs dfsadmin -shutdownDatanode 10.255.129.104:50020 upgrade
            ansible nn2 -i dev_rolling.host -mshell -a"su - hdfs -c 'hdfs dfsadmin -shutdownDatanode 10.255.129.104:50020 upgrade'"
@@ -146,8 +146,8 @@ cgroup权限的更改
 
    2.重复上述步骤，直到集群中的所有数据节点都被升级。
 4.完成滚动升级
-   1.运行“hdfs dfsadmin -rollingUpgrade finalize”来完成滚动升级。
-     ansible nn2 -i dev_rolling.host -mshell -a"su - hdfs -c 'hdfs dfsadmin -rollingUpgrade finalize'"
+   1.运行“hdfs dfsadmin -rollingUpgrade finalize”来完成滚动升级。【等待一周后、没有发现问题再执行finalize命令，否则影响降级和回滚】
+     【等一周、确认升级无误】ansible nn2 -i dev_rolling.host -mshell -a"su - hdfs -c 'hdfs dfsadmin -rollingUpgrade finalize'"
 
 
 --------------其他--------------:
@@ -178,5 +178,8 @@ ansible all -i dev_rolling.host -mcopy -a"src=/data/tools/ansible/modules/hadoop
 重启nodemanager，
 ansible nodemanager -i dev_rolling.host -mshell -a"su - yarn -c '/opt/hadoop/sbin/yarn-daemon.sh stop  nodemanager'"
 ansible nodemanager -i dev_rolling.host -mshell -a"su - yarn -c '/opt/hadoop/sbin/yarn-daemon.sh start nodemanager'"
-
+f.yarn的其他两个demon服务
+jps
+ApplicationHistoryServer ->  timeline             /opt/hadoop/sbin/yarn-daemon.sh start timelineserver          [yarn]
+JobHistoryServer         -> JobHistoryServer      /opt/hadoop/sbin//mr-jobhistory-daemon.sh start historyserver [yarn]
 

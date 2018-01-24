@@ -20,7 +20,7 @@ ansible all -i test_cgroup.host -mshell -a"cd /opt/hadoop;chown root:hadoop etc"
 ansible all -i test_cgroup.host -mshell -a"cd /opt/hadoop/etc;chown root:hadoop hadoop"
 ansible all -i test_cgroup.host -mshell -a"cd /opt/hadoop/bin;chown root:hadoop container-executor"
 ansible all -i test_cgroup.host -mshell -a"cd /opt/hadoop;chmod 6050 bin/container-executor"
-ansible all -i test_cgroup.host -mshell -a"cd /sys/fs/cgroup/;chmod 777 cpu,cpuacct"
+ansible all -i test_cgroup.host -mshell -a"cd /sys/fs/cgroup/;chmod 777 'cpu,cpuacct'"
 
 
 6.重启resourcemanager [yarn用户]

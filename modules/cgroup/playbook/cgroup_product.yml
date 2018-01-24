@@ -1,0 +1,29 @@
+---
+- hosts: nodemanager
+  tasks:
+    - name: cgroup install
+      shell: yum install -y libcgroup libcgroup-tools
+      tags: cgroup_install
+
+    - name: cgroup config files
+      copy: src=/data/tools/ansible/modules/cgroup/config/{{ item.name }} dest={{ item.dest }} owner={{ item.owner }} group={{ item.group }} mode={{ item.mode }}
+      tags: cgroup_config
+      with_items:
+        - {name: 'cgrules.conf',  dest: '/etc',owner: 'root',group: 'root',  mode: '644'}
+        - {name: 'cgconfig.conf', dest: '/etc',owner: 'root',group: 'root',  mode: '644'}
+
+    - name: add to auto start list when machine reboot
+      shell: systemctl enable cgconfig && systemctl enable cgred
+      tags: cgroup_config
+
+    - name: restart cgconfig and cgred
+      shell: systemctl restart cgconfig && systemctl restart cgred
+      tags: cgroup_restart
+
+    - name: restart cgconfig and cgred
+      shell: systemctl start cgconfig && systemctl start cgred
+      tags: cgroup_start
+
+    - name: restart cgconfig and cgred
+      shell: systemctl stop cgconfig && systemctl stop cgred
+      tags: cgroup_stop

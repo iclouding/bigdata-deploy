@@ -3,12 +3,10 @@ bigtest-appsvr-129-6
 bigtest-appsvr-129-7
 
 [ngx-extsvr-webproxy]
-bigdata-extsvr-web_bi
-bigdata-extsvr-db_bi1
-bigdata-extsvr-db_bi2
+bigtest-appsvr-129-8
 
 [ngx-extsvr-tcpproxy]
-bigdata-extsvr-web_bi
+bigtest-appsvr-129-8
 
 
 [ngx-extsvr-log]
