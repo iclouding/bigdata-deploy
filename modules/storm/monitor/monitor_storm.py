@@ -6,7 +6,6 @@ import pdb
 import json
 import socket
 
-
 send_to = 'peng.tao@whaley.cn,xu.tong@whaley.cn,lian.kai@whaley.cn'
 
 
@@ -61,7 +60,9 @@ def check_supervisor(url_supervisor):
     r = requests.get(url_supervisor)
     all_host = ['bigdata-cmpt-128-2', 'bigdata-cmpt-128-3', 'bigdata-cmpt-128-14', 'bigdata-cmpt-128-15',
                 'bigdata-cmpt-128-26', 'bigdata-cmpt-128-27', 'bigdata-cmpt-128-38', 'bigdata-cmpt-128-39',
-                'bigdata-cmpt-128-50', 'bigdata-cmpt-128-51']
+                'bigdata-cmpt-128-50', 'bigdata-cmpt-128-51', 'bigdata-cmpt-128-4', 'bigdata-cmpt-128-5',
+                'bigdata-cmpt-128-16', 'bigdata-cmpt-128-17', 'bigdata-cmpt-128-28', 'bigdata-cmpt-128-29',
+                'bigdata-cmpt-128-40', 'bigdata-cmpt-128-41', 'bigdata-cmpt-128-52', 'bigdata-cmpt-128-53']
     active_host = list()
     if r.status_code == 200:
         data = json.loads(r.content)
