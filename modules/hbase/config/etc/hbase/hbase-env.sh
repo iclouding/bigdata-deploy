@@ -32,7 +32,7 @@ export HBASE_LOG_DIR=/data/logs/hbase
 export HBASE_CLASSPATH=${HBASE_CLASSPATH}:${HADOOP_CONF_DIR}
 
 # The maximum amount of heap to use. Default is left to JVM default.
-export HBASE_HEAPSIZE=24G
+export HBASE_HEAPSIZE=30G
 
 # Uncomment below if you intend to use off heap cache. For example, to allocate 8G of
 # offheap, set the value to "8G".
@@ -42,7 +42,7 @@ export HBASE_HEAPSIZE=24G
 # Below are what we set by default.  May only work with SUN JVM.
 # For more on why as well as other possible settings,
 # see http://wiki.apache.org/hadoop/PerformanceTuning
-export HBASE_OPTS="-XX:+UseConcMarkSweepGC"
+export HBASE_OPTS="-server -XX:+UseG1GC -XX:MaxGCPauseMillis=20 -XX:InitiatingHeapOccupancyPercent=35 -XX:+DisableExplicitGC -Djava.awt.headless=true -javaagent:/opt/hbase/prometheus/jmx_prometheus_javaagent-0.1.0.jar=7000:/opt/hbase/prometheus/hbase_jmx_config.yaml"
 
 # Configure PermSize. Only needed in JDK7. You can safely remove it for JDK8+
 export HBASE_MASTER_OPTS="$HBASE_MASTER_OPTS"
@@ -59,7 +59,7 @@ export HBASE_REGIONSERVER_OPTS="$HBASE_REGIONSERVER_OPTS"
 
 # This enables basic GC logging to its own file with automatic log rolling. Only applies to jdk 1.6.0_34+ and 1.7.0_2+.
 # If FILE-PATH is not replaced, the log file(.gc) would still be generated in the HBASE_LOG_DIR .
-# export SERVER_GC_OPTS="-verbose:gc -XX:+PrintGCDetails -XX:+PrintGCDateStamps -Xloggc:<FILE-PATH> -XX:+UseGCLogFileRotation -XX:NumberOfGCLogFiles=1 -XX:GCLogFileSize=512M"
+export SERVER_GC_OPTS="-verbose:gc -XX:+PrintGCDetails -XX:+PrintGCDateStamps -XX:+PrintGCTimeStamps -Xloggc:/data/logs/hbase/hbase-server-side-gc.log -XX:+UseGCLogFileRotation -XX:NumberOfGCLogFiles=1 -XX:GCLogFileSize=512M"
 
 # Uncomment one of the below three options to enable java garbage collection logging for the client processes.
 
@@ -72,7 +72,7 @@ export HBASE_REGIONSERVER_OPTS="$HBASE_REGIONSERVER_OPTS"
 
 # This enables basic GC logging to its own file with automatic log rolling. Only applies to jdk 1.6.0_34+ and 1.7.0_2+.
 # If FILE-PATH is not replaced, the log file(.gc) would still be generated in the HBASE_LOG_DIR .
-# export CLIENT_GC_OPTS="-verbose:gc -XX:+PrintGCDetails -XX:+PrintGCDateStamps -Xloggc:<FILE-PATH> -XX:+UseGCLogFileRotation -XX:NumberOfGCLogFiles=1 -XX:GCLogFileSize=512M"
+export CLIENT_GC_OPTS="-verbose:gc -XX:+PrintGCDetails -XX:+PrintGCDateStamps -Xloggc:/data/logs/hbase/hbase-client-side-gc.log -XX:+UseGCLogFileRotation -XX:NumberOfGCLogFiles=1 -XX:GCLogFileSize=512M"
 
 # See the package documentation for org.apache.hadoop.hbase.io.hfile for other configurations
 # needed setting up off-heap block caching.

@@ -89,9 +89,12 @@ ansible hbase-master-backup -i hbase_test.host -mshell -a"su - hadoop -c'jps'"
 
 
 ------------测试环境配置prometheus------------
+ansible all -i hbase_test.host -mcopy -a"src=/data/tools/ansible/modules/hbase/config_test/etc/hbase/hbase-env.sh dest=/opt/hbase/conf  owner=hadoop group=hadoop mode=755"
 ansible all -i hbase_test.host -mshell -a"su - hadoop -c' mkdir -p /opt/hbase/prometheus '"
 ansible all -i hbase_test.host -mcopy -a"src=/data/tools/ansible/modules/hbase/config_test/etc/hbase/jmx_prometheus_javaagent-0.1.0.jar dest=/opt/hbase/prometheus  owner=hadoop group=hadoop mode=755"
 ansible all -i hbase_test.host -mcopy -a"src=/data/tools/ansible/modules/hbase/config_test/etc/hbase/hbase_jmx_config.yaml dest=/opt/hbase/prometheus  owner=hadoop group=hadoop mode=755"
 ansible regionserver -i hbase_test.host -mshell -a"su - hadoop -c'/opt/hbase/bin/hbase-daemon.sh restart regionserver'"
 ansible hmaster      -i hbase_test.host -mshell -a"su - hadoop -c'/opt/hbase/bin/hbase-daemon.sh restart hmaster'"
 
+ansible hbase-master-backup -i hbase_test.host -mshell -a"su - hadoop -c'/opt/hbase/bin/hbase-daemon.sh stop master'"
+ansible hbase-master-backup -i hbase_test.host -mshell -a"su - hadoop -c'/opt/hbase/bin/hbase-daemon.sh start master'"

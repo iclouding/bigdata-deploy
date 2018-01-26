@@ -9,8 +9,8 @@ ansible-playbook -i hbase.host install_hbase-bin.yml -t install
 ansible-playbook -i hbase.host install_hbase-bin.yml -t config
 
 --添加crontab
-ansible hmaster -i hbase.host -m cron -a "name='check hbase master ' minute=*/6  user='hadoop' job='sh /opt/hbase/conf/monitor_hbase.sh org.apache.hadoop.hbase.master.HMaster master >/dev/null 2>&1'  "
-ansible hbase-master-backup -i hbase.host -m cron -a "name='check hbase master ' minute=*/6  user='hadoop' job='sh /opt/hbase/conf/monitor_hbase.sh org.apache.hadoop.hbase.master.HMaster master >/dev/null 2>&1'  "
+ansible hmaster -i hbase.host -m cron -a "name='check hbase master ' minute=*/2  user='hadoop' job='sh /opt/hbase/conf/monitor_hbase.sh org.apache.hadoop.hbase.master.HMaster master >/dev/null 2>&1'  "
+ansible hbase-master-backup -i hbase.host -m cron -a "name='check hbase master ' minute=*/2  user='hadoop' job='sh /opt/hbase/conf/monitor_hbase.sh org.apache.hadoop.hbase.master.HMaster master >/dev/null 2>&1'  "
 ansible regionserver -i hbase.host -m cron -a "name='check hbase regionserver ' minute=*/2  user='hadoop' job='. /etc/profile;sh /opt/hbase/conf/monitor_hbase.sh org.apache.hadoop.hbase.regionserver.HRegionServer regionserver >/dev/null 2>&1'  "
 
 
@@ -51,12 +51,12 @@ hostname替换为机器名称，例如bigdata-cmpt-128-19
 ------------------------------滚动重启所有hbase------------------------------
 1.停止hbase regionserver cronjob监控[防止hbase滚动重启过程中，监控拉起hbase相关服务]
 在ansible机器上,hbase/playbook目录，执行
-ansible regionserver -i hbase.host -m cron -a "name='check hbase regionserver ' state=absent minute=*/6  user='hadoop' job='. /etc/profile;sh /opt/hbase/conf/monitor_hbase.sh org.apache.hadoop.hbase.regionserver.HRegionServer regionserver >/dev/null 2>&1'  "
-ansible hmaster -i hbase.host -m cron -a "name='check hbase master ' state=absent minute=*/6  user='hadoop' job='sh /opt/hbase/conf/monitor_hbase.sh org.apache.hadoop.hbase.master.HMaster master >/dev/null 2>&1'  "
-ansible hbase-master-backup -i hbase.host -m cron -a "name='check hbase master ' state=absent minute=*/6  user='hadoop' job='sh /opt/hbase/conf/monitor_hbase.sh org.apache.hadoop.hbase.master.HMaster master >/dev/null 2>&1'  "
+ansible regionserver -i hbase.host -m cron -a "name='check hbase regionserver ' state=absent minute=*/2  user='hadoop' job='. /etc/profile;sh /opt/hbase/conf/monitor_hbase.sh org.apache.hadoop.hbase.regionserver.HRegionServer regionserver >/dev/null 2>&1'  "
+ansible hmaster -i hbase.host -m cron -a "name='check hbase master ' state=absent minute=*/2  user='hadoop' job='sh /opt/hbase/conf/monitor_hbase.sh org.apache.hadoop.hbase.master.HMaster master >/dev/null 2>&1'  "
+ansible hbase-master-backup -i hbase.host -m cron -a "name='check hbase master ' state=absent minute=*/2  user='hadoop' job='sh /opt/hbase/conf/monitor_hbase.sh org.apache.hadoop.hbase.master.HMaster master >/dev/null 2>&1'  "
 
--------------
-2.开始滚动重启
+
+2.开始滚动重启-------------
 在hbase-master机器，bigdata-cmpt-128-1，发布滚动重启命令
 nohup sh /opt/hbase/bin/rolling-restart.sh > rolling.log 2>&1 &
 如果在rolling.log日志里发现"Waiting for /hbase/region-in-transition to empty 3"日志，参考[note1]解决
@@ -67,14 +67,36 @@ d.一般不需要手动启动负载均衡
   手动启动负载均衡,在hbase-master机器
   sh /opt/hbase/bin/hbase shell
   运行： balance_switch true
--------------
+
+
+3.开始滚动重启regionserver-------------
+a.停止hbase regionserver cronjob监控,防止hbase滚动重启过程中，监控拉起hbase regionserver
+在ansible机器上,hbase/playbook目录，执行
+ansible regionserver -i hbase.host -m cron -a "name='check hbase regionserver ' state=absent minute=*/2  user='hadoop' job='. /etc/profile;sh /opt/hbase/conf/monitor_hbase.sh org.apache.hadoop.hbase.regionserver.HRegionServer regionserver >/dev/null 2>&1'  "
+b.在hbase-master机器，bigdata-cmpt-128-1，发布滚动重启命令
+nohup sh /opt/hbase/bin/rolling-restart.sh --rs-only  --graceful > rolling.log 2>&1 &
+c.手动启动负载均衡,在hbase-master机器，sh /opt/hbase/bin/hbase shell
+运行： balance_switch true
+d.启动hbase regionserver cronjob
+在ansible机器上,hbase/playbook目录，执行
+ansible regionserver -i hbase.host -m cron -a "name='check hbase regionserver ' minute=*/2  user='hadoop' job='. /etc/profile;sh /opt/hbase/conf/monitor_hbase.sh org.apache.hadoop.hbase.regionserver.HRegionServer regionserver >/dev/null 2>&1'  "
+
 
 4.启动hbase cronjob
 在ansible机器上,hbase/playbook目录，执行
-ansible hmaster -i hbase.host -m cron -a "name='check hbase master ' minute=*/6  user='hadoop' job='sh /opt/hbase/conf/monitor_hbase.sh org.apache.hadoop.hbase.master.HMaster master >/dev/null 2>&1'  "
-ansible hbase-master-backup -i hbase.host -m cron -a "name='check hbase master ' minute=*/6  user='hadoop' job='sh /opt/hbase/conf/monitor_hbase.sh org.apache.hadoop.hbase.master.HMaster master >/dev/null 2>&1'  "
-ansible regionserver -i hbase.host -m cron -a "name='check hbase regionserver ' minute=*/6  user='hadoop' job='. /etc/profile;sh /opt/hbase/conf/monitor_hbase.sh org.apache.hadoop.hbase.regionserver.HRegionServer regionserver >/dev/null 2>&1'  "
+ansible hmaster -i hbase.host -m cron -a "name='check hbase master ' minute=*/2  user='hadoop' job='sh /opt/hbase/conf/monitor_hbase.sh org.apache.hadoop.hbase.master.HMaster master >/dev/null 2>&1'  "
+ansible hbase-master-backup -i hbase.host -m cron -a "name='check hbase master ' minute=*/2  user='hadoop' job='sh /opt/hbase/conf/monitor_hbase.sh org.apache.hadoop.hbase.master.HMaster master >/dev/null 2>&1'  "
+ansible regionserver -i hbase.host -m cron -a "name='check hbase regionserver ' minute=*/2  user='hadoop' job='. /etc/profile;sh /opt/hbase/conf/monitor_hbase.sh org.apache.hadoop.hbase.regionserver.HRegionServer regionserver >/dev/null 2>&1'  "
 ------------------------------滚动重启所有hbase------------------------------end
+
+
+------------生产环境配置prometheus------------
+ansible regionserver -i hbase.host -mcopy -a"src=/data/tools/ansible/modules/hbase/config/etc/hbase/hbase-env.sh dest=/opt/hbase/conf  owner=hadoop group=hadoop mode=755"
+ansible regionserver -i hbase.host -mshell -a"su - hadoop -c' mkdir -p /opt/hbase/prometheus '"
+ansible regionserver -i hbase.host -mcopy -a"src=/data/tools/ansible/modules/hbase/config/etc/hbase/jmx_prometheus_javaagent-0.1.0.jar dest=/opt/hbase/prometheus  owner=hadoop group=hadoop mode=755"
+ansible regionserver -i hbase.host -mcopy -a"src=/data/tools/ansible/modules/hbase/config/etc/hbase/hbase_jmx_config.yaml dest=/opt/hbase/prometheus  owner=hadoop group=hadoop mode=755"
+开始滚动重启regionservers
+
 
 
 [note1]
