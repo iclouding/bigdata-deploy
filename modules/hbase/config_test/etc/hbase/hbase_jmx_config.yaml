@@ -1,0 +1,3 @@
+rules:
+  - pattern: Hadoop<service=(\w+), name=(JvmMetrics), sub=(\w+)><>(\w+)
+    name: HBase_$2_$3_$4
