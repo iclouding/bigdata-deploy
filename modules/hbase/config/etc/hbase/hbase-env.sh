@@ -42,7 +42,7 @@ export HBASE_HEAPSIZE=32G
 # Below are what we set by default.  May only work with SUN JVM.
 # For more on why as well as other possible settings,
 # see http://wiki.apache.org/hadoop/PerformanceTuning
-export HBASE_OPTS="-server -XX:+UseG1GC -XX:MaxGCPauseMillis=20 -XX:InitiatingHeapOccupancyPercent=35 -XX:+DisableExplicitGC -Djava.awt.headless=true -javaagent:/opt/hbase/prometheus/jmx_prometheus_javaagent-0.1.0.jar=7000:/opt/hbase/prometheus/hbase_jmx_config.yaml"
+export HBASE_OPTS="-server -XX:+UseG1GC -XX:MaxGCPauseMillis=50 -XX:InitiatingHeapOccupancyPercent=35 -XX:+DisableExplicitGC -Djava.awt.headless=true -javaagent:/opt/hbase/prometheus/jmx_prometheus_javaagent-0.1.0.jar=7000:/opt/hbase/prometheus/hbase_jmx_config.yaml"
 
 # Configure PermSize. Only needed in JDK7. You can safely remove it for JDK8+
 export HBASE_MASTER_OPTS="$HBASE_MASTER_OPTS"
