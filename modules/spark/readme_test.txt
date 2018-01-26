@@ -1,6 +1,9 @@
 ansible all -i spark.host -mcopy -a"src=/data/tools/ansible/modules/spark/config_test/spark2.2.0/spark-thrift-sparkconf.conf dest=/opt/spark220/conf owner=spark group=hadoop mode=755"
 ansible all -i spark.host -mcopy -a"src=/data/tools/ansible/modules/spark/config_test/spark2.2.0/launch-thriftserver.sh dest=/opt/spark220/sbin owner=spark group=hadoop mode=755"
 ansible thriftserver -i spark.host -mshell -a"su - spark -c 'cd /opt/spark220/sbin && ./launch-thriftserver.sh'"
+ansible thriftserver -i spark.host -mshell -a"su - spark -c 'cd /opt/spark220/sbin && ./stop-thriftserver.sh'"
+
+
 ansible all -i spark.host -mshell -a"su - spark -c 'rm  -r /opt/spark220/config'"
 
 
