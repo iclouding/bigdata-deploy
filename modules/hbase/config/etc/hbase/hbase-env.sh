@@ -32,7 +32,7 @@ export HBASE_LOG_DIR=/data/logs/hbase
 export HBASE_CLASSPATH=${HBASE_CLASSPATH}:${HADOOP_CONF_DIR}
 
 # The maximum amount of heap to use. Default is left to JVM default.
-export HBASE_HEAPSIZE=30G
+export HBASE_HEAPSIZE=32G
 
 # Uncomment below if you intend to use off heap cache. For example, to allocate 8G of
 # offheap, set the value to "8G".
