@@ -152,6 +152,7 @@ if [  $JMX_PORT ]; then
 fi
 
 # Log directory to use
+LOG_DIR="/data/logs/kafka3"
 if [ "x$LOG_DIR" = "x" ]; then
   LOG_DIR="$base_dir/logs"
 fi
