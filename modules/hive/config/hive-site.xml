@@ -238,6 +238,17 @@
             After hitting this limit, the async thread pool will reject new requests.</description>
     </property>
 
+    <property>
+        <name>hive.security.authorization.sqlstd.confwhitelist.append</name>
+        <value>hive.query.name</value>
+        <description>
+          List of comma separated Java regexes, to be appended to list set in
+          hive.security.authorization.sqlstd.confwhitelist. Using this list instead
+          of updating the original list means that you can append to the defaults
+          set by SQL standard authorization instead of replacing it entirely.
+        </description>
+    </property>
+
 
 </configuration>
 
