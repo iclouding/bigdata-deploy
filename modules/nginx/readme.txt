@@ -51,6 +51,12 @@ Total of 6010 requests completed
 --下发数据收集集群v2.0 https 配置文件并reload（最新版本）
 ansible-playbook -i nginx.hosts install_ngx-extsvr-log-v2.0.yml
 
+--下发数据收集测试集群v2.0 test-config https 配置文件并reload
+ansible-playbook -i nginx-extsvr-v2.0-test.hosts install_ngx-extsvr-config-v2.0-test.yml
+
+--下发数据收集测试集群v2.0 test-log https 配置文件并reload
+ansible-playbook -i nginx-extsvr-v2.0-test.hosts install_ngx-extsvr-log-v2.0-test.yml
+
 --------------------nginx升级[云主机的模版机器初始化nginx]--------------------------
 --安装升级版nginx[模版云主机]
 ansible-playbook -i nginx_template.hosts install_nginx_template.yml

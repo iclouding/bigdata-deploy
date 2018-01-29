@@ -41,6 +41,14 @@ ansible-playbook -i kafka.host install_kafka_3.yml -t config
 --定制的启动停止脚本分发
 ansible-playbook -i kafka.host install_kafka_bin_3.yml
 
+ansible all -i kafka.host -mcopy -a"src=/data/tools/ansible/modules/kafka/config/kafka3/log4j.properties dest=/opt/kafka3/config  owner=moretv group=moretv mode=644"
+ansible all -i kafka.host -mcopy -a"src=/data/tools/ansible/modules/kafka/config/kafka3/kafka-run-class.sh dest=/opt/kafka3/bin   owner=moretv group=moretv mode=755"
+
+bigdata-appsvr-130-6上已经备份log4j.properties和kafka-run-class.sh
+查看kafka不同连接状态的统计：
+ansible all -i kafka.host -mshell -a"netstat -anlput|grep 9094 |awk '{print \$6}'|sort|uniq -c"
+
+
 --启动、停止单台kafka3系列的某一台
 守护进程启动kafka server
 cd /opt/kafka3;./bin/kafka-server-start.sh  -daemon ./config/server.properties

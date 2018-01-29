@@ -210,3 +210,18 @@ ansible logstashs -i logstash.host -m cron -a "name='logstash autostart job 10' 
 ansible logstashs -i logstash.host -mshell -a"su - moretv -c  'cd /opt/logstash_v5/bin;sh stop_logstash.sh kafka_topic_distribute_helios_player_sdk_parse_startplay.conf'"
 ansible logstashs -i logstash.host -mshell -a"su - moretv -c  'cd /opt/logstash_v5/bin;sh stop_logstash.sh kafka_topic_distribute_medusa_player_sdk_parse_startplay.conf'"
 
+--更新配置
+ansible logstashs -i logstash.host -mcopy -a"src=/data/tools/ansible/modules/logstash_v5/config/etc/logstash/kafka_topic_distribute_medusa_player_sdk_startplay.conf dest=/opt/logstash_v5/config  owner=moretv group=moretv mode=755"
+ansible logstashs -i logstash.host -mcopy -a"src=/data/tools/ansible/modules/logstash_v5/config/etc/logstash/kafka_topic_distribute_helios_player_sdk_startplay.conf dest=/opt/logstash_v5/config  owner=moretv group=moretv mode=755"
+
+--stop
+ansible logstashs -i logstash.host -mshell -a"su - moretv -c  'cd /opt/logstash_v5/bin;sh stop_logstash.sh kafka_topic_distribute_medusa_player_sdk_startplay.conf'"
+ansible logstashs -i logstash.host -mshell -a"su - moretv -c  'cd /opt/logstash_v5/bin;sh stop_logstash.sh kafka_topic_distribute_helios_player_sdk_startplay.conf'"
+
+--start
+ansible logstashs -i logstash.host -mshell -a"su - moretv -c  'cd /opt/logstash_v5/bin;sh start_logstash.sh kafka_topic_distribute_medusa_player_sdk_startplay.conf'"
+ansible logstashs -i logstash.host -mshell -a"su - moretv -c  'cd /opt/logstash_v5/bin;sh start_logstash.sh kafka_topic_distribute_helios_player_sdk_startplay.conf'"
+
+--check
+ansible logstashs -i logstash.host -mshell -a"su - moretv -c  'tail /data/logs/logstash_v5/openrs-helios-player-sdk-startplay-product.log'"
+ansible logstashs -i logstash.host -mshell -a"su - moretv -c  'tail /data/logs/logstash_v5/openrs-medusa-player-sdk-startplay-product.log'"
