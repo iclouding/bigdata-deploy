@@ -35,14 +35,14 @@
         - /data/backups/elasticsearch
 
     - name: copy elasticsearch config file to remote host
-      copy: src=/data/tools/ansible/modules/elasticsearch/config/{{ item.name }} dest=/opt/elasticsearch/config/{{ item.dest }} owner=moretv group=moretv mode=0771
+      copy: src=/data/tools/ansible/modules/elasticsearch/config_test/{{ item.name }} dest=/opt/elasticsearch/config/{{ item.dest }} owner=moretv group=moretv mode=0771
       tags: config
       with_items:
         - {name: 'elasticsearch6.yml', dest: 'elasticsearch.yml'}
 
     - name: copy elasticsearch shell file to remote host
       tags: config
-      copy: src=/data/tools/ansible/modules/elasticsearch/config/{{ item }} dest=/opt/elasticsearch/bin/{{ item }} owner=moretv group=moretv mode=0771
+      copy: src=/data/tools/ansible/modules/elasticsearch/config_test/{{ item }} dest=/opt/elasticsearch/bin/{{ item }} owner=moretv group=moretv mode=0771
       with_items:
         - start.sh
         - stop.sh
