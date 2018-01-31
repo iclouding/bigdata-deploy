@@ -52,6 +52,11 @@
       copy: src=/data/tools/ansible/modules/ansible/scripts/modi_conf/{{ item }} dest=/data/scripts/{{ item }} owner=moretv group=moretv mode=0755
       with_items:
         - make_conf.py
+
+    - name: sync  modi conf script to desc host
+      tags: config
+      copy: src=/data/tools/ansible/modules/elasticsearch/playbook_test/{{ item }} dest=/data/scripts/{{ item }} owner=moretv group=moretv mode=0755
+      with_items:
         - es6.conf
 
     - name: run modi config script
