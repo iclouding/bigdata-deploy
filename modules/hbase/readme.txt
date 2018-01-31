@@ -74,7 +74,7 @@ a.停止hbase regionserver cronjob监控,防止hbase滚动重启过程中，监�
 在ansible机器上,hbase/playbook目录，执行
 ansible regionserver -i hbase.host -m cron -a "name='check hbase regionserver ' state=absent minute=*/2  user='hadoop' job='. /etc/profile;sh /opt/hbase/conf/monitor_hbase.sh org.apache.hadoop.hbase.regionserver.HRegionServer regionserver >/dev/null 2>&1'  "
 b.在hbase-master机器，bigdata-cmpt-128-1，发布滚动重启命令
-nohup sh /opt/hbase/bin/rolling-restart.sh --rs-only  --graceful > rolling.log 2>&1 &
+nohup sh /opt/hbase/bin/rolling-restart.sh --rs-only > rolling.log 2>&1 &
 c.手动启动负载均衡,在hbase-master机器，sh /opt/hbase/bin/hbase shell
 运行： balance_switch true
 d.启动hbase regionserver cronjob
@@ -97,6 +97,8 @@ ansible regionserver -i hbase.host -mcopy -a"src=/data/tools/ansible/modules/hba
 ansible regionserver -i hbase.host -mcopy -a"src=/data/tools/ansible/modules/hbase/config/etc/hbase/hbase_jmx_config.yaml dest=/opt/hbase/prometheus  owner=hadoop group=hadoop mode=755"
 开始滚动重启regionservers
 
+/opt/hbase/bin/hbase-daemon.sh stop regionserver
+/opt/hbase/bin/hbase-daemon.sh start regionserver
 
 
 [note1]
