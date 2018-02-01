@@ -129,3 +129,7 @@ ansible filebeats -i filebeat_template.host -m cron -a "name='filebeat nginx aut
 --查看进程状态[filebeat_template.host为最新云主机配置]
 ansible filebeats -i filebeat_template.host -mshell -a"su - moretv -c  'ps -ef|grep filebeat_nginx_whaleytv_main.yml|grep -v grep|wc -l'"
 ansible filebeats -i filebeat_template.host -mshell -a"su - moretv -c  'ps -ef|grep filebeat_nginx_whaleytv_main.yml'"
+
+
+下发活动日志filebeat（nginx）
+ansible filebeats -i filebeat_template.host -mcopy -a"src=/data/tools/ansible/modules/filebeat_v5/config/etc/filebeat/filebeat_nginx_whaleytv_activity.yml dest=/opt/filebeat_v5  owner=moretv group=moretv mode=755"

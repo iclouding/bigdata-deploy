@@ -65,7 +65,10 @@
       with_items:
         - {name: 'filebeat_nginx_medusa_3x.yml',            dest: '/opt/filebeat_v5'}
         - {name: 'filebeat_nginx_whaleytv_main.yml',        dest: '/opt/filebeat_v5'}
+        - {name: 'filebeat_nginx_whaleytv_activity.yml',    dest: '/opt/filebeat_v5'}
         - {name: 'start_filebeat_nginx_medusa_3x.sh',       dest: '/opt/filebeat_v5'}
         - {name: 'start_filebeat_nginx_whaleytv_main.sh',   dest: '/opt/filebeat_v5'}
         - {name: 'stop_filebeat_nginx_medusa_3x.sh',        dest: '/opt/filebeat_v5'}
         - {name: 'stop_filebeat_nginx_whaleytv_main.sh',    dest: '/opt/filebeat_v5'}
+        - {name: 'start_filebeat_nginx_activity.sh',        dest: '/opt/filebeat_v5'}
+        - {name: 'stop_filebeat_nginx_activity.sh',         dest: '/opt/filebeat_v5'}
