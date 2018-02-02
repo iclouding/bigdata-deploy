@@ -133,3 +133,9 @@ ansible filebeats -i filebeat_template.host -mshell -a"su - moretv -c  'ps -ef|g
 
 下发活动日志filebeat（nginx）
 ansible filebeats -i filebeat_template.host -mcopy -a"src=/data/tools/ansible/modules/filebeat_v5/config/etc/filebeat/filebeat_nginx_whaleytv_activity.yml dest=/opt/filebeat_v5  owner=moretv group=moretv mode=755"
+ansible filebeats -i filebeat_template.host -mshell -a"su - moretv -c  'cd /opt/filebeat_v5;sh start_filebeat_nginx_activity.sh'"
+
+ansible filebeats -i filebeat_template.host -mshell -a"su - moretv -c  'free -g'"
+
+
+
