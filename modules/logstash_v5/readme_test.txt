@@ -16,3 +16,16 @@ bin/kafka-topics.sh --create --topic openrs-helios-player-sdk-startplay-test --z
 
 sh /opt/kafka3/bin/kafka-console-consumer.sh --topic openrs-helios-player-sdk-startplay-test -bootstrap-server bigtest-appsvr-129-1:9094 | head
 
+157742 Jps
+135923 CoarseGrainedExecutorBackend
+153489 CoarseGrainedExecutorBackend
+150965 CoarseGrainedExecutorBackend
+150651 CoarseGrainedExecutorBackend
+104250 CoarseGrainedExecutorBackend
+149308 CoarseGrainedExecutorBackend
+106847 CoarseGrainedExecutorBackend
+
+
+kill -9 147766 148999 104250 150227 143665 146236 150651 153489
+
+hbba
