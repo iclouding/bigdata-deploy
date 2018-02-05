@@ -11,3 +11,28 @@ ansible all -i es6.host -mshell -a"su - moretv -c '/opt/elasticsearch/bin/plugin
 
 安装delete-by-query插件，安装后需要重启：
 ansible all -i es6.host -mshell -a"su - moretv -c '/opt/elasticsearch/bin/plugin install delete-by-query'"
+
+
+
+
+ansible all -i es6.host -mshell -a"su - moretv -c 'jps'"
+
+
+
+
+ansible all -i es6.host -mshell -a" cat /etc/sysctl.conf |grep max_map_count"
+ansible all -i es6.host -mshell -a" sysctl vm.max_map_count "
+
+
+
+ansible all -i es6.host -mshell -a" echo 'vm.max_map_count=262144' >> /etc/sysctl.conf "
+ansible all -i es6.host -mshell -a" sysctl -w vm.max_map_count=262144 "
+
+
+
+
+
+[1]: max virtual memory areas vm.max_map_count [65530] is too low, increase to at least [262144]
+
+参考：
+https://www.elastic.co/guide/en/elasticsearch/reference/current/vm-max-map-count.html
