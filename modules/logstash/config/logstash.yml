@@ -207,7 +207,7 @@
 #
 # todo,on prod evn,log.level need change to error
   log.level: info
-  path.logs: /data/logs/logstash_v5
+  path.logs: /data/logs/logstash
 #
 # ------------ Other Settings --------------
 #
