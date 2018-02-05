@@ -12,6 +12,8 @@ ansible-playbook -i logstash.host logstash-ansible.yml -t config
 -监控tpc端口logstash
 ansible logstashs -i logstash.host -mshell -a"su - moretv -c  'cd /opt/logstash/bin;sh start_logstash.sh read_port_info.conf'"
 
+ansible logstashs -i logstash.host -mshell -a"su - moretv -c  'ps -ef|grep read_port_info.conf'"
+
 
 
 
