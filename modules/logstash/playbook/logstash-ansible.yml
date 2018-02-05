@@ -30,7 +30,7 @@
       with_items:
          - { name: '/data/logs/logstash', user: 'moretv', groups: 'moretv' }
 
-    - name: copy logstash config file to remote host
+    - name: modify logstash parameter
       copy: src=/data/tools/ansible/modules/logstash/config/{{ item.name }} dest={{ item.dest }} owner=moretv group=moretv mode=755
       tags: install
       with_items:
@@ -40,8 +40,8 @@
         - {name: 'start_logstash.sh',                   dest: '/opt/logstash/bin'}
         - {name: 'stop_logstash.sh',                    dest: '/opt/logstash/bin'}
 
-    - name: copy logstash config file to remote host
-      copy: src=/data/tools/ansible/modules/logstash_v5/config/etc/logstash/{{ item.name }} dest={{ item.dest }} owner=moretv group=moretv mode=755
+    - name: copy logstash business config file to remote host
+      copy: src=/data/tools/ansible/modules/logstash/config/{{ item.name }} dest={{ item.dest }} owner=moretv group=moretv mode=755
       tags: config
       with_items:
        - {name: 'read_port_info.conf',              dest: '/opt/logstash/config'}
