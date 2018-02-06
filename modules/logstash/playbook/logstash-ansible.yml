@@ -44,4 +44,5 @@
       copy: src=/data/tools/ansible/modules/logstash/config/{{ item.name }} dest={{ item.dest }} owner=moretv group=moretv mode=755
       tags: config
       with_items:
-       - {name: 'read_port_info.conf',              dest: '/opt/logstash/config'}
+       - {name: 'read_port_info.conf',                  dest: '/opt/logstash/config'}
+       - {name: 'read_from_filebeat.conf',              dest: '/opt/logstash/config'}
