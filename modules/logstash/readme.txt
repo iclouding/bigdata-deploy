@@ -12,8 +12,15 @@ ansible-playbook -i logstash.host logstash-ansible.yml -t config
 -监控tpc端口logstash
 ansible logstashs -i logstash.host -mshell -a"su - moretv -c  'cd /opt/logstash/bin;sh start_logstash.sh read_port_info.conf'"
 
-ansible logstashs -i logstash.host -mshell -a"su - moretv -c  'ps -ef|grep read_port_info.conf'"
+-接受filebeat发送的数据
+ansible logstashs -i logstash.host -mshell -a"su - moretv -c  'cd /opt/logstash/bin;sh start_logstash.sh read_from_filebeat.conf'"
 
+
+ansible logstashs -i logstash.host -mshell -a"su - moretv -c  'ps -ef|grep read_from_filebeat.conf'"
+
+
+
+ansible logstashs -i logstash.host -mshell -a"chown -R moretv:moretv /data/apps/logstash"
 
 
 

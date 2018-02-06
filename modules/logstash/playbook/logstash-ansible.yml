@@ -29,6 +29,7 @@
       tags: install
       with_items:
          - { name: '/data/logs/logstash', user: 'moretv', groups: 'moretv' }
+         - { name: '/data/apps/logstash', user: 'moretv', groups: 'moretv' }
 
     - name: modify logstash parameter
       copy: src=/data/tools/ansible/modules/logstash/config/{{ item.name }} dest={{ item.dest }} owner=moretv group=moretv mode=755
