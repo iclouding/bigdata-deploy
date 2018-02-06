@@ -1,0 +1,49 @@
+---
+- hosts: all
+  tasks:
+    - name: copy tar file to remote host
+      shell: ncftpget -z -ubigdata -p'whaley!90365' 10.255.130.6 /tmp bigdata/{{ item }}
+      tags: install
+      with_items:
+        - filebeat-6.1.1-linux-x86_64.tar.gz
+
+    - name: decompress filebeat-6.1.1-linux-x86_64.tar.gz
+      shell: cd /tmp && tar zxvf  filebeat-6.1.1-linux-x86_64.tar.gz -C /app && chown -R moretv:moretv /app/filebeat-6.1.1-linux-x86_64
+      tags: install
+      args:
+        creates: /app/filebeat-6.1.1-linux-x86_64/.install
+
+    - name: touch install file
+      shell: touch /app/filebeat-6.1.1-linux-x86_64/.install
+      tags: install
+      args:
+        creates: /app/filebeat-6.1.1-linux-x86_64/.install
+
+    - name: create soft link
+      file: src=/app/filebeat-6.1.1-linux-x86_64 dest=/opt/filebeat state=link owner=moretv group=moretv
+      tags: install
+
+    - name: make dir
+      file: path={{ item.name }} state=directory owner={{ item.user }} group={{ item.groups }}
+      tags: install
+      with_items:
+         - { name: '/data/logs/filebeat', user: 'moretv', groups: 'moretv' }
+         - { name: '/opt/filebeat/bin',   user: 'moretv', groups: 'moretv' }
+         - { name: '/opt/filebeat/conf',  user: 'moretv', groups: 'moretv' }
+
+    - name: for filebeat script
+      copy: src=/data/tools/ansible/modules/filebeat/config/{{ item.name }} dest={{ item.dest }} owner=moretv group=moretv mode=755
+      tags: install
+      with_items:
+        - {name: 'start_filebeat.sh',            dest: '/opt/filebeat/bin'}
+        - {name: 'stop_filebeat.sh',             dest: '/opt/filebeat/bin'}
+
+
+- hosts: apps
+  tasks:
+    - name: config for apps
+      copy: src=/data/tools/ansible/modules/filebeat/config/{{ item.name }} dest={{ item.dest }} owner=moretv group=moretv mode=755
+      tags: config_for_apps
+      with_items:
+        - {name: 'app_kafka.yml',            dest: '/opt/filebeat/conf'}
+

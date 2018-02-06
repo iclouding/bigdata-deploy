@@ -1,0 +1,19 @@
+ncftpput -ubigdata -p'whaley!90365' 10.255.130.6 bigdata/ /home/moretv/logstash-6.1.1.tar.gz
+
+cd /data/tools/ansible/modules/logstash/playbook
+
+--安装包分发
+ansible-playbook -i logstash.host logstash-ansible.yml -t install
+
+--业务配置分发
+ansible-playbook -i logstash.host logstash-ansible.yml -t config
+
+--启动业务logstash
+-监控tpc端口logstash
+ansible logstashs -i logstash.host -mshell -a"su - moretv -c  'cd /opt/logstash/bin;sh start_logstash.sh read_port_info.conf'"
+
+ansible logstashs -i logstash.host -mshell -a"su - moretv -c  'ps -ef|grep read_port_info.conf'"
+
+
+
+

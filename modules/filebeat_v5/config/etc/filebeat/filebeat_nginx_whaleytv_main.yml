@@ -33,6 +33,7 @@ filebeat.prospectors:
   #监控电视主程序的nginx日志
   paths:
     - /data/logs/nginx/boikgpokn78sb95kjhfrendo8dc5mlsr.log*
+    - /data/logs/nginx/boikgpokn78sb95kjhfrendosesh6bmu.log*
     #- c:\programdata\elasticsearch\logs\*
 
   # Configure the file encoding for reading files with international characters
@@ -506,7 +507,7 @@ output.kafka:
   # The list of Kafka broker addresses from where to fetch the cluster metadata.
   # The cluster metadata contain the actual Kafka brokers events are published
   # to.
-  hosts: ["bigdata-appsvr-130-1:9094","bigdata-appsvr-130-2:9094","bigdata-appsvr-130-3:9094","bigdata-appsvr-130-4:9094","bigdata-appsvr-130-5:9094","bigdata-appsvr-130-6:9094"]
+  hosts: ["bigdata-appsvr-130-1:9094","bigdata-appsvr-130-2:9094","bigdata-appsvr-130-3:9094","bigdata-appsvr-130-4:9094","bigdata-appsvr-130-5:9094","bigdata-appsvr-130-6:9094","bigdata-appsvr-130-7:9094","bigdata-appsvr-130-8:9094","bigdata-appsvr-130-9:9094"]
 
   # The Kafka topic used for produced events. The setting can be a format string
   # using any event field. To set the topic from document type use `%{[type]}`.
