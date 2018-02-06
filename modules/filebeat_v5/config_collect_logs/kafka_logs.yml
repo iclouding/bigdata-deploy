@@ -1,0 +1,10 @@
+filebeat.prospectors:
+  - input_type: log
+    fields:
+        ownfield: "kafka_log"                         # 类似 logstash 的 add_fields
+    paths:
+        - /opt/kafka3/logs/server.log                   # 指明读取文件的位置
+    include_lines: ["^ERR", "^WARN"]            # 只发送包含这些字样的日志
+    exclude_lines: ["^OK"]                      # 不发送包含这些字样的日志
+  output.logstash:
+    hosts: ["10.255.130.8:5002"]
