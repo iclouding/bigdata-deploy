@@ -8,13 +8,13 @@ ansible-playbook -i filebeat.host filebeat-ansible.yml -t install
 ansible-playbook -i filebeat.host filebeat-ansible.yml -t config_for_apps
 
 --启动filebeat实例
-ansible apps -i filebeat.host -mshell -a"su - moretv -c  'cd /opt/filebeat/bin;sh start_filebeat.sh xxx.yml'"
+ansible apps -i filebeat.host -mshell -a"su - moretv -c  'cd /opt/filebeat/bin;sh start_filebeat.sh app_kafka.yml'"
 
 --停止filebeat实例
 ansible apps -i filebeat.host -mshell -a"su - moretv -c  'cd /opt/filebeat/bin;sh stop_filebeat.sh xxx.yml'"
 
 --检查filebeat实例
-ansible apps -i filebeat.host -mshell -a"su - moretv -c  'ps -ef|grep app_test.yml'"
+ansible apps -i filebeat.host -mshell -a"su - moretv -c  'ps -ef|grep app_kafka.yml'"
 
 --临时脚本发布
-ansible all -i filebeat.host -mcopy -a"src=/data/tools/ansible/modules/filebeat/config/start_filebeat.sh dest=/opt/filebeat/bin owner=moretv group=moretv mode=755"
+ansible apps -i filebeat.host -mcopy -a"src=/data/tools/ansible/modules/filebeat/config/app_kafka.yml dest=/opt/filebeat/conf owner=moretv group=moretv mode=755"

@@ -25,4 +25,6 @@ ansible logstashs -i logstash.host -mshell -a"su - moretv -c  'ls /data/apps/log
 --临时脚本操作
 ansible logstashs -i logstash.host -mcopy -a"src=/data/tools/ansible/modules/logstash/config/logstash.yml dest=/opt/logstash/config owner=moretv group=moretv mode=755"
 ansible logstashs -i logstash.host -mshell -a"chown -R moretv:moretv /data/apps/logstash"
+ansible logstashs -i logstash.host -mcopy -a"src=/data/tools/ansible/modules/logstash/config/read_from_filebeat.conf dest=/opt/logstash/config owner=moretv group=moretv mode=755"
+
 
