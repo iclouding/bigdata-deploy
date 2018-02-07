@@ -13,4 +13,8 @@ ansible apps -i filebeat.host -mshell -a"su - moretv -c  'cd /opt/filebeat/bin;s
 --停止filebeat实例
 ansible apps -i filebeat.host -mshell -a"su - moretv -c  'cd /opt/filebeat/bin;sh stop_filebeat.sh xxx.yml'"
 
+--检查filebeat实例
+ansible apps -i filebeat.host -mshell -a"su - moretv -c  'ps -ef|grep app_test.yml'"
 
+--临时脚本发布
+ansible all -i filebeat.host -mcopy -a"src=/data/tools/ansible/modules/filebeat/config/start_filebeat.sh dest=/opt/filebeat/bin owner=moretv group=moretv mode=755"

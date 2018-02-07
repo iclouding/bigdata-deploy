@@ -21,11 +21,12 @@ filebeat.prospectors:
 - type: log
 
   # Change to true to enable this prospector configuration.
-  enabled: false
+  enabled: true
 
   # Paths that should be crawled and fetched. Glob based paths.
   paths:
-    - /var/log/*.log
+    - /opt/kafka3/logs/server.log
+    - /data/logs/kafka3/server.log
     #- c:\programdata\elasticsearch\logs\*
 
   # Exclude lines. A list of regular expressions to match. It drops the lines that are
@@ -70,7 +71,8 @@ filebeat.config.modules:
   path: ${path.config}/modules.d/*.yml
 
   # Set to true to enable config reloading
-  reload.enabled: false
+  # michael changed
+  reload.enabled: true
 
   # Period on which files under path should be checked for changes
   #reload.period: 10s
@@ -140,9 +142,9 @@ setup.kibana:
 # Configure what output to use when sending the data collected by the beat.
 
 #-------------------------- Elasticsearch output ------------------------------
-output.elasticsearch:
+#output.elasticsearch:
   # Array of hosts to connect to.
-  hosts: ["localhost:9200"]
+  #  hosts: ["localhost:9200"]
 
   # Optional protocol and basic auth credentials.
   #protocol: "https"
@@ -150,9 +152,9 @@ output.elasticsearch:
   #password: "changeme"
 
 #----------------------------- Logstash output --------------------------------
-#output.logstash:
+output.logstash:
   # The Logstash hosts
-  #hosts: ["localhost:5044"]
+  hosts: ["bigdata-appsvr-130-8:5044","bigdata-appsvr-130-9:5044"]
 
   # Optional SSL. By default is off.
   # List of root certificates for HTTPS server verifications
