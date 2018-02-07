@@ -19,8 +19,9 @@ ansible logstashs -i logstash.host -mshell -a"su - moretv -c  'cd /opt/logstash/
 ansible logstashs -i logstash.host -mshell -a"su - moretv -c  'ps -ef|grep read_from_filebeat.conf'"
 
 
+ansible logstashs -i logstash.host -mcopy -a"src=/data/tools/ansible/modules/logstash/config/logstash.yml dest=/opt/logstash/config owner=moretv group=moretv mode=755"
 
 ansible logstashs -i logstash.host -mshell -a"chown -R moretv:moretv /data/apps/logstash"
 
-
+nohup ./logstash -f ../config/read_port_info.conf --config.reload.automatic --path.data /data/apps/logstash/read_port_info.conf >a.log 2>&1 &
 
