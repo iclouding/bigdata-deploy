@@ -103,3 +103,21 @@
         - {name: 'slaves-journalnode', dest: '/opt/hadoop/etc/hadoop'}
         - {name: 'yarn-env.sh', dest: '/opt/hadoop/etc/hadoop'}
         - {name: 'yarn-site.xml', dest: '/opt/hadoop/etc/hadoop'}
+
+- hosts: namenode
+  tasks:
+    - name: deploy namenode backup script file
+      copy: src=/data/tools/ansible/modules/hadoop/scripts/{{ item.name }} dest={{ item.dest }} owner=hadoop group=hadoop mode=755
+      tags: backup
+      with_items:
+        - {name: 'namenode_backup.sh', dest: '/opt/hadoop/sbin'}
+
+    - name: make dir
+      file: path={{ item.name }} state=directory owner={{ item.user }} group={{ item.groups }}
+      tags: backup
+      with_items:
+        - { name: '/data/hdfs/backup', user: 'hdfs', groups: 'hadoop' }
+
+    - name: create monitor_cpu  cron
+      cron: name="namenode_backup" minute=5,35 user="hdfs" job="cd /opt/hadoop/sbin && sh namenode_backup.sh"
+      tags: backup
