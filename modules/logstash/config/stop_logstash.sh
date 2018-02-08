@@ -12,7 +12,7 @@ fi
 
 config_file_name=$1
 echo "start to stop ${config_file_name} ...."
-pid=$(ps -ef |grep ${config_file_name} |grep -v "grep"|grep -v "$0"  |awk '{print $2}')
+pid=$(ps -ef |grep -e '/logstash'|grep ${config_file_name} |grep -v "grep"|grep -v "$0"  |awk '{print $2}')
 echo "pid is ${pid}"
 
 if [ -z "${pid}" ]; then
