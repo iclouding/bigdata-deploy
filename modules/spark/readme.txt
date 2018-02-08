@@ -99,6 +99,14 @@ ansible all -i spark2.2.0.host -mcopy -a"src=/data/tools/ansible/modules/spark/p
   ansible thriftserver -i spark2.2.0.host -mshell -a "ps -ef|grep HiveThriftServer2 |grep 20360 | grep -v 'grep' | awk '{print \$2}' |xargs kill -9  "
 3.查看
   ansible thriftserver -i spark2.2.0.host -mshell -a "ps -ef|grep HiveThriftServer2 |grep 20360    "
+4.加入cronjob[daemon不适合使用supervisor做自动拉起操作]
+ansible thriftserver -i spark2.2.0.host -m cron -a "name='spark thrift auto start'  minute=*/5  user='spark' job='. /etc/profile;cd /opt/spark220 && ./sbin/launch-thriftserver.sh > /dev/null 2>&1'  "
+
+ansible thriftserver -i spark2.2.0.host -mshell -a"su - spark -c 'cat /opt/spark220/conf/spark-thrift-sparkconf.conf'"
+ansible thriftserver -i spark2.2.0.host -mcopy -a"src=/data/tools/ansible/modules/spark/config/spark2.2.0/spark-thrift-sparkconf.conf dest=/opt/spark220/conf/  owner=spark group=hadoop mode=755"
+ansible all -i spark2.2.0.host -mcopy -a"src=/data/tools/ansible/modules/spark/config/spark2.2.0/spark-thrift-sparkconf.conf dest=/opt/spark220/conf/  owner=spark group=hadoop mode=755"
+ansible all -i spark2.2.0.host -mcopy -a"src=/data/tools/ansible/modules/spark/config/spark2.2.0/spark-defaults.conf dest=/opt/spark220/conf/  owner=spark group=hadoop mode=755"
+
 
 
 

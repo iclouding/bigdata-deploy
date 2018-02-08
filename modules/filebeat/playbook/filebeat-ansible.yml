@@ -42,8 +42,9 @@
 - hosts: apps
   tasks:
     - name: config for apps
-      copy: src=/data/tools/ansible/modules/filebeat/config/{{ item.name }} dest={{ item.dest }} owner=moretv group=moretv mode=755
+      copy: src=/data/tools/ansible/modules/filebeat/config/{{ item.name }} dest={{ item.dest }} owner={{ item.owner }} group={{ item.group }} mode=755
       tags: config_for_apps
       with_items:
-        - {name: 'app_kafka.yml',            dest: '/opt/filebeat/conf'}
+        - {name: 'app_kafka.yml',            dest: '/opt/filebeat/conf' ,owner : 'moretv' ,group: 'moretv'}
+        - {name: 'cmpt_sys.yml',             dest: '/opt/filebeat/conf' ,owner : 'root'   ,group: 'root'}
 
