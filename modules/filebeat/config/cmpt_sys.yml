@@ -11,7 +11,7 @@
 # configuration file.
 
 #Global Filebeat configuration options,michael added
-filebeat.registry_file: registry_app_kafka
+filebeat.registry_file: registry_cmpt_sys
 #=========================== Filebeat prospectors =============================
 
 filebeat.prospectors:
