@@ -13,8 +13,8 @@ else
   echo "config_name is ${config_name}!"
 fi
 
-ps -ef|grep "$config_name"|grep -v grep|grep -v "$0"
-pro_num=`ps -ef|grep "$config_name"|grep -v grep|grep -v "$0"|wc -l`
+ps -ef|grep -e '/filebeat'|grep "$config_name"|grep -v grep|grep -v "$0"
+pro_num=`ps -ef|grep -e '/filebeat'|grep "$config_name"|grep -v grep|grep -v "$0"|wc -l`
 echo "pro_num is $pro_num"
 if [ ${pro_num} -gt 0 ]; then
   ps -ef|grep ${config_name}|grep -v grep|awk '{print $2}'|xargs kill  -15
