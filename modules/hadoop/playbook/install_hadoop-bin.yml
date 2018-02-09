@@ -118,6 +118,12 @@
       with_items:
         - { name: '/data/hdfs/backup', user: 'hdfs', groups: 'hadoop' }
 
-    - name: create monitor_cpu  cron
+    - name: create cron job
       cron: name="namenode_backup" minute=5,35 user="hdfs" job="cd /opt/hadoop/sbin && sh namenode_backup.sh"
       tags: backup
+
+    - name: deploy namenode backup file clean config
+      copy: src=/data/tools/ansible/modules/hadoop/config/{{ item.name }} dest={{ item.dest }} owner=root group=root mode=644
+      tags: backup
+      with_items:
+        - {name: 'namenode_backup_clean.conf', dest: '/etc/tmpfiles.d/'}
