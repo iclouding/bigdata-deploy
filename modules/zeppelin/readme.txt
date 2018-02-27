@@ -8,6 +8,9 @@
 2.配置分发
     ansible-playbook -i zeppelin.host install_zeppelin.yml -t config
 
+    如果执行sparksql出现jackson异常，是因为zeppelin的jackson版本过旧造成的，
+    把spark220的jackson版本替换zeppelin的lib下的版本
+
 3.启动应用
     #启动后，使用请，需要在编译器配置界面，配置相关的spark master地址
     ansible zeppelin -i zeppelin.host -mshell -a"su - hadoop -c  '/opt/zeppelin/bin/zeppelin-daemon.sh start'"
