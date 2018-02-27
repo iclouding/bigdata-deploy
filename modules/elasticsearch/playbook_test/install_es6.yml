@@ -39,6 +39,7 @@
       tags: config
       with_items:
         - {name: 'elasticsearch6.yml', dest: 'elasticsearch.yml'}
+        - {name: 'jvm.options',        dest: 'jvm.options'}
 
     - name: copy elasticsearch shell file to remote host
       tags: config

@@ -234,6 +234,10 @@ ansible-playbook -i logstash.host logstash-config.yml -t business_config
 ansible logstashs -i logstash.host -mshell -a"su - moretv -c  'cd /opt/logstash_v5/bin;sh start_logstash.sh kafka_es.conf'"
 ansible logstashs -i logstash.host -mshell -a"su - moretv -c  'cd /data/logs/logstash_v5 |tail activity.log'"
 ansible logstashs -i logstash.host -mshell -a"su - moretv -c  'tail /data/logs/logstash_v5/activity.log '"
+ansible logstashs -i logstash.host -mshell -a"su - moretv -c  'ps -ef|grep kafka_es.conf'"
+
+
+http://10.255.130.1:9200/_plugin/head/
 
 ansible logstashs -i logstash.host -m cron -a "name='logstash autostart job 1'  minute=*/6  user='moretv' job='. /etc/profile;sh /opt/logstash_v5/bin/start_logstash.sh kafka_es.conf > /dev/null 2>&1'  "
 ansible logstashs -i logstash.host -m cron -a "name='logstash autostart job 1' state=absent minute=*/6  user='moretv' job='. /etc/profile;sh /opt/logstash_v5/bin/start_logstash.sh kafka_es.conf > /dev/null 2>&1'  "

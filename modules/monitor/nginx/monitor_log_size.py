@@ -53,7 +53,7 @@ class CheckLogSzie():
         filesize = os.path.getsize(self.filename)
         if int(filesize) > int(self.alter_size):
             sub = "{0} 发现日志较大的文件 {1}".format(socket.gethostname(), self.filename)
-            body = "{0} 文件大于设定值{2}，当前为{1}".format(self.filename, filesize,self.alter_size)
+            body = "{0} 文件大于设定值{2}，当前为{1}".format(self.filename, filesize, self.alter_size)
             log_msg("check", body, 2)
             send_alter_mail(sub, body)
             return False
@@ -96,6 +96,7 @@ def main():
     pattern = "^sign_fail_.*.log$"
     alter_size = 1024 * 1024 * 1
     check_files = GetFileByPath(CHECK_PATH, pattern).get_filename()
+    log_msg("main", "Begin check !", 1)
     if not check_files:
         print "No files match"
     else:

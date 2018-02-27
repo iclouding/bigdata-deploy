@@ -1,0 +1,49 @@
+---
+- hosts: nodes
+  tasks:
+
+    - name: copy tar file to remote host
+      shell: ncftpget -z -ubigdata -p'whaley!90365' 10.255.130.6 /tmp bigdata/{{ item }}
+      tags: install
+      with_items:
+        - logstash-6.1.1.tar.gz
+
+    - name: decompress logstash-6.1.1.tar.gz
+      shell: cd /tmp && tar zxvf  logstash-6.1.1.tar.gz -C /app && chown -R moretv:moretv /app/logstash-6.1.1
+      tags: install
+      args:
+        creates: /app/logstash-6.1.1/.install
+
+    - name: touch install file
+      shell: touch /app/logstash-6.1.1/.install
+      tags: install
+      args:
+        creates: /app/logstash-6.1.1/.install
+
+    - name: create soft link
+      file: src=/app/logstash-6.1.1 dest=/opt/logstash state=link owner=moretv group=moretv
+      tags: install
+
+    - name: make dir
+      file: path={{ item.name }} state=directory owner={{ item.user }} group={{ item.groups }}
+      tags: install
+      with_items:
+         - { name: '/data/logs/logstash', user: 'moretv', groups: 'moretv' }
+         - { name: '/data/apps/logstash', user: 'moretv', groups: 'moretv' }
+
+    - name: modify logstash parameter
+      copy: src=/data/tools/ansible/modules/logstash/config/{{ item.name }} dest={{ item.dest }} owner=moretv group=moretv mode=755
+      tags: install
+      with_items:
+        - {name: 'jvm.options',                         dest: '/opt/logstash/config'}
+        - {name: 'log4j2.properties',                   dest: '/opt/logstash/config'}
+        - {name: 'logstash.yml',                        dest: '/opt/logstash/config'}
+        - {name: 'start_logstash.sh',                   dest: '/opt/logstash/bin'}
+        - {name: 'stop_logstash.sh',                    dest: '/opt/logstash/bin'}
+
+    - name: copy logstash business config file to remote host
+      copy: src=/data/tools/ansible/modules/logstash/config/{{ item.name }} dest={{ item.dest }} owner=moretv group=moretv mode=755
+      tags: config
+      with_items:
+       - {name: 'read_port_info.conf',                  dest: '/opt/logstash/config'}
+       - {name: 'read_from_filebeat.conf',              dest: '/opt/logstash/config'}

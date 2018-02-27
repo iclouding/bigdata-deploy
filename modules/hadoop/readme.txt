@@ -135,3 +135,9 @@ ansible-playbook -i hadoop-template.host install_yarn-spark-shuffle.yml -t insta
 
 --配置分发
 ansible-playbook -i hadoop-template.host install_hadoop-bin.yml -t config
+
+
+
+=======================namenode备份==========================
+--脚本分发&设置crontab
+ansible-playbook -i hadoop.host install_hadoop-bin.yml -t backup
