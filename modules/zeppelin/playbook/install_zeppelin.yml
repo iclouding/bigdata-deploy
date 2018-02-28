@@ -70,10 +70,10 @@
       tags: config
       with_items:
         - { src: 'bigdata/zeppelin-env.sh', dest: 'zeppelin2/conf/zeppelin-env.sh'}
-        - { src: 'bigdata/zeppelin-env.sh', dest: 'zeppelin2/conf/zeppelin-site.sh'}
+        - { src: 'bigdata/zeppelin-site.xml', dest: 'zeppelin2/conf/zeppelin-site.xml'}
         - { src: 'bigdata/shiro.ini', dest: 'zeppelin2/conf/shiro.ini'}
         - { src: 'rom/zeppelin-env.sh', dest: 'zeppelin-rom2/conf/zeppelin-env.sh'}
-        - { src: 'rom/zeppelin-env.sh', dest: 'zeppelin-rom2/conf/zeppelin-site.sh'}
+        - { src: 'rom/zeppelin-site.xml', dest: 'zeppelin-rom2/conf/zeppelin-site.xml'}
         - { src: 'rom/shiro.ini', dest: 'zeppelin-rom2/conf/shiro.ini'}
 
     - name: sync  modi conf script to desc host
