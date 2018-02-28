@@ -26,6 +26,15 @@
         - zeppelin-0.7.3-bin-all
         - zeppelin-0.7.3-bin-all-rom
 
+    - name: rename dir
+      shell: mv /app/{{ item }}/zeppelin-0.7.3-bin-all/* /app/{{ item }} && rmdir /app/{{ item }}/zeppelin-0.7.3-bin-all
+      tags: install
+      args:
+        creates: /app/{{ item }}/.install
+      with_items:
+        - zeppelin-0.7.3-bin-all
+        - zeppelin-0.7.3-bin-all-rom
+
     - name: decompress
       shell: cd /tmp && tar zxvf  rom_notebook.tgz -C /app/{{ item }}
       tags: install

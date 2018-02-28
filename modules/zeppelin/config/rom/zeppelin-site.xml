@@ -27,7 +27,7 @@
 
 <property>
   <name>zeppelin.server.port</name>
-  <value>20213</value>
+  <value>20211</value>
   <description>Server port.</description>
 </property>
 
