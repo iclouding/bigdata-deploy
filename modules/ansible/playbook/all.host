@@ -35,6 +35,9 @@ bigdata-extsvr-log12
 bigdata-extsvr-log13
 bigdata-extsvr-log14
 
+bigdata-extsvr-log51
+bigdata-extsvr-log52
+
 [test]
 10.255.129.1
 10.255.129.2
