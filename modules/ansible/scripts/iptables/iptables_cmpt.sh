@@ -50,6 +50,10 @@ iptables -A INPUT -p tcp  -s 10.19.38.90/32 -j ACCEPT
 iptables -A INPUT -p tcp  -s 10.19.178.52/32 -j ACCEPT
 iptables -A INPUT -p tcp  -s 10.19.139.124/32 -j ACCEPT
 iptables -A INPUT -p tcp  -s 10.19.95.122/32 -j ACCEPT
+
+iptables -A INPUT -p tcp  -s 10.10.201.176/32 -j ACCEPT
+iptables -A INPUT -p tcp  -s 10.10.210.25/32 -j ACCEPT
+
 ##################For yuanchuili########################
 iptables -A INPUT -p tcp  -s 10.19.195.126/32 -j ACCEPT
 iptables -A INPUT -p udp --dport 40123 -j ACCEPT
