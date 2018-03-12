@@ -2,3 +2,7 @@
 
 --服务&应用集群web反向代理服务
 ansible-playbook -i nginx-test.hosts install_ngx-appsvr-webproxy-test.yml
+
+
+--nginx json test操作
+ansible-playbook -i nginx_json_test.hosts install_nginx_json_test.yml
