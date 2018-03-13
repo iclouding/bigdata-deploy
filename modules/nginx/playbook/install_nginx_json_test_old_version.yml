@@ -21,27 +21,27 @@
       tags: install
 
     - name : configure
-      shell : ./configure --prefix=/app/openresty-1.13.6.1    --with-luajit   --without-http_redis2_module    --with-http_iconv_module    --with-http_stub_status_module  --with-stream
+      shell : ./configure --prefix=/app/openresty-1.11.2.5    --with-luajit   --without-http_redis2_module    --with-http_iconv_module    --with-http_stub_status_module  --with-stream
       args:
-        chdir: /tmp/openresty-1.13.6.1
-        creates: /app/openresty-1.13.6.1/.install
+        chdir: /tmp/openresty-1.11.2.5
+        creates: /app/openresty-1.11.2.5/.install
       tags: install
 
     - name : make & make install
       shell : make -j2 && make install
       args:
-        chdir: /tmp/openresty-1.13.6.1
-        creates: /app/openresty-1.13.6.1/.install
+        chdir: /tmp/openresty-1.11.2.5
+        creates: /app/openresty-1.11.2.5/.install
       tags: install
 
     - name : add nginx with system restart
       shell : echo "cd /opt/openresty/nginx/sbin && ./nginx" >> /etc/rc.local
       args:
-        creates: /app/openresty-1.13.6.1/.install
+        creates: /app/openresty-1.11.2.5/.install
       tags: install
 
     - name: create a soft link to nginx
-      file: src=/app/openresty-1.13.6.1 dest=/opt/openresty state=link owner=root group=root
+      file: src=/app/openresty-1.11.2.5 dest=/opt/openresty state=link owner=root group=root
       tags: install
 
     - name: make online dir
