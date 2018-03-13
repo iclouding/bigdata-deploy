@@ -6,6 +6,8 @@ bigdata-appsvr-130-4
 bigdata-appsvr-130-5
 bigdata-appsvr-130-6
 bigdata-appsvr-130-7
+bigdata-appsvr-130-8
+bigdata-appsvr-130-9
 bigdata-cmpt-128-1
 bigdata-cmpt-128-2
 bigdata-cmpt-128-3
@@ -58,6 +60,7 @@ bigdata-cmpt-128-49
 bigdata-cmpt-128-50
 bigdata-cmpt-128-51
 bigdata-cmpt-128-52
+bigdata-cmpt-128-53
 
 
 [hiveserver2]

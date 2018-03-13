@@ -1,0 +1,15 @@
+---
+- hosts: all
+  tasks:
+
+    - name : backup old config
+      shell: cp /etc/sysctl.conf /etc/sysctl.conf.bak.0129
+
+
+    - name: rsync yunwei_init scripts
+      copy: src=/data/tools/ansible/modules/ansible/config/system/sysctl.conf dest=/etc/sysctl.conf
+      tags: sysctl
+
+    - name : run yunwei_init script
+      command : /sbin/sysctl -p
+      tags: sysctl

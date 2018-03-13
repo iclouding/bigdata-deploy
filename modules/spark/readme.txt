@@ -16,11 +16,6 @@ ansible master -i spark.host -mshell -a"su - spark -c 'cd /opt/spark/sbin && ./s
 --启动HistoryServer
 ansible historyserver -i spark.host -mshell -a"su - spark -c 'cd /opt/spark/sbin && ./start-history-server.sh'"
 
---启动Thriftserver
-ansible all -i spark.host -mcopy -a"src=/data/tools/ansible/modules/spark/config/spark1.6.3/conf/spark-thrift-sparkconf.conf dest=/opt/spark/conf  owner=spark group=hadoop mode=755"
-ansible thriftserver -i spark.host -mshell -a"su - spark -c 'cd /opt/spark && ./sbin/launch-thriftserver.sh'"
-
-
 --停止spark-standalone集群
 ansible master -i spark.host -mshell -a"su - spark -c 'cd /opt/spark/sbin && ./stop-all.sh'"
 
@@ -82,13 +77,6 @@ ansible all -i spark.host -mshell -a"mkdir /opt/spark2/bk ; mv /opt/spark2/jars/
 ansible all -i spark.host -mcopy -a"src=/data/tools/ansible/modules/spark/package/jersey-client-1.9.jar dest=/opt/spark2/jars  owner=spark group=hadoop mode=755"
 ansible all -i spark.host -mcopy -a"src=/data/tools/ansible/modules/spark/package/jersey-core-1.9.jar dest=/opt/spark2/jars  owner=spark group=hadoop mode=755"
 
-启动spark thrift server
- --root用户
- ansible thriftserver -i spark.host -mshell -a"su - spark -c 'cd /opt/spark2 && ./sbin/launch-thriftserver.sh'"
- --spark用户
- ansible thriftserver -i spark.host -mshell -a"cd /opt/spark2 && ./sbin/launch-thriftserver.sh"
- 停止Thriftserver
- ansible thriftserver -i spark.host -mshell -a"cd /opt/spark2 && ./sbin/stop-thriftserver.sh"
 
 ==================spark2.2.0==============================
 --安装包分发
@@ -109,6 +97,16 @@ ansible all -i spark2.2.0.host -mcopy -a"src=/data/tools/ansible/modules/spark/p
   ansible thriftserver -i spark2.2.0.host -mshell -a"cd /opt/spark220 && ./sbin/stop-thriftserver.sh"
   如果通过上面命令，停止不了，通过下面命令强制杀掉进程
   ansible thriftserver -i spark2.2.0.host -mshell -a "ps -ef|grep HiveThriftServer2 |grep 20360 | grep -v 'grep' | awk '{print \$2}' |xargs kill -9  "
+3.查看
+  ansible thriftserver -i spark2.2.0.host -mshell -a "ps -ef|grep HiveThriftServer2 |grep 20360    "
+4.加入cronjob[daemon不适合使用supervisor做自动拉起操作]
+ansible thriftserver -i spark2.2.0.host -m cron -a "name='spark thrift auto start'  minute=*/5  user='spark' job='. /etc/profile;cd /opt/spark220 && ./sbin/launch-thriftserver.sh > /dev/null 2>&1'  "
+
+ansible thriftserver -i spark2.2.0.host -mshell -a"su - spark -c 'cat /opt/spark220/conf/spark-thrift-sparkconf.conf'"
+ansible thriftserver -i spark2.2.0.host -mcopy -a"src=/data/tools/ansible/modules/spark/config/spark2.2.0/spark-thrift-sparkconf.conf dest=/opt/spark220/conf/  owner=spark group=hadoop mode=755"
+ansible all -i spark2.2.0.host -mcopy -a"src=/data/tools/ansible/modules/spark/config/spark2.2.0/spark-thrift-sparkconf.conf dest=/opt/spark220/conf/  owner=spark group=hadoop mode=755"
+ansible all -i spark2.2.0.host -mcopy -a"src=/data/tools/ansible/modules/spark/config/spark2.2.0/spark-defaults.conf dest=/opt/spark220/conf/  owner=spark group=hadoop mode=755"
+
 
 
 

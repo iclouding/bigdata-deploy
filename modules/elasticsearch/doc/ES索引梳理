@@ -1,0 +1,6 @@
+索引名称定义：
+monitor_sys_msg
+monitor_kafka_msg
+monitor_hbase_msg
+
+日志位置 服务名称  索引名称定义

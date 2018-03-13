@@ -13,12 +13,9 @@
       copy: src=/data/tools/ansible/modules/nginx/config/ngx-extsvr-log-v2.0-test/{{ item.name }} dest=/opt/openresty/nginx/conf/{{ item.dest }} owner=root group=root mode=0771
       tags: config
       with_items:
-        - {name: 'aginomoto_com.key', dest: 'aginomoto_com.key'}
-        - {name: 'aginomoto_com.crt', dest: 'aginomoto_com.crt'}
         - {name: 'nginx.conf', dest: 'nginx.conf'}
         - {name: 'online/nginx_http.conf', dest: 'online/'}
         - {name: 'online/nginx_init.lua', dest: 'online/'}
-        - {name: 'online/nginx_comm_userblank.block', dest: 'online/'}
         - {name: 'online/nginx_crawler.conf', dest: 'online/'}
         - {name: 'online/nginx_medusa.conf', dest: 'online/'}
         - {name: 'online/nginx_mobilehelper.conf', dest: 'online/'}
@@ -26,6 +23,11 @@
         - {name: 'online/nginx_whaleytv.conf', dest: 'online/'}
         - {name: 'online/nginx_whaleyvr.conf', dest: 'online/'}
         - {name: 'online/nginx_monitor.conf', dest: 'online/'}
+        - {name: 'online/1_text-wlslog.aginomoto.com_bundle.crt', dest: 'online/'}
+        - {name: 'online/2_text-wlslog.aginomoto.com.key', dest: 'online/'}
+        - {name: 'online/test-wlslog.aginomoto_com.crt', dest: 'online/'}
+        - {name: 'online/test-wlslog.aginomoto_com.key', dest: 'online/'}
+
 
     - name : reload nginx worker process
       tags: reload

@@ -1,0 +1,76 @@
+---
+- hosts: all
+  tasks:
+    - name: download openresty
+      shell: ncftpget -z -ubigdata -p'whaley!90365' 10.255.130.6 /tmp bigdata/{{ item }}
+      with_items:
+        - openresty-1.13.6.1.tar.gz
+      tags: install
+
+    - name : run init script
+      shell : tar zxvf openresty-1.13.6.1.tar.gz -C /tmp
+      args:
+        chdir: /tmp
+        creates: /app/openresty-1.13.6.1/.install
+      tags: install
+
+    - name: install package from yum repo
+      yum: name={{ item }}  state=present
+      with_items:
+        - readline-devel
+        - pcre-devel
+        - openssl-devel
+      tags: install
+
+    - name : configure
+      shell : ./configure --prefix=/app/openresty-1.13.6.1    --with-luajit   --without-http_redis2_module    --with-http_iconv_module    --with-http_stub_status_module  --with-stream
+      args:
+        chdir: /tmp/openresty-1.13.6.1
+        creates: /app/openresty-1.13.6.1/.install
+      tags: install
+
+    - name : make & make install
+      shell : make -j2 && make install
+      args:
+        chdir: /tmp/openresty-1.13.6.1
+        creates: /app/openresty-1.13.6.1/.install
+      tags: install
+
+    - name : add nginx with system restart
+      shell : echo "cd /opt/openresty/nginx/sbin && ./nginx" >> /etc/rc.local
+      args:
+        creates: /app/openresty-1.13.6.1/.install
+      tags: install
+
+    - name: create a soft link to nginx
+      file: src=/app/openresty-1.13.6.1 dest=/opt/openresty state=link owner=root group=root
+      tags: install
+
+    - name: make online dir
+      file: dest=/opt/openresty/nginx/conf/online state=directory  mode=755 owner=root group=root
+      tags: install
+
+    - name: make log dir
+      file: dest=/data/logs/nginx state=directory  mode=755 owner=nobody group=nobody
+      tags: install
+
+    - name: copy app-svr-webproxy config file to remote host
+      copy: src=/data/tools/ansible/modules/nginx/config/ngx-extsvr-log-v2.0/{{ item.name }} dest=/opt/openresty/nginx/conf/{{ item.dest }} owner=root group=root mode=0771
+      tags: config
+      with_items:
+        - {name: 'nginx.conf', dest: 'nginx.conf'}
+        - {name: 'online/nginx_http.conf', dest: 'online/'}
+        - {name: 'online/nginx_init.lua', dest: 'online/'}
+        - {name: 'online/nginx_crawler.conf', dest: 'online/'}
+        - {name: 'online/nginx_medusa.conf', dest: 'online/'}
+        - {name: 'online/nginx_mobilehelper.conf', dest: 'online/'}
+        - {name: 'online/nginx_server_shared.conf', dest: 'online/'}
+        - {name: 'online/nginx_whaleytv.conf', dest: 'online/'}
+        - {name: 'online/nginx_whaleyvr.conf', dest: 'online/'}
+        - {name: 'online/nginx_monitor.conf', dest: 'online/'}
+        - {name: 'online/wlslog_aginomoto_com.crt', dest: 'online/'}
+        - {name: 'online/wlslog_aginomoto_com.key', dest: 'online/'}
+
+    - name : reload nginx worker process
+      shell : /opt/openresty/nginx/sbin/nginx -t -c /opt/openresty/nginx/conf/nginx.conf && /opt/openresty/nginx/sbin/nginx -c /opt/openresty/nginx/conf/nginx.conf &&  /opt/openresty/nginx/sbin/nginx -s reload
+      tags: config

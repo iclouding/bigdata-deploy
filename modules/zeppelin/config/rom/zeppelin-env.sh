@@ -25,10 +25,10 @@ export ZEPPELIN_NOTEBOOK_PUBLIC="true"
 # export ZEPPELIN_INTP_MEM       		# zeppelin interpreter process jvm mem options. Default = ZEPPELIN_MEM
 # export ZEPPELIN_INTP_JAVA_OPTS 		# zeppelin interpreter process jvm options. Default = ZEPPELIN_JAVA_OPTS
 
-export ZEPPELIN_LOG_DIR="/opt/zeppelin-rom2/logs"
+export ZEPPELIN_LOG_DIR="/opt/zeppelin-rom/logs"
 # export ZEPPELIN_PID_DIR        		# The pid files are stored. /tmp by default.
 # export ZEPPELIN_WAR_TEMPDIR    		# The location of jetty temporary directory.
-export ZEPPELIN_NOTEBOOK_DIR="/opt/zeppelin-rom2/notebook"
+export ZEPPELIN_NOTEBOOK_DIR="/opt/zeppelin-rom/notebook"
 # export ZEPPELIN_NOTEBOOK_HOMESCREEN		# Id of notebook to be displayed in homescreen. ex) 2A94M5J1Z
 # export ZEPPELIN_NOTEBOOK_HOMESCREEN_HIDE	# hide homescreen notebook from list when this value set to "true". default "false"
 # export ZEPPELIN_NOTEBOOK_S3_BUCKET    # Bucket where notebook saved
@@ -42,7 +42,7 @@ export ZEPPELIN_NOTEBOOK_DIR="/opt/zeppelin-rom2/notebook"
 ## Use provided spark installation ##
 ## defining SPARK_HOME makes Zeppelin run spark interpreter process using spark-submit
 ##
-export SPARK_HOME="/opt/spark2"
+export SPARK_HOME="/opt/spark220"
 export SPARK_SUBMIT_OPTIONS="--driver-memory 2g --executor-memory 1g"
 
 ## Use embedded spark binaries ##

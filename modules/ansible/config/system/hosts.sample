@@ -113,6 +113,7 @@
 
 10.19.35.248 tableau.whaley.cn
 10.19.35.248  azkaban.whaley.cn
+10.19.94.75 authority.aginomoto.com
 
 10.255.129.201 bigtest-cmpt-129-201
 10.255.129.202 bigtest-cmpt-129-202
@@ -168,5 +169,8 @@
 10.19.178.52    bigdata-extsvr-log12
 10.19.139.124   bigdata-extsvr-log13
 10.19.95.122    bigdata-extsvr-log14
+
+10.10.201.176  bigdata-extsvr-log51
+10.10.210.25  bigdata-extsvr-log52
 
 10.19.168.17 bigdata-extsvr-monitor01

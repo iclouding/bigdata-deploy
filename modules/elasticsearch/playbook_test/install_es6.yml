@@ -1,0 +1,67 @@
+---
+- hosts: all
+  tasks:
+    - name: copy elasticsearch tar file to remote host
+      shell: ncftpget -z -ubigdata -p'whaley!90365' 10.255.130.6 /tmp bigdata/{{ item }}
+      tags: install
+      with_items:
+        - elasticsearch-6.1.1.tar.gz
+
+    - name: tar elasticsearch tar to /app
+      shell: cd /tmp && tar zxvf  elasticsearch-6.1.1.tar.gz -C /app
+      tags: install
+      args:
+        creates: /app/elasticsearch-6.1.1/.install
+
+    - name: owner to elasticsearch
+      shell: chown -R moretv:moretv /app/elasticsearch-6.1.1
+      tags: install
+
+    - name: create a soft link to elasticsearch
+      file: src=/app/elasticsearch-6.1.1 dest=/opt/elasticsearch state=link owner=moretv group=moretv
+      tags: install
+
+    - name: create elasticsearch need directory
+      file: path={{ item }}  state=directory  owner=moretv group=moretv
+      tags: install
+      with_items:
+        - /data/logs/elasticsearch
+        - /data/apps/elasticsearch
+
+    - name: create elasticsearch need directory
+      file: path={{ item }}  state=directory  owner=moretv group=moretv mode=0777
+      tags: install
+      with_items:
+        - /data/backups/elasticsearch
+
+    - name: copy elasticsearch config file to remote host
+      copy: src=/data/tools/ansible/modules/elasticsearch/config_test/{{ item.name }} dest=/opt/elasticsearch/config/{{ item.dest }} owner=moretv group=moretv mode=0771
+      tags: config
+      with_items:
+        - {name: 'elasticsearch6.yml', dest: 'elasticsearch.yml'}
+        - {name: 'jvm.options',        dest: 'jvm.options'}
+
+    - name: copy elasticsearch shell file to remote host
+      tags: config
+      copy: src=/data/tools/ansible/modules/elasticsearch/config_test/{{ item }} dest=/opt/elasticsearch/bin/{{ item }} owner=moretv group=moretv mode=0771
+      with_items:
+        - start.sh
+        - stop.sh
+
+    - name: sync  modi conf script to desc host
+      tags: config
+      copy: src=/data/tools/ansible/modules/ansible/scripts/modi_conf/{{ item }} dest=/data/scripts/{{ item }} owner=moretv group=moretv mode=0755
+      with_items:
+        - make_conf.py
+
+    - name: sync  modi conf script to desc host
+      tags: config
+      copy: src=/data/tools/ansible/modules/elasticsearch/playbook_test/{{ item }} dest=/data/scripts/{{ item }} owner=moretv group=moretv mode=0755
+      with_items:
+        - es6.conf
+
+    - name: run modi config script
+      shell: python make_conf.py es6.conf
+      tags: config
+      args:
+        chdir: /data/scripts

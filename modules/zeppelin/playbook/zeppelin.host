@@ -1,8 +1,9 @@
 [all]
+bigdata-appsvr-130-6
 bigdata-appsvr-130-7
 
 [zeppelin]
 bigdata-appsvr-130-7
 
 [zeppelin-rom]
-bigdata-appsvr-130-7
+bigdata-appsvr-130-6
