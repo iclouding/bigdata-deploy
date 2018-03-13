@@ -47,6 +47,7 @@
 
     - name: copy app-svr-webproxy config file to remote host
       copy: src=/data/tools/ansible/modules/nginx/config/ngx-extsvr-log-v2.0/{{ item.name }} dest=/opt/openresty/nginx/conf/{{ item.dest }} owner=root group=root mode=0771
+      tags: config
       with_items:
         - {name: 'nginx.conf', dest: 'nginx.conf'}
         - {name: 'online/nginx_http.conf', dest: 'online/'}
@@ -63,3 +64,4 @@
 
     - name : reload nginx worker process
       shell : /opt/openresty/nginx/sbin/nginx -t -c /opt/openresty/nginx/conf/nginx.conf && /opt/openresty/nginx/sbin/nginx -s reload
+      tags: config
